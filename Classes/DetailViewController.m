@@ -16,6 +16,7 @@
 -(void)viewWillAppear:(BOOL)animated{
 	nameLabel.text = person.personName;
 	textView.text = person.personStatus;
+	textView.editable = NO;
 	detailImage.image = [UIImage imageNamed:person.imageName];
 }
 
