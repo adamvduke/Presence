@@ -13,6 +13,14 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
+		560315A810ABA79A005F649A /* PersonListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* PersonListViewController.m */; };
+		568D7F8610AE29D400693A99 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 568D7F8510AE29D400693A99 /* Icon.png */; };
+		56A5A88F10ABABB6007412ED /* ListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56A5A88E10ABABB6007412ED /* ListView.xib */; };
+		56A5B90410ABAD44007412ED /* OMFG.png in Resources */ = {isa = PBXBuildFile; fileRef = 56A5B90210ABAD44007412ED /* OMFG.png */; };
+		56A5B90510ABAD44007412ED /* ONOZ.png in Resources */ = {isa = PBXBuildFile; fileRef = 56A5B90310ABAD44007412ED /* ONOZ.png */; };
+		56A5B93910ABB47B007412ED /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A5B93810ABB47B007412ED /* DetailViewController.m */; };
+		56A5BA3410ABDFAE007412ED /* DetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56A5BA3310ABDFAE007412ED /* DetailView.xib */; };
+		56D3059A10AC54BA00C1A6A1 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D3059910AC54BA00C1A6A1 /* Person.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +33,17 @@
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Presence_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Presence_Prefix.pch; sourceTree = "<group>"; };
+		560315A610ABA79A005F649A /* PersonListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonListViewController.h; sourceTree = "<group>"; };
+		560315A710ABA79A005F649A /* PersonListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonListViewController.m; sourceTree = "<group>"; };
+		568D7F8510AE29D400693A99 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Classes/Icon.png; sourceTree = "<group>"; };
+		56A5A88E10ABABB6007412ED /* ListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ListView.xib; path = Classes/ListView.xib; sourceTree = "<group>"; };
+		56A5B90210ABAD44007412ED /* OMFG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OMFG.png; sourceTree = "<group>"; };
+		56A5B90310ABAD44007412ED /* ONOZ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ONOZ.png; sourceTree = "<group>"; };
+		56A5B93710ABB47B007412ED /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		56A5B93810ABB47B007412ED /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		56A5BA3310ABDFAE007412ED /* DetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailView.xib; sourceTree = "<group>"; };
+		56D3059810AC54BA00C1A6A1 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Person.h; path = ../Person.h; sourceTree = "<group>"; };
+		56D3059910AC54BA00C1A6A1 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Person.m; path = ../Person.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Presence-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Presence-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -45,8 +64,14 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				56D3059810AC54BA00C1A6A1 /* Person.h */,
+				56D3059910AC54BA00C1A6A1 /* Person.m */,
+				56A5B93710ABB47B007412ED /* DetailViewController.h */,
+				56A5B93810ABB47B007412ED /* DetailViewController.m */,
 				1D3623240D0F684500981E51 /* PresenceAppDelegate.h */,
 				1D3623250D0F684500981E51 /* PresenceAppDelegate.m */,
+				560315A610ABA79A005F649A /* PersonListViewController.h */,
+				560315A710ABA79A005F649A /* PersonListViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -83,6 +108,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				568D7F8510AE29D400693A99 /* Icon.png */,
+				56A5A88E10ABABB6007412ED /* ListView.xib */,
+				56A5BA3310ABDFAE007412ED /* DetailView.xib */,
+				56A5B90210ABAD44007412ED /* OMFG.png */,
+				56A5B90310ABAD44007412ED /* ONOZ.png */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Presence-Info.plist */,
 			);
@@ -142,6 +172,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
+				56A5A88F10ABABB6007412ED /* ListView.xib in Resources */,
+				56A5B90410ABAD44007412ED /* OMFG.png in Resources */,
+				56A5B90510ABAD44007412ED /* ONOZ.png in Resources */,
+				56A5BA3410ABDFAE007412ED /* DetailView.xib in Resources */,
+				568D7F8610AE29D400693A99 /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +189,9 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* PresenceAppDelegate.m in Sources */,
+				560315A810ABA79A005F649A /* PersonListViewController.m in Sources */,
+				56A5B93910ABB47B007412ED /* DetailViewController.m in Sources */,
+				56D3059A10AC54BA00C1A6A1 /* Person.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 #import "PresenceAppDelegate.h"
+#import "PersonListViewController.h"
 
 @implementation PresenceAppDelegate
 
@@ -15,12 +16,23 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
 
-    // Override point for customization after application launch
+	navigationController = [[UINavigationController alloc]init];
+	[window addSubview:navigationController.view];
+	
+	//Instantiate the list view and push it on the navigation controller stack
+	PersonListViewController *listViewController = [[PersonListViewController alloc]initWithNibName:@"ListView" bundle:[NSBundle mainBundle]];
+	[listViewController setTitle:@"People"];
+	[navigationController pushViewController:listViewController animated:NO];
+	[listViewController release];
+	
+	// Override point for customization after application launch
     [window makeKeyAndVisible];
 }
 
 
 - (void)dealloc {
+	
+	[navigationController release];
     [window release];
     [super dealloc];
 }
