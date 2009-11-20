@@ -11,24 +11,19 @@
 
 @implementation Person
 
-@synthesize personName;
-@synthesize imageName;
-@synthesize personStatus;
+@synthesize userName;
+@synthesize displayName;
+@synthesize imageUrlString;
+@synthesize statusUpdates;
+@synthesize image;
 
--(id)initWithName:(NSString *)pName imageName:(NSString *)iName status:(NSString *)pStatus{
-
-	if (self == [super init]) {
-		personName = pName;
-		imageName = iName;
-		personStatus = pStatus;
-	}
-	return self;
-}
 -(void)dealloc{
 
-	[personName release];
-	[imageName release];
-	[personStatus release];
+	[userName release];
+	[displayName release];
+	[imageUrlString release];
+	[statusUpdates release];
+	[image release];
 	[super dealloc];
 }
 @end

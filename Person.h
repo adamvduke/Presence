@@ -11,14 +11,17 @@
 
 @interface Person : NSObject {
 
-	NSString *personName;
-	NSString *imageName;
-	NSString *personStatus;
+	NSString *userName;
+	NSString *displayName;
+	NSString *imageUrlString;
+	NSArray *statusUpdates;
+	UIImage *image;
 }
 
-@property (retain) NSString *imageName;
-@property (retain) NSString *personName;
-@property (retain) NSString *personStatus;
+@property (retain) NSString *userName;
+@property (retain) NSString *displayName;
+@property (retain) NSString *imageUrlString;
+@property (retain) NSArray *statusUpdates;
+@property (retain) UIImage *image;
 
--(id)initWithName:(NSString *)pName imageName:(NSString *)iName status:(NSString *)pStatus;
 @end
