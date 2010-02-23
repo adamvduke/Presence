@@ -15,6 +15,9 @@
 
 @synthesize people;
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+	return  (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
 
 -(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
 	NSMutableArray *temp = [[NSMutableArray alloc]init];
