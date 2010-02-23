@@ -58,6 +58,7 @@
 	cell.textLabel.numberOfLines = 0;
 	cell.textLabel.font = [UIFont systemFontOfSize:14];
 	cell.textLabel.text = [statusUpdates objectAtIndex:indexPath.row];
+	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	return cell;
 }
 
