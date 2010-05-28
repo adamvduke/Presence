@@ -11,7 +11,7 @@
 + (NSString *)twitterHostname
 {
 #if USE_TEST_SERVER
-	return @"www.stanford.edu/class/cs193p/presence-test";
+	return @"www.adamvduke.com/development/CS193P";
 #else
 	return @"twitter.com";
 #endif
