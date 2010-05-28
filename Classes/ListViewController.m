@@ -134,10 +134,7 @@
     
 	// Create and push another view controller.
 	Person *person = [people objectAtIndex:indexPath.row];
-	NSArray *statusUpdates = [person statusUpdates];
-	StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped];
-	statusViewController.statusUpdates = statusUpdates;
-	statusViewController.title = [person userName];
+	StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
 	[self.navigationController pushViewController:statusViewController animated:YES];
 	[statusViewController release];
 }

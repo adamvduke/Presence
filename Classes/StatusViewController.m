@@ -9,6 +9,7 @@
 #import "StatusViewController.h"
 
 @implementation StatusViewController
+@synthesize person;
 @synthesize statusUpdates;
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -17,6 +18,17 @@
     if (self = [super initWithStyle:style]) {
     }
     return self;
+}
+
+-(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson{
+
+	if (self = [super initWithStyle:style]) {
+		self.person = aPerson;
+		self.statusUpdates = aPerson.statusUpdates;
+		self.title = aPerson.userName;
+		//[self.navigationController.navigationBar 
+	}
+	return self;
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -7,13 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Person.h"
 
 @interface StatusViewController : UITableViewController {
 
+	Person *person;
 	NSArray *statusUpdates;
 }
 
+@property (retain) Person *person;
 @property (retain) NSArray *statusUpdates;
+
+-(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson;
 
 @end
