@@ -20,7 +20,7 @@
 	navigationController = [[UINavigationController alloc]init];
 	[window addSubview:navigationController.view];
 	
-	//create the list view controller and push it onto the navigation controller's stack§
+	//create the list view controller and push it onto the navigation controller's stack
 	ListViewController *listViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain];
 	[listViewController setTitle:@"People"];
 	[navigationController pushViewController:listViewController animated:YES];

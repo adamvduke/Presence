@@ -20,15 +20,19 @@
 }
 
 -(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
+	
 	NSMutableArray *temp = [[NSMutableArray alloc]init];
 	for (NSDictionary *timelineEntry in userTimeline) {
 		NSString *formatString = [NSString stringWithFormat:@"%@", [timelineEntry objectForKey:@"text"]];
 		[temp addObject:formatString];
 	}
-	return [NSArray arrayWithArray:temp];
+	NSArray *returnArray = [NSArray arrayWithArray:temp];
+	[temp release];
+	
+	return returnArray;
 }
 
-- (Person *) initPersonWithInfo: (NSDictionary *) userInfo userName: (NSString *) userName userTimeline:(NSArray *) userTimeline {
+- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName userTimeline:(NSArray *)userTimeline {
 	
 	NSString *imageUrlString = [userInfo valueForKey:@"profile_image_url"];
 	NSString *displayName = [userInfo valueForKey:@"screen_name"];
