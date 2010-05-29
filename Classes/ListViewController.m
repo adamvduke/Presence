@@ -27,35 +27,12 @@
 	NSString *imageUrlString = [userInfo valueForKey:@"profile_image_url"];
 	NSString *displayName = [userInfo valueForKey:@"screen_name"];
 	
-	//Initialize the UIImage for the person
-	NSURL *imageUrl = [NSURL URLWithString:imageUrlString];
-	NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
-	UIImage *image = [[UIImage alloc] initWithData:imageData];
-	
 	//Create the person object and return it
 	Person *person = [[Person alloc]init];
 	person.userName = userName;
 	person.displayName = displayName;
 	person.imageUrlString = imageUrlString;
-	person.image = image;
-	[image release];
 	return person;
-}
-
-- (id)initWithStyle:(UITableViewStyle)style {
-		
-	if (self = [super initWithStyle:style]){
-		
-		//Create the NSOperationQueue for threading data loading
-		queue = [[NSOperationQueue alloc]init];
-		
-		//set the maxConcurrent operations to 1
-		[queue setMaxConcurrentOperationCount:1];
-
-		//allocate the memory for the NSMutableArray of people on this ViewController
-		people = [[NSMutableArray alloc]init];
-	}
-	return self;
 }
 
 -(void) didFinishLoadingPerson{
@@ -110,12 +87,28 @@
 	[operation release];
 }
 
+- (id)initWithStyle:(UITableViewStyle)style {
+	
+	if (self = [super initWithStyle:style]){
+		
+		//Create the NSOperationQueue for threading data loading
+		queue = [[NSOperationQueue alloc]init];
+		
+		//set the maxConcurrent operations to 1
+		[queue setMaxConcurrentOperationCount:1];
+		
+		//allocate the memory for the NSMutableArray of people on this ViewController
+		people = [[NSMutableArray alloc]init];
+		
+		//begin loading data from twitter
+		[self beginLoadingTwitterData];
+	}
+	return self;
+}
+
 - (void)viewWillAppear:(BOOL)animated{
 
 	[super viewWillAppear:animated];
-	
-	//begin loading data from twitter
-	[self beginLoadingTwitterData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -164,6 +157,17 @@
 	//get a person object out of the people array for the correct IndexPath
 	//set the person's properties on the cell
 	Person *person = [people objectAtIndex:indexPath.row];
+	
+	if (person.image == nil) {
+		
+		//Initialize the UIImage for the person
+		NSURL *imageUrl = [NSURL URLWithString:person.imageUrlString];
+		NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
+		UIImage *image = [[UIImage alloc] initWithData:imageData];
+		person.image = image;
+		[image release];
+	}
+	
 	cell.imageView.image = person.image;
     cell.textLabel.text = person.userName;
 	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

@@ -12,12 +12,13 @@
 @implementation StatusViewController
 @synthesize person;
 @synthesize statusUpdates;
+@synthesize queue;
 
 -(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
 	
 	NSMutableArray *temp = [[NSMutableArray alloc]init];
 	for (NSDictionary *timelineEntry in userTimeline) {
-		NSString *formatString = [NSString stringWithFormat:@"%@", [timelineEntry objectForKey:@"text"]];
+		NSString *formatString = [NSString stringWithString:[timelineEntry objectForKey:@"text"]];
 		[temp addObject:formatString];
 	}
 	NSArray *returnArray = [NSArray arrayWithArray:temp];
@@ -26,23 +27,53 @@
 	return returnArray;
 }
 
--(void)loadData{
+-(void) didFinishLoadingUpdates{
+
+	[self.tableView reloadData];
+	[self.tableView flashScrollIndicators];
+}
+
+-(void) synchronousLoadUpdates{
 	
 	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:person.userName];
 	NSArray *statusArray = [self parseStatusUpdatesFromTimeline:userTimeline];
 	self.statusUpdates = statusArray;
 	
+	//call the main thread to notify that the data has finished loading
+	[self performSelectorOnMainThread:@selector(didFinishLoadingUpdates) withObject:nil waitUntilDone:NO];
+}
+
+- (void) beginLoadUpdates{
+	
+	//create the NSInvocationOperation and add it to the queue
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadUpdates) object:nil];
+	[queue addOperation:operation];
+	[operation release];
 }
 
 -(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson{
 
 	if (self = [super initWithStyle:style]) {
-		self.person = aPerson;
+		
+		//set the title of the view to "Tweets"
+		//this is the text displayed at the top
 		self.title = @"Tweets";
-		[self loadData];
-
+		
+		//set the person reference on the view
+		self.person = aPerson;
+		
+		//Create the NSOperationQueue for threading data loading
+		queue = [[NSOperationQueue alloc]init];
+		
+		//set the maxConcurrent operations to 1
+		[queue setMaxConcurrentOperationCount:1];
 	}
 	return self;
+}
+
+-(void) viewWillAppear:(BOOL)animated{
+	[super viewWillAppear:animated];
+	[self beginLoadUpdates];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -117,6 +148,7 @@
 }
 
 - (void)dealloc {
+	[queue dealloc];
     [super dealloc];
 }
 @end

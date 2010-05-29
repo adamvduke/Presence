@@ -13,10 +13,14 @@
 
 	Person *person;
 	NSArray *statusUpdates;
+	NSOperationQueue *queue;
+	
 }
 
 @property (retain) Person *person;
 @property (retain) NSArray *statusUpdates;
+@property (nonatomic, retain) NSOperationQueue *queue;
+
 
 -(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson;
 
