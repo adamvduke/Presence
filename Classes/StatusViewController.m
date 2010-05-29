@@ -7,25 +7,40 @@
 //
 
 #import "StatusViewController.h"
+#import "TwitterHelper.h"
 
 @implementation StatusViewController
 @synthesize person;
 @synthesize statusUpdates;
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    
-	// Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if (self = [super initWithStyle:style]) {
-    }
-    return self;
+-(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
+	
+	NSMutableArray *temp = [[NSMutableArray alloc]init];
+	for (NSDictionary *timelineEntry in userTimeline) {
+		NSString *formatString = [NSString stringWithFormat:@"%@", [timelineEntry objectForKey:@"text"]];
+		[temp addObject:formatString];
+	}
+	NSArray *returnArray = [NSArray arrayWithArray:temp];
+	[temp release];
+	
+	return returnArray;
+}
+
+-(void)loadData{
+	
+	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:person.userName];
+	NSArray *statusArray = [self parseStatusUpdatesFromTimeline:userTimeline];
+	self.statusUpdates = statusArray;
+	
 }
 
 -(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson{
 
 	if (self = [super initWithStyle:style]) {
 		self.person = aPerson;
-		self.statusUpdates = aPerson.statusUpdates;
 		self.title = @"Tweets";
+		[self loadData];
+
 	}
 	return self;
 }

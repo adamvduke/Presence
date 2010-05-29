@@ -19,20 +19,7 @@
 	return  (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
--(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
-	
-	NSMutableArray *temp = [[NSMutableArray alloc]init];
-	for (NSDictionary *timelineEntry in userTimeline) {
-		NSString *formatString = [NSString stringWithFormat:@"%@", [timelineEntry objectForKey:@"text"]];
-		[temp addObject:formatString];
-	}
-	NSArray *returnArray = [NSArray arrayWithArray:temp];
-	[temp release];
-	
-	return returnArray;
-}
-
-- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName userTimeline:(NSArray *)userTimeline {
+- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName {
 	
 	NSString *imageUrlString = [userInfo valueForKey:@"profile_image_url"];
 	NSString *displayName = [userInfo valueForKey:@"screen_name"];
@@ -41,14 +28,12 @@
 	NSURL *imageUrl = [NSURL URLWithString:imageUrlString];
 	NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
 	UIImage *image = [[UIImage alloc] initWithData:imageData];
-	NSArray *statusUpdates = [self parseStatusUpdatesFromTimeline:userTimeline];
 	
 	Person *person = [[Person alloc]init];
 	person.userName = userName;
 	person.displayName = displayName;
 	person.imageUrlString = imageUrlString;
 	person.image = image;
-	person.statusUpdates = statusUpdates;
 	[image release];
 	return person;
 }
@@ -62,10 +47,9 @@
 		
 		//Get the user's information from Twitter
 		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
-		NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:userName];		
 		if (userInfo != nil) {
 			
-			Person *person = [self initPersonWithInfo:userInfo userName:userName userTimeline:userTimeline];
+			Person *person = [self initPersonWithInfo:userInfo userName:userName];
 			[tempArray addObject:person];
 			[person release];
 		}
