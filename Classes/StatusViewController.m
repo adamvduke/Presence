@@ -25,7 +25,7 @@
 	if (self = [super initWithStyle:style]) {
 		self.person = aPerson;
 		self.statusUpdates = aPerson.statusUpdates;
-		self.title = aPerson.userName;
+		self.title = @"Tweets";
 		//[self.navigationController.navigationBar 
 	}
 	return self;
@@ -49,28 +49,47 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [statusUpdates count];
+	
+	if(section > 0)
+	{
+		return [statusUpdates count];
+	}
+    return 1;
 }
 
 // Customize the content of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"StatusCell";
-    //NSLog(@"%f" [tableView c])
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
-    }
+	static NSString *TitleCell = @"TitleCell";
+	static NSString *StatusCell = @"StatusCell";
 	
-	cell.textLabel.numberOfLines = 0;
-	cell.textLabel.font = [UIFont systemFontOfSize:14];
-	cell.textLabel.text = [statusUpdates objectAtIndex:indexPath.row];
-	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	NSUInteger section = indexPath.section;
+    UITableViewCell *cell;
+	
+	if (section > 0) {
+		cell = [tableView dequeueReusableCellWithIdentifier:StatusCell];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:StatusCell] autorelease];
+		}
+		cell.textLabel.numberOfLines = 0;
+		cell.textLabel.font = [UIFont systemFontOfSize:14];
+		cell.textLabel.text = [statusUpdates objectAtIndex:indexPath.row];
+		cell.imageView.image = nil;
+		[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	}
+	else {
+		cell = [tableView dequeueReusableCellWithIdentifier:TitleCell];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:TitleCell] autorelease];
+		}
+		cell.textLabel.text = person.userName;
+		cell.imageView.image = person.image;
+	}
 	return cell;
 }
 
