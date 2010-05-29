@@ -44,13 +44,37 @@
 	if (self = [super initWithStyle:style]){
 		queue = [[NSOperationQueue alloc]init];
 		[queue setMaxConcurrentOperationCount:1];
+		people = [[NSMutableArray alloc]init];
 	}
 	return self;
 }
 
+-(void) didFinishLoadingPerson{
+	[self.tableView reloadData];
+}
+
+-(void) synchronousLoadPerson:(NSString *)userName{
+	
+	//Get the user's information from Twitter
+	NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
+	if (userInfo != nil) {
+		Person *person = [self initPersonWithInfo:userInfo userName:userName];
+		[people addObject:person];
+		[person release];
+	}
+	[self performSelectorOnMainThread:@selector(didFinishLoadingPerson) withObject:nil waitUntilDone:NO];
+}
+
+- (void) beginLoadPerson:(NSString *)userName{
+	
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userName];
+	[queue addOperation:operation];
+	[operation release];
+}
+
 - (void)didFinishLoadingTwitterData{
 	
-	[self.tableView reloadData];
+	//[self.tableView reloadData];
 	[self.tableView flashScrollIndicators];
 }
 
@@ -58,22 +82,10 @@
 	
 	NSString *path = [[NSBundle mainBundle]pathForResource:@"TwitterUsers" ofType:@"plist"];
 	NSArray *userNames = [NSArray arrayWithContentsOfFile:path];
-	NSMutableArray *tempArray = [[NSMutableArray alloc]init];
 	for (NSString *userName in userNames) {
 		
-		//Get the user's information from Twitter
-		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
-		if (userInfo != nil) {
-			
-			Person *person = [self initPersonWithInfo:userInfo userName:userName];
-			[tempArray addObject:person];
-			[person release];
-		}
+		[self beginLoadPerson:userName];
 	}
-	self.people = tempArray;
-	[tempArray release];
-	
-	[self performSelectorOnMainThread:@selector(didFinishLoadingTwitterData) withObject:nil waitUntilDone:NO];
 }
 
 - (void)beginLoadingTwitterData{
@@ -147,5 +159,7 @@
 
 - (void)dealloc {
     [super dealloc];
+	[people release];
+	[queue release];
 }
 @end
