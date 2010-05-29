@@ -26,7 +26,6 @@
 		self.person = aPerson;
 		self.statusUpdates = aPerson.statusUpdates;
 		self.title = @"Tweets";
-		//[self.navigationController.navigationBar 
 	}
 	return self;
 }
@@ -79,7 +78,6 @@
 		cell.textLabel.numberOfLines = 0;
 		cell.textLabel.font = [UIFont systemFontOfSize:14];
 		cell.textLabel.text = [statusUpdates objectAtIndex:indexPath.row];
-		cell.imageView.image = nil;
 		[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	}
 	else {
