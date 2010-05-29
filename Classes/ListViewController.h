@@ -11,9 +11,12 @@
 
 @interface ListViewController : UITableViewController {
 	NSMutableArray *people;
+	NSOperationQueue *queue;
 }
 
 
 @property (retain) NSMutableArray *people;
+@property (nonatomic, retain) NSOperationQueue *queue;
+
 
 @end

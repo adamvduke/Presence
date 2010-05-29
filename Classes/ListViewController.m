@@ -14,6 +14,7 @@
 @implementation ListViewController
 
 @synthesize people;
+@synthesize queue;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
 	return  (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
@@ -38,7 +39,22 @@
 	return person;
 }
 
--(void)loadData{
+- (id)initWithStyle:(UITableViewStyle)style {
+		
+	if (self = [super initWithStyle:style]){
+		queue = [[NSOperationQueue alloc]init];
+		[queue setMaxConcurrentOperationCount:1];
+	}
+	return self;
+}
+
+- (void)didFinishLoadingTwitterData{
+	
+	[self.tableView reloadData];
+	[self.tableView flashScrollIndicators];
+}
+
+- (void)synchronousLoadTwitterData{
 	
 	NSString *path = [[NSBundle mainBundle]pathForResource:@"TwitterUsers" ofType:@"plist"];
 	NSArray *userNames = [NSArray arrayWithContentsOfFile:path];
@@ -56,16 +72,22 @@
 	}
 	self.people = tempArray;
 	[tempArray release];
+	
+	[self performSelectorOnMainThread:@selector(didFinishLoadingTwitterData) withObject:nil waitUntilDone:NO];
 }
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (void)beginLoadingTwitterData{
+
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadTwitterData) object:nil];
+	[queue addOperation:operation];
+	[operation release];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+
+	[super viewWillAppear:animated];
 	
-	// Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-	
-	if (self = [super initWithStyle:style]){
-		[self loadData];
-	}
-	return self;
+	[self beginLoadingTwitterData];
 }
 
 - (void)didReceiveMemoryWarning {
