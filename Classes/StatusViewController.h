@@ -12,13 +12,10 @@
 @interface StatusViewController : UITableViewController {
 
 	Person *person;
-	NSArray *statusUpdates;
-	NSOperationQueue *queue;
-	
+	NSOperationQueue *queue;	
 }
 
 @property (retain) Person *person;
-@property (retain) NSArray *statusUpdates;
 @property (nonatomic, retain) NSOperationQueue *queue;
 
 

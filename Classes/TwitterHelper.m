@@ -42,4 +42,14 @@
     return [self fetchJSONValueForURL:url];
 }
 
++(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
+	
+	NSMutableArray *returnArray = [[[NSMutableArray alloc]init]autorelease];
+	for (NSDictionary *timelineEntry in userTimeline) {
+		NSString *formatString = [NSString stringWithString:[timelineEntry objectForKey:@"text"]];
+		[returnArray addObject:formatString];
+	}
+	return returnArray;
+}
+
 @end

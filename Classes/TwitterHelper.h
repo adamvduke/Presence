@@ -28,4 +28,8 @@
 // This method is synchronous (it will block the calling thread).
 + (NSArray *)fetchTimelineForUsername:(NSString *)username;
 
+// Returns an array that contains the individual status updates from a 
+// Timeline
++(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline;
+
 @end
