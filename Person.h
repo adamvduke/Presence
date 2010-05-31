@@ -24,4 +24,6 @@
 @property (retain) NSArray *statusUpdates;
 @property (retain) UIImage *image;
 
+-(Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName;
+
 @end

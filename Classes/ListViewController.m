@@ -20,21 +20,6 @@
 	return  (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
-//Create a Person object from the NSDictionary of userInfo and a userName
-- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName {
-	
-	//Keys in the dictionary for the url string and display name
-	NSString *imageUrlString = [userInfo valueForKey:@"profile_image_url"];
-	NSString *displayName = [userInfo valueForKey:@"screen_name"];
-	
-	//Create the person object and return it
-	Person *person = [[Person alloc]init];
-	person.userName = userName;
-	person.displayName = displayName;
-	person.imageUrlString = imageUrlString;
-	return person;
-}
-
 -(void) didFinishLoadingPerson{
 	
 	//after each person has finished loading, reload the table's data
@@ -52,7 +37,7 @@
 	//Get the user's information from Twitter
 	NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
 	if (userInfo != nil) {
-		Person *person = [self initPersonWithInfo:userInfo userName:userName];
+		Person *person = [[Person alloc]initPersonWithInfo:userInfo userName:userName];
 		[people addObject:person];
 		[person release];
 	}
