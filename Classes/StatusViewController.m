@@ -21,12 +21,14 @@
 
 -(void) synchronousLoadUpdates{
 	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
 	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:person.userName];
 	NSArray *statusArray = [TwitterHelper parseStatusUpdatesFromTimeline:userTimeline];
 	person.statusUpdates = statusArray;
 	
 	//call the main thread to notify that the data has finished loading
 	[self performSelectorOnMainThread:@selector(didFinishLoadingUpdates) withObject:nil waitUntilDone:NO];
+	[pool release];
 }
 
 - (void) beginLoadUpdates{

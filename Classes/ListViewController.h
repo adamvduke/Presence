@@ -12,11 +12,13 @@
 @interface ListViewController : UITableViewController {
 	NSMutableArray *people;
 	NSOperationQueue *queue;
+	UIActivityIndicatorView	*spinner;
 }
 
 
 @property (retain) NSMutableArray *people;
 @property (nonatomic, retain) NSOperationQueue *queue;
+@property (retain) UIActivityIndicatorView	*spinner;
 
 
 @end

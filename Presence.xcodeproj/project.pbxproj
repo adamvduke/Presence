@@ -15,6 +15,8 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		560315A810ABA79A005F649A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* ListViewController.m */; };
 		5637324F10B21BD80016B43A /* TwitterUsers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5637324E10B21BD80016B43A /* TwitterUsers.plist */; };
+		5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */; };
+		5638D04511B494CB00C9F272 /* ComposeStatusViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5638D04311B494CB00C9F272 /* ComposeStatusViewController.xib */; };
 		568D7F8610AE29D400693A99 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 568D7F8510AE29D400693A99 /* Icon.png */; };
 		56B897BD10B34DB400C7C5FF /* StatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B897BC10B34DB400C7C5FF /* StatusViewController.m */; };
 		56C5613210B248120014D33C /* TwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C5613110B248120014D33C /* TwitterHelper.m */; };
@@ -37,6 +39,9 @@
 		560315A610ABA79A005F649A /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
 		560315A710ABA79A005F649A /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		5637324E10B21BD80016B43A /* TwitterUsers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = TwitterUsers.plist; path = Classes/TwitterUsers.plist; sourceTree = "<group>"; };
+		5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeStatusViewController.h; sourceTree = "<group>"; };
+		5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeStatusViewController.m; sourceTree = "<group>"; };
+		5638D04311B494CB00C9F272 /* ComposeStatusViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ComposeStatusViewController.xib; path = Classes/ComposeStatusViewController.xib; sourceTree = "<group>"; };
 		568D7F8510AE29D400693A99 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Classes/Icon.png; sourceTree = "<group>"; };
 		56B897BB10B34DB400C7C5FF /* StatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusViewController.h; sourceTree = "<group>"; };
 		56B897BC10B34DB400C7C5FF /* StatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusViewController.m; sourceTree = "<group>"; };
@@ -81,6 +86,8 @@
 				560315A710ABA79A005F649A /* ListViewController.m */,
 				56B897BB10B34DB400C7C5FF /* StatusViewController.h */,
 				56B897BC10B34DB400C7C5FF /* StatusViewController.m */,
+				5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */,
+				5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -118,6 +125,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5638D04311B494CB00C9F272 /* ComposeStatusViewController.xib */,
 				5637324E10B21BD80016B43A /* TwitterUsers.plist */,
 				568D7F8510AE29D400693A99 /* Icon.png */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
@@ -195,6 +203,7 @@
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				568D7F8610AE29D400693A99 /* Icon.png in Resources */,
 				5637324F10B21BD80016B43A /* TwitterUsers.plist in Resources */,
+				5638D04511B494CB00C9F272 /* ComposeStatusViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,6 +223,7 @@
 				56C5613C10B2481E0014D33C /* NSString+SBJSON.m in Sources */,
 				56C5613D10B2481E0014D33C /* SBJSON.m in Sources */,
 				56B897BD10B34DB400C7C5FF /* StatusViewController.m in Sources */,
+				5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

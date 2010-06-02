@@ -32,4 +32,16 @@
 // Timeline
 +(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline;
 
+// Returns a dictionary with info about the given username.
+// This method is synchronous (it will block the calling thread).
++ (NSArray *)fetchFriendsForUsername:(NSString *)username;
+
+// Returns YES if the status update succeeded, otherwise NO.
++ (BOOL)updateStatus:(NSString *)status forUsername:(NSString *)username withPassword:(NSString *)password;
+
+// Returns an array of the users with the most recent status updates.
++ (NSArray *)fetchPublicTimeline;
+
+// Returns status updates matching the query string.
++ (NSDictionary *)fetchSearchResultsForQuery:(NSString *)query;
 @end

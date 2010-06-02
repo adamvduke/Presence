@@ -6,28 +6,44 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import "ComposeStatusViewController.h"
 #import "ListViewController.h"
 #import "Person.h"
-#import "TwitterHelper.h"
 #import "StatusViewController.h"
+#import "TwitterHelper.h"
+
 
 @implementation ListViewController
 
 @synthesize people;
 @synthesize queue;
+@synthesize spinner;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+	
+	// return YES for all orientations except upside down
 	return  (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 -(void) didFinishLoadingPerson{
-	
+
 	//after each person has finished loading, reload the table's data
 	[self.tableView reloadData];
 	
-	//if this is the last operation in the queue, flash the scroll indicators
+	//if this is the last operation in the queue
 	NSArray *operations = [queue operations];
-	if ([operations count] == 1) {
+	if ([operations count] <= 1) {
+		
+		// if the spinner is active stop it
+		if ([spinner isAnimating]) {
+			[spinner stopAnimating];
+			[spinner removeFromSuperview];
+		}
+		
+		// stop the network indicator
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO; 
+
+		// flash the scroll indicators to show give the user an idea of how long the list is
 		[self.tableView flashScrollIndicators];
 	}
 }
@@ -42,13 +58,16 @@
 		[person release];
 	}
 	
+	// add a wait to the loading for demonstrating the activity indicators
+	[NSThread sleepForTimeInterval:.2f];
+	
 	//call the main thread to notify that the person has finished loading
 	[self performSelectorOnMainThread:@selector(didFinishLoadingPerson) withObject:nil waitUntilDone:NO];
 }
 
 - (void) beginLoadPerson:(NSString *)userName{
 	
-	//create the NSInvocationOperation and add it to the queue
+	//create an NSInvocationOperation and add it to the queue
 	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userName];
 	[queue addOperation:operation];
 	[operation release];
@@ -72,6 +91,13 @@
 	[operation release];
 }
 
+-(void)presentUpdateStatusController{
+
+	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] initWithNibName:@"ComposeStatusViewController" bundle:[NSBundle mainBundle]];
+	[self.navigationController presentModalViewController:statusViewController animated:YES];
+	
+}
+
 - (id)initWithStyle:(UITableViewStyle)style {
 	
 	if (self = [super initWithStyle:style]){
@@ -85,15 +111,33 @@
 		//allocate the memory for the NSMutableArray of people on this ViewController
 		people = [[NSMutableArray alloc]init];
 		
-		//begin loading data from twitter
-		[self beginLoadingTwitterData];
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Tweet!" style:UIBarButtonSystemItemCompose target:self action:@selector(presentUpdateStatusController)];
+		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
+		[rightBarButton release];
 	}
 	return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
 
+	
 	[super viewWillAppear:animated];
+	
+	if ([people count] == 0) {
+		
+		// start the device's network activity indicator
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES; 
+		
+		// initialize and start animating the UIActivityIndicatorView for this view controller
+		spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		[spinner setCenter:self.view.center]; 
+		[self.view addSubview:spinner];
+		[spinner startAnimating];
+		
+		//begin loading data from twitter
+		[self beginLoadingTwitterData];
+	}
+	
 }
 
 - (void)didReceiveMemoryWarning {
