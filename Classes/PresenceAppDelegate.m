@@ -18,6 +18,7 @@
 
 	//create navigation controller and add it's view to the window
 	navigationController = [[UINavigationController alloc]init];
+	navigationController.navigationBar.barStyle = UIBarStyleBlack;
 	[window addSubview:navigationController.view];
 	
 	//create the list view controller and push it onto the navigation controller's stack
