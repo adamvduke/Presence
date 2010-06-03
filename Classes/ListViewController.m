@@ -111,7 +111,7 @@
 		//allocate the memory for the NSMutableArray of people on this ViewController
 		people = [[NSMutableArray alloc]init];
 		
-		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Tweet!" style:UIBarButtonSystemItemCompose target:self action:@selector(presentUpdateStatusController)];
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentUpdateStatusController)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
 	}
