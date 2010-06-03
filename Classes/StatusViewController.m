@@ -118,6 +118,8 @@
 	NSUInteger section = indexPath.section;
     UITableViewCell *cell;
 	
+	
+	//TODO: Document this method better
 	if (section == 0) {
 		cell = [tableView dequeueReusableCellWithIdentifier:TitleCell];
 		if (cell == nil) {
