@@ -43,6 +43,11 @@
 
 	if (self = [super initWithStyle:style]) {
 				
+		//set the right bar button for reloading the data
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(beginLoadUpdates)];
+		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
+		[rightBarButton release];
+
 		//set the title of the view to "Tweets"
 		//this is the text displayed at the top
 		self.title = @"Tweets";
