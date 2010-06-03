@@ -12,50 +12,69 @@
 
 @implementation ComposeStatusViewController
 
--(IBAction)cancelAction{
+-(IBAction)dismiss{
 	
 	[self dismissModalViewControllerAnimated:YES];
-}
-
--(IBAction)changeCountLabel{
-
-	charactersLabel.text = [NSString stringWithFormat:@"%d/140",[textView.text length]];
 }
 
 -(IBAction)tweetAction{
 	
 	// MUST ADD USERNAME AND PASSWORD TO POST UPDATES
 	BOOL success = [TwitterHelper updateStatus:textView.text forUsername:@"" withPassword:@""];
-	[self dismissModalViewControllerAnimated:YES];
+	if (!success) {
+		
+		//Display an error message
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update failed!" message:@"Your update failed. Check your network settings and try again." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
+		[alert show];
+	    [alert release];
+		
+		//TODO: Save the contents of the update somewhere so that it can be re populated
+	}
+	else {
+		
+		[self dismiss];
+	}
 }
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        textView.text = @"";
-    }
-    return self;
+- (BOOL)textView:(UITextView *)theTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+	
+	if ([theTextView.text length] + [text length] <= 140) {
+		return YES;
+	}
+	return NO;
 }
-*/
 
+- (void)textViewDidChange:(UITextView *)theTextView{
+
+	countLabel.text = [NSString stringWithFormat:@"%d/140",[theTextView.text length]];
+
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+
+	[super viewWillAppear:animated];
+	[textView becomeFirstResponder];
+	textView.layer.cornerRadius = 8;
+
+}
 
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     textView.text = @"";
 	charactersLabel.text = @"Characters:";
-	countLabel.text = @"000/140";
+	countLabel.text = @"0/140";
 }
 
 
 /*
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-*/
+    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}*/
+
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
