@@ -14,6 +14,7 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		560315A810ABA79A005F649A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* ListViewController.m */; };
+		563329FA11B761BF00BF4184 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563329F911B761BF00BF4184 /* QuartzCore.framework */; };
 		5637324F10B21BD80016B43A /* TwitterUsers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5637324E10B21BD80016B43A /* TwitterUsers.plist */; };
 		5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */; };
 		5638D04511B494CB00C9F272 /* ComposeStatusViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5638D04311B494CB00C9F272 /* ComposeStatusViewController.xib */; };
@@ -38,6 +39,7 @@
 		32CA4F630368D1EE00C91783 /* Presence_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Presence_Prefix.pch; sourceTree = "<group>"; };
 		560315A610ABA79A005F649A /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
 		560315A710ABA79A005F649A /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		563329F911B761BF00BF4184 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5637324E10B21BD80016B43A /* TwitterUsers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = TwitterUsers.plist; path = Classes/TwitterUsers.plist; sourceTree = "<group>"; };
 		5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeStatusViewController.h; sourceTree = "<group>"; };
 		5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeStatusViewController.m; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
+				563329FA11B761BF00BF4184 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +140,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				563329F911B761BF00BF4184 /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
