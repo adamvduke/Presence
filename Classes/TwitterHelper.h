@@ -28,8 +28,8 @@
 // This method is synchronous (it will block the calling thread).
 + (NSArray *)fetchTimelineForUsername:(NSString *)username;
 
-// Returns an array that contains the individual status updates from a 
-// Timeline
+// Returns an array that contains the individual status updates from a timeline
+// This method is synchronous (it will block the calling thread).
 +(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline;
 
 // Returns a dictionary with info about the given username.
@@ -37,11 +37,14 @@
 + (NSArray *)fetchFriendsForUsername:(NSString *)username;
 
 // Returns YES if the status update succeeded, otherwise NO.
+// This method is synchronous (it will block the calling thread).
 + (BOOL)updateStatus:(NSString *)status forUsername:(NSString *)username withPassword:(NSString *)password;
 
 // Returns an array of the users with the most recent status updates.
+// This method is synchronous (it will block the calling thread).
 + (NSArray *)fetchPublicTimeline;
 
 // Returns status updates matching the query string.
+// This method is synchronous (it will block the calling thread).
 + (NSDictionary *)fetchSearchResultsForQuery:(NSString *)query;
 @end

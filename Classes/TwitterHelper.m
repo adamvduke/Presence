@@ -34,7 +34,6 @@
     return [self fetchJSONValueForURL:url];
 }
 
-
 + (NSArray *)fetchTimelineForUsername:(NSString *)username
 {
     NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/user_timeline/%@.json", [self twitterHostname], username];

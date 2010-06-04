@@ -9,6 +9,8 @@
 #import "ComposeStatusViewController.h"
 #import "ListViewController.h"
 #import "Person.h"
+#import "PresenceContants.h"
+#import "SettingsViewController.h"
 #import "StatusViewController.h"
 #import "TwitterHelper.h"
 
@@ -25,12 +27,13 @@
 	return  (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+// called by synchronousLoadPerson when the load has finished
 -(void) didFinishLoadingPerson{
 
-	//after each person has finished loading, reload the table's data
+	// after each person has finished loading, reload the table's data
 	[self.tableView reloadData];
 	
-	//if this is the last operation in the queue
+	// if this is the last operation in the queue
 	NSArray *operations = [queue operations];
 	if ([operations count] <= 1) {
 		
@@ -48,9 +51,11 @@
 	}
 }
 
+// synchronously fetch data, initialize a person object, and add it to the list of people
+// call the main thread when finished
 -(void) synchronousLoadPerson:(NSString *)userName{
 	
-	//Get the user's information from Twitter
+	// get the user's information from Twitter
 	NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
 	if (userInfo != nil) {
 		Person *person = [[Person alloc]initPersonWithInfo:userInfo userName:userName];
@@ -58,13 +63,11 @@
 		[person release];
 	}
 	
-	// add a wait to the loading for demonstrating the activity indicators
-	[NSThread sleepForTimeInterval:.2f];
-	
-	//call the main thread to notify that the person has finished loading
+	// call the main thread to notify that the person has finished loading
 	[self performSelectorOnMainThread:@selector(didFinishLoadingPerson) withObject:nil waitUntilDone:NO];
 }
 
+// start to load a person object asynchronously
 - (void) beginLoadPerson:(NSString *)userName{
 	
 	//create an NSInvocationOperation and add it to the queue
@@ -73,6 +76,7 @@
 	[operation release];
 }
 
+// synchronously get the usernames and call beginLoadPerson for each username
 - (void)synchronousLoadTwitterData{
 	
 	//read the user names from the TwitterUsers plist and begin a load operation for each person
@@ -83,6 +87,7 @@
 	}
 }
 
+// start to load data asynchronously so that the UI is not blocked
 - (void)beginLoadingTwitterData{
 
 	//create the NSInvocationOperation and add it to the queue
@@ -91,13 +96,21 @@
 	[operation release];
 }
 
+// show a modal view controller that will allow a user to compose a twitter status
 -(void)presentUpdateStatusController{
 
-	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] initWithNibName:@"ComposeStatusViewController" bundle:[NSBundle mainBundle]];
+	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] initWithNibName:ComposeStatusViewControllerNibName bundle:[NSBundle mainBundle]];
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
-	
 }
 
+// show a modal view controller that will allow a user to enter his/her twitter credentials
+-(void)presentSettingsViewController{
+
+	SettingsViewController *settingsViewController = [[SettingsViewController alloc]initWithNibName:SettingsViewControllerNibName bundle:[NSBundle mainBundle]];
+	[self.navigationController presentModalViewController:settingsViewController animated:YES];
+}
+
+// override initWithStyle to do some custom setup for this view controller
 - (id)initWithStyle:(UITableViewStyle)style {
 	
 	if (self = [super initWithStyle:style]){
@@ -111,18 +124,25 @@
 		//allocate the memory for the NSMutableArray of people on this ViewController
 		people = [[NSMutableArray alloc]init];
 		
+		// create a UIBarButtonItem for the right side using the Compose style, this will present the ComposeStatusViewController modally
 		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentUpdateStatusController)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
+		
+		// create a UIBarButton Item for the left side using the Action style, this will present the SettingsViewController modally
+		UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(presentSettingsViewController)];
+		[self.navigationItem setLeftBarButtonItem:leftBarButton];
+		[leftBarButton release];
 	}
 	return self;
 }
 
+// override viewWillAppear to begin the data load
 - (void)viewWillAppear:(BOOL)animated{
 
-	
 	[super viewWillAppear:animated];
 	
+	// if the array of people is empty, start the activity indicators and begin loading data
 	if ([people count] == 0) {
 		
 		// start the device's network activity indicator
@@ -139,6 +159,7 @@
 	}
 	
 }
+
 
 - (void)didReceiveMemoryWarning {
 	
@@ -197,13 +218,14 @@
 		[image release];
 	}
 	
+	// set the image, text and accesory type on the cell
 	cell.imageView.image = person.image;
     cell.textLabel.text = person.userName;
 	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
-
+// override didSelectRowAtIndexPath to push a StatusViewController onto the navigation stack when a row is selected
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	// Create and push another view controller.
@@ -211,18 +233,18 @@
 	Person *person = [people objectAtIndex:indexPath.row];
 	StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
 	
-	//push the new view controller onto the navigation stack
+	// push the new view controller onto the navigation stack
 	[self.navigationController pushViewController:statusViewController animated:YES];
 	[statusViewController release];
 }
 
 - (void)dealloc {
 	
-	//always call the dealloc of the super class
-    [super dealloc];
-	
-	//make sure to deallocate the people array and the operation queue
+	// make sure to deallocate the people array and the operation queue
 	[people release];
 	[queue release];
-}
+	
+	// always call the dealloc of the super class
+    [super dealloc];
+	}
 @end
