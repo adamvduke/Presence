@@ -13,6 +13,7 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		560315A810ABA79A005F649A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* ListViewController.m */; };
 		56129B0F11B87B1F0030E797 /* ErrorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56129B0E11B87B1F0030E797 /* ErrorHelper.m */; };
+		561E9B6211BAE59F005A6BC8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 561E9B6011BAE59F005A6BC8 /* Localizable.strings */; };
 		563329FA11B761BF00BF4184 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563329F911B761BF00BF4184 /* QuartzCore.framework */; };
 		5637324F10B21BD80016B43A /* TwitterUsers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5637324E10B21BD80016B43A /* TwitterUsers.plist */; };
 		5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */; };
@@ -43,6 +44,8 @@
 		560315A710ABA79A005F649A /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		56129B0D11B87B1F0030E797 /* ErrorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorHelper.h; sourceTree = "<group>"; };
 		56129B0E11B87B1F0030E797 /* ErrorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorHelper.m; sourceTree = "<group>"; };
+		561E9B6111BAE59F005A6BC8 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		561E9B6311BAE5AC005A6BC8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		563329F911B761BF00BF4184 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5637324E10B21BD80016B43A /* TwitterUsers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = TwitterUsers.plist; path = Classes/TwitterUsers.plist; sourceTree = "<group>"; };
 		5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeStatusViewController.h; sourceTree = "<group>"; };
@@ -145,6 +148,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				561E9B6011BAE59F005A6BC8 /* Localizable.strings */,
 				5640027011B8C10500355A74 /* Icon.png */,
 				5640026A11B8C0EB00355A74 /* ComposeStatusViewController.xib */,
 				5640026B11B8C0EB00355A74 /* MainWindow.xib */,
@@ -211,6 +215,14 @@
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Presence" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				en,
+				es,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -230,6 +242,7 @@
 				5640026E11B8C0EB00355A74 /* MainWindow.xib in Resources */,
 				5640026F11B8C0EB00355A74 /* SettingsViewController.xib in Resources */,
 				5640027111B8C10500355A74 /* Icon.png in Resources */,
+				561E9B6211BAE59F005A6BC8 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,6 +270,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		561E9B6011BAE59F005A6BC8 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				561E9B6111BAE59F005A6BC8 /* en */,
+				561E9B6311BAE5AC005A6BC8 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {

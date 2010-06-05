@@ -64,7 +64,8 @@
 		
 		//set the title of the view to "Tweets"
 		//this is the text displayed at the top
-		self.title = StatusViewTitle;
+		NSString *statusViewTitle = NSLocalizedString(StatusViewTitleKey, @"");
+		self.title = statusViewTitle;
 		
 		//set the person reference on the view
 		self.person = aPerson;
