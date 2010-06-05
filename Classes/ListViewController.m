@@ -101,6 +101,7 @@
 
 	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] initWithNibName:ComposeStatusViewControllerNibName bundle:[NSBundle mainBundle]];
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
+	[statusViewController release];
 }
 
 // show a modal view controller that will allow a user to enter his/her twitter credentials
@@ -108,6 +109,7 @@
 
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc]initWithNibName:SettingsViewControllerNibName bundle:[NSBundle mainBundle]];
 	[self.navigationController presentModalViewController:settingsViewController animated:YES];
+	[settingsViewController release];
 }
 
 // override initWithStyle to do some custom setup for this view controller
