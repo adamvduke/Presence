@@ -9,13 +9,13 @@
 #import "PresenceContants.h"
 #import "SettingsViewController.h"
 
-
 @implementation SettingsViewController
 
 @synthesize usernameLabel;
 @synthesize passwordLabel;
 @synthesize usernameField;
 @synthesize passwordField;
+@synthesize liveDataSwitch;
 @synthesize delegate;
 
 // dismiss the modal view controller
@@ -24,12 +24,13 @@
 	[self.delegate didFinish:self];
 }
 
-// save the credential information to NSUserDefaults
+// save the state of the settings to NSUserDefaults
 -(IBAction)save
 {	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:usernameField.text forKey:UsernameKey];
 	[defaults setObject:passwordField.text forKey:PasswordKey];
+	[defaults setBool:liveDataSwitch.isOn forKey:LiveDataKey];
 	
 	// after the data is saved, dismiss the modal view controller
 	[self dismiss];
@@ -41,6 +42,7 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	usernameField.text = [defaults objectForKey:UsernameKey];
 	passwordField.text = [defaults objectForKey:PasswordKey];
+	liveDataSwitch.on = [defaults boolForKey:LiveDataKey];
 	
 	// set the clearsOnBeginEditing property to NO, allow the user to decide to delete the current values
 	usernameField.clearsOnBeginEditing = NO;
@@ -73,6 +75,7 @@
 	[passwordLabel release];
 	[usernameField release];
 	[passwordField release];
+	[liveDataSwitch release];
     [super dealloc];
 }
 

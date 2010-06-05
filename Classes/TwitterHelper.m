@@ -2,7 +2,7 @@
 //  TwitterHelper.m
 //  Presence
 //
-
+#import "PresenceContants.h"
 #import "TwitterHelper.h"
 #import "JSON.h"
 
@@ -10,11 +10,15 @@
 
 + (NSString *)twitterHostname
 {
-#if USE_TEST_SERVER
-	return @"www.adamvduke.com/development/CS193P";
-#else
-	return @"twitter.com";
-#endif
+	BOOL useLiveData = [[NSUserDefaults standardUserDefaults] boolForKey:LiveDataKey];
+	if (useLiveData) 
+	{
+		return @"twitter.com";
+	}
+	else
+	{
+		return @"www.adamvduke.com/development/CS193P";
+	}
 }
 
 + (id)fetchJSONValueForURL:(NSURL *)url

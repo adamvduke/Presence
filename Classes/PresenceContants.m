@@ -26,3 +26,5 @@ NSString *const TweetContentKey = @"TweetContent";
 NSString *const UsernameKey = @"Username";
 
 NSString *const PasswordKey = @"Password";
+
+NSString *const LiveDataKey = @"LiveData";

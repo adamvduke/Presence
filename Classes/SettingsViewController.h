@@ -24,6 +24,10 @@
 	// text field for the password
 	IBOutlet UITextField *passwordField;
 	
+	// switch to select between live twitter data and test data
+	IBOutlet UISwitch *liveDataSwitch;
+	
+	// the settings view controller delegate
 	id<SettingsViewControllerDelegate> delegate;
 }
 
@@ -31,6 +35,7 @@
 @property (retain)UILabel *passwordLabel;
 @property (retain)UITextField *usernameField;
 @property (retain)UITextField *passwordField;
+@property (retain)UISwitch *liveDataSwitch;
 @property (assign) id<SettingsViewControllerDelegate> delegate;
 
 // Provide an implementation to dismiss this view contoller when presented modally
