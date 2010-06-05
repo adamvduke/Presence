@@ -1,0 +1,32 @@
+/* 
+   Localizable.strings
+   Presence
+   English localization
+   
+   Created by Adam Duke on 6/5/10.
+   Copyright 2010 Adam Duke. All rights reserved.
+ */
+
+// English localization for "Following"
+"FollowingKey" = "Following";
+
+// English localization for "Tweets"
+"TweetsKey" = "Tweets";
+
+// English localization for "Settings"
+"SettingsKey" = "Settings";
+
+// English localization for "Username"
+"UsernameKey" = "Username";
+
+// English localization for "Password"
+"PasswordKey" = "Password";
+
+// English localization for "Live Data"
+"LiveDataKey" = "Live Data";
+
+// English localization for "Compose"
+"ComposeKey" = "Compose";
+
+// English localization for "Tweet"
+"TweetKey" = "Tweet";

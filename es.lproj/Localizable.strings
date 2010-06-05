@@ -1,0 +1,38 @@
+/* 
+   Localizable.strings
+   Presence
+   Spanish localizations
+   
+   Created by Adam Duke on 6/5/10.
+   Copyright 2010 Adam Duke. All rights reserved.
+ */
+
+// Spanish key for "Following"
+"FollowingKey" = "es_Following";
+
+// Spanish localization for "Tweets"
+"TweetsKey" = "es_Tweets";
+
+// Spanish localization for "Following"
+"FollowingKey" = "es_Following";
+
+// Spanish localization for "Tweets"
+"TweetsKey" = "es_Tweets";
+
+// Spanish localization for "Settings"
+"SettingsKey" = "es_Settings";
+
+// Spanish localization for "Username"
+"UsernameKey" = "es_Username";
+
+// Spanish localization for "Password"
+"PasswordKey" = "es_Password";
+
+// Spanish localization for "Live Data"
+"LiveDataKey" = "es_Live Data";
+
+// Spanish localization for "Compose"
+"ComposeKey" = "es_Compose";
+
+// Spanish localization for "Tweet"
+"TweetKey" = "es_Tweet";
