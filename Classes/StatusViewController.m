@@ -151,7 +151,7 @@
 	// because there are only two sections, the else block will always create cells styled for statuses
 	else {
 		// attempt to deque a reuseable cel with the TitleCellReuseIdentifier, if not available create one
-		cell = [tableView dequeueReusableCellWithIdentifier:TitleCellReuseIdentifier];
+		cell = [tableView dequeueReusableCellWithIdentifier:StatusCellReuseIdentifier];
 		if (cell == nil) {
 			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:StatusCellReuseIdentifier] autorelease];
 		}
