@@ -30,7 +30,8 @@
 	ListViewController *listViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain];
 	
 	// set the listViewController's title to a globally defined string
-	[listViewController setTitle:ListViewTitle];
+	NSString *title = NSLocalizedString(ListViewControllerTitleKey, @"");
+	[listViewController setTitle:title];
 	
 	// use the navigation contoller to push a view controller on the stack
 	[navigationController pushViewController:listViewController animated:YES];
