@@ -12,10 +12,16 @@
 
 @implementation SettingsViewController
 
+@synthesize usernameLabel;
+@synthesize passwordLabel;
+@synthesize usernameField;
+@synthesize passwordField;
+@synthesize delegate;
+
 // dismiss the modal view controller
 -(IBAction)dismiss{
 
-	[self dismissModalViewControllerAnimated:YES];
+	[self.delegate didFinish:self];
 }
 
 // save the credential information to NSUserDefaults
@@ -60,8 +66,12 @@
 }
 
 - (void)dealloc {
+	
+	[usernameLabel release];
+	[passwordLabel release];
+	[usernameField release];
+	[passwordField release];
     [super dealloc];
 }
-
 
 @end

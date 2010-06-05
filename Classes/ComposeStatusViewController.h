@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+@protocol ComposeStatusViewControllerDelegate;
 
 @interface ComposeStatusViewController : UIViewController <UITextViewDelegate>{
 
@@ -20,7 +21,15 @@
 	
 	// IBOutlet for the UITextView
 	IBOutlet UITextView *textView;
+	
+	// the delegate
+	id<ComposeStatusViewControllerDelegate> delegate;
 }
+
+@property (retain) UILabel *charactersLabel;
+@property (retain) UILabel *countLabel;
+@property (retain) UITextView *textView;
+@property (assign) id<ComposeStatusViewControllerDelegate> delegate;
 
 // action to call to dismiss this view controller when displayed modally
 -(IBAction)dismiss;
@@ -33,5 +42,11 @@
 
 // called when the UITextView changes
 - (void)textViewDidChange:(UITextView *)textView;
+
+@end
+
+@protocol ComposeStatusViewControllerDelegate<NSObject>
+
+-(void)didFinishComposing:(ComposeStatusViewController *)viewController;
 
 @end

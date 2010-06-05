@@ -15,7 +15,7 @@
 	Person *person;
 	
 	// operation queue for threading the UI
-	NSOperationQueue *queue;	
+	NSOperationQueue *queue;
 }
 
 @property (retain) Person *person;
@@ -25,3 +25,5 @@
 -(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson;
 
 @end
+
+

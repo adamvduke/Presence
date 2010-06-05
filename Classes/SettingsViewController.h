@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SettingsViewControllerDelegate;
 
 @interface SettingsViewController : UIViewController {
 
@@ -22,11 +23,26 @@
 	
 	// text field for the password
 	IBOutlet UITextField *passwordField;
+	
+	id<SettingsViewControllerDelegate> delegate;
 }
+
+@property (retain)UILabel *usernameLabel;
+@property (retain)UILabel *passwordLabel;
+@property (retain)UITextField *usernameField;
+@property (retain)UITextField *passwordField;
+@property (assign) id<SettingsViewControllerDelegate> delegate;
 
 // Provide an implementation to dismiss this view contoller when presented modally
 -(IBAction)dismiss;
 
 // Provide an implementation to save the user's settings
 -(IBAction)save;
+@end
+
+
+@protocol SettingsViewControllerDelegate<NSObject>
+
+-(void)didFinish:(SettingsViewController *)viewController;
+
 @end

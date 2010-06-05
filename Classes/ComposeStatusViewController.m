@@ -13,6 +13,11 @@
 
 @implementation ComposeStatusViewController
 
+@synthesize charactersLabel;
+@synthesize countLabel;
+@synthesize textView;
+@synthesize delegate;
+
 // save the current content of the text view to NSUserDefaults
 -(void)saveText{
 	
@@ -25,7 +30,7 @@
 -(IBAction)dismiss{
 
 	[self saveText];
-	[self dismissModalViewControllerAnimated:YES];
+	[self.delegate didFinishComposing:self];
 }
 
 // action to call to post a status update to twitter
@@ -126,6 +131,9 @@
 }
 
 - (void)dealloc {
+	[charactersLabel release];
+	[countLabel release];
+	[textView release];
     [super dealloc];
 }
 

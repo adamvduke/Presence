@@ -6,11 +6,14 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import "ComposeStatusViewController.h"
+#import "SettingsViewController.h"
 #import <UIKit/UIKit.h>
 
 
-@interface ListViewController : UITableViewController {
-	
+@interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate, SettingsViewControllerDelegate>
+
+{
 	// mutable array of people
 	NSMutableArray *people;
 	
@@ -25,5 +28,6 @@
 @property (retain) NSMutableArray *people;
 @property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, retain) UIActivityIndicatorView	*spinner;
+
 
 @end

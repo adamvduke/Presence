@@ -6,7 +6,7 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "ComposeStatusViewController.h"
+
 #import "ListViewController.h"
 #import "Person.h"
 #import "PresenceContants.h"
@@ -100,16 +100,30 @@
 -(void)presentUpdateStatusController{
 
 	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] initWithNibName:ComposeStatusViewControllerNibName bundle:[NSBundle mainBundle]];
+	statusViewController.delegate = self;
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
 	[statusViewController release];
+}
+
+// ComposeStatusViewControllerDelegate protocol
+-(void)didFinishComposing:(ComposeStatusViewController *)viewController
+{
+	[self dismissModalViewControllerAnimated:YES];
 }
 
 // show a modal view controller that will allow a user to enter his/her twitter credentials
 -(void)presentSettingsViewController{
 
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc]initWithNibName:SettingsViewControllerNibName bundle:[NSBundle mainBundle]];
+	settingsViewController.delegate = self;
 	[self.navigationController presentModalViewController:settingsViewController animated:YES];
 	[settingsViewController release];
+}
+
+// SettingsViewControllerDelegate protocol
+-(void)didFinish:(SettingsViewController *)viewController
+{
+	[self dismissModalViewControllerAnimated:YES];
 }
 
 // override initWithStyle to do some custom setup for this view controller
@@ -245,6 +259,7 @@
 	// make sure to deallocate the people array and the operation queue
 	[people release];
 	[queue release];
+	[spinner release];
 	
 	// always call the dealloc of the super class
     [super dealloc];
