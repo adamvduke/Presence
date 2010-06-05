@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 
 
-@interface ErrorHelper : NSObject {
-
+@interface ErrorHelper : NSObject 
+{
+	
 }
 
 +(void)displayErrorWithTitle:(NSString *)title Message:(NSString *)message CloseButtonTitle:(NSString *)closeButtonTitle;

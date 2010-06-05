@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PresenceAppDelegate : NSObject <UIApplicationDelegate> {
+@interface PresenceAppDelegate : NSObject <UIApplicationDelegate> 
+{
     UIWindow *window;
 	IBOutlet UINavigationController *navigationController;
 }

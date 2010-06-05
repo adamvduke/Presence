@@ -15,9 +15,8 @@
 
 @synthesize window;
 
-
-- (void)applicationDidFinishLaunching:(UIApplication *)application {    
-
+- (void)applicationDidFinishLaunching:(UIApplication *)application 
+{
 	// create navigation controller and add it's view to the window
 	navigationController = [[UINavigationController alloc]init];
 	
@@ -38,12 +37,12 @@
 	
 	// release the listViewController, it's memory will now be managed by the navigation controller
 	[listViewController release];
-
+	
     [window makeKeyAndVisible];
 }
 
-- (void)dealloc {
-	
+- (void)dealloc 
+{	
 	[navigationController release];
     [window release];
     [super dealloc];

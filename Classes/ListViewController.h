@@ -12,7 +12,6 @@
 
 
 @interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate, SettingsViewControllerDelegate>
-
 {
 	// mutable array of people
 	NSMutableArray *people;
@@ -23,7 +22,6 @@
 	// activity indicator for animation during data access
 	UIActivityIndicatorView	*spinner;
 }
-
 
 @property (retain) NSMutableArray *people;
 @property (nonatomic, retain) NSOperationQueue *queue;

@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
-@interface Person : NSObject {
-
+@interface Person : NSObject 
+{
 	NSString *userName;
 	NSString *displayName;
 	NSString *imageUrlString;

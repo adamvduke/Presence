@@ -15,15 +15,15 @@
 @synthesize queue;
 
 // reload the table data and flash the scroll indicators when all of the data has been loaded
--(void) didFinishLoadingUpdates{
-
+-(void) didFinishLoadingUpdates
+{
 	[self.tableView reloadData];
 	[self.tableView flashScrollIndicators];
 }
 
 // synchronous method to fetch a list of updates
--(void) synchronousLoadUpdates{
-	
+-(void) synchronousLoadUpdates
+{	
 	// attempt to limit the auto release footprint by creating an autorelease pool around the data load
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
 	
@@ -44,8 +44,8 @@
 }
 
 // begin loading the updates asynchronously
-- (void) beginLoadUpdates{
-	
+- (void) beginLoadUpdates
+{	
 	// create the NSInvocationOperation and add it to the queue
 	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadUpdates) object:nil];
 	[queue addOperation:operation];
@@ -53,15 +53,15 @@
 }
 
 // initialize with a UITableViewStyle and Person object
--(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson{
-
-	if (self = [super initWithStyle:style]) {
-				
+-(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson
+{
+	if (self = [super initWithStyle:style]) 
+	{				
 		// set the right bar button for reloading the data with the Refresh style
 		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(beginLoadUpdates)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
-
+		
 		//set the title of the view to "Tweets"
 		//this is the text displayed at the top
 		self.title = StatusViewTitle;
@@ -79,42 +79,44 @@
 }
 
 // override viewWillAppear to load the data if it hasn't been already
--(void) viewWillAppear:(BOOL)animated{
-	
+-(void) viewWillAppear:(BOOL)animated
+{	
 	[super viewWillAppear:animated];
 	
 	//if the person's status updates have not been loaded, load them
-	if (person.statusUpdates == nil) {
+	if (person.statusUpdates == nil) 
+	{
 		[self beginLoadUpdates];
 	}
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated 
+{
     [super viewDidAppear:animated];
 }
 
-- (void)didReceiveMemoryWarning {
-	
+- (void)didReceiveMemoryWarning 
+{	
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 	// Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
-	
+- (void)viewDidUnload 
+{	
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
+{	
 	//There will be a title section and the statuses section
     return 2;
 }
 
 // Customize the number of rows in the table view.
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
+{	
 	//section 1 will have 1 row, section 2 will have however many rows exist in the statusUpdates
 	//array on the person object
 	if(section == 0)
@@ -125,8 +127,8 @@
 }
 
 // Customize the content of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
+{	
 	// get the section of the selected cell, the title and status cell's have different styles
 	// and the section number will determine the style
 	NSUInteger section = indexPath.section;
@@ -139,7 +141,8 @@
 		
 		// attempt to deque a reuseable cell with the TitleCellReuseIdentifier, if not available create one
 		cell = [tableView dequeueReusableCellWithIdentifier:TitleCellReuseIdentifier];
-		if (cell == nil) {
+		if (cell == nil) 
+		{
 			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:TitleCellReuseIdentifier] autorelease];
 		}
 		
@@ -149,7 +152,8 @@
 	}
 	
 	// because there are only two sections, the else block will always create cells styled for statuses
-	else {
+	else 
+	{
 		// attempt to deque a reuseable cel with the TitleCellReuseIdentifier, if not available create one
 		cell = [tableView dequeueReusableCellWithIdentifier:StatusCellReuseIdentifier];
 		if (cell == nil) {
@@ -168,8 +172,8 @@
 }
 
 // return the custom height of the cell based on the string that will be displayed
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-	
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{	
 	//if the index path represents the "Title cell" return the height of the user's image plus 15
 	NSUInteger section = indexPath.section;
 	if (section == 0) {
@@ -185,7 +189,8 @@
 	return size.height + 35;
 }
 
-- (void)dealloc {
+- (void)dealloc 
+{
 	[person release];
 	[queue dealloc];
     [super dealloc];

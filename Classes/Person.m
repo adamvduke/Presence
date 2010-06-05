@@ -18,9 +18,10 @@
 @synthesize image;
 
 //Create a Person object from the NSDictionary of userInfo and a userName
-- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)theUserName {
-	
-	if (self == [super init]) {
+- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)theUserName 
+{	
+	if (self == [super init]) 
+	{
 		//Keys in the dictionary for the url string and display name
 		NSString *theImageUrlString = [userInfo valueForKey:@"profile_image_url"];
 		NSString *theDisplayName = [userInfo valueForKey:@"screen_name"];
@@ -32,8 +33,8 @@
 	return self;
 }
 
--(void)dealloc{
-
+-(void)dealloc
+{
 	[userName release];
 	[displayName release];
 	[imageUrlString release];

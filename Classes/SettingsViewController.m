@@ -19,14 +19,14 @@
 @synthesize delegate;
 
 // dismiss the modal view controller
--(IBAction)dismiss{
-
+-(IBAction)dismiss
+{
 	[self.delegate didFinish:self];
 }
 
 // save the credential information to NSUserDefaults
--(IBAction)save{
-	
+-(IBAction)save
+{	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:usernameField.text forKey:UsernameKey];
 	[defaults setObject:passwordField.text forKey:PasswordKey];
@@ -35,8 +35,8 @@
 	[self dismiss];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-
+-(void)viewWillAppear:(BOOL)animated
+{
 	// get any values out of NSUserDefaults and set those values on the fields
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	usernameField.text = [defaults objectForKey:UsernameKey];
@@ -49,24 +49,26 @@
 	// set the secureTextEntry property to YES for the passwordField
 	// this cloaks the text in ****** characters
 	passwordField.secureTextEntry = YES;
-
+	
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning 
+{
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 	
 	// Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload 
+{
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 	
 }
 
-- (void)dealloc {
-	
+- (void)dealloc 
+{	
 	[usernameLabel release];
 	[passwordLabel release];
 	[usernameField release];

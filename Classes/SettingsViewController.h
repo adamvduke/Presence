@@ -10,8 +10,8 @@
 
 @protocol SettingsViewControllerDelegate;
 
-@interface SettingsViewController : UIViewController {
-
+@interface SettingsViewController : UIViewController 
+{
 	// label to identify the username field
 	IBOutlet UILabel *usernameLabel;
 	

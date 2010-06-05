@@ -11,8 +11,8 @@
 
 @protocol ComposeStatusViewControllerDelegate;
 
-@interface ComposeStatusViewController : UIViewController <UITextViewDelegate>{
-
+@interface ComposeStatusViewController : UIViewController <UITextViewDelegate>
+{
 	// IBOutlet for the label that displays the word representing Characters
 	IBOutlet UILabel *charactersLabel;
 	

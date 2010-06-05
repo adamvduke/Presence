@@ -11,14 +11,12 @@
 
 @implementation ErrorHelper
 
-
-+(void)displayErrorWithTitle:(NSString *)title Message:(NSString *)message CloseButtonTitle:(NSString *)closeButtonTitle{
-	
++(void)displayErrorWithTitle:(NSString *)title Message:(NSString *)message CloseButtonTitle:(NSString *)closeButtonTitle
+{
 	//Display an error message
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:closeButtonTitle otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-
 }
 
 @end

@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Person.h"
 
-@interface StatusViewController : UITableViewController {
-
+@interface StatusViewController : UITableViewController 
+{
 	// the person object that this view controller will display details about
 	Person *person;
 	

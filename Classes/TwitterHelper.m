@@ -44,7 +44,8 @@
 +(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
 	
 	NSMutableArray *returnArray = [[[NSMutableArray alloc]init]autorelease];
-	for (NSDictionary *timelineEntry in userTimeline) {
+	for (NSDictionary *timelineEntry in userTimeline) 
+	{
 		NSString *formatString = [NSString stringWithString:[timelineEntry objectForKey:@"text"]];
 		[returnArray addObject:formatString];
 	}
@@ -53,7 +54,8 @@
 
 + (BOOL)updateStatus:(NSString *)status forUsername:(NSString *)username withPassword:(NSString *)password
 {
-    if (!username || !password) {
+    if (!username || !password) 
+	{
         return NO;
     }
 	

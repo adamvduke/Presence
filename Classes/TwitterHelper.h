@@ -16,8 +16,9 @@
 // Read more at http://apiwiki.twitter.com/Rate-limiting
 #define USE_TEST_SERVER 1
 
-@interface TwitterHelper : NSObject {
-
+@interface TwitterHelper : NSObject 
+{
+	
 }
 
 // Returns a dictionary with info about the given username.
