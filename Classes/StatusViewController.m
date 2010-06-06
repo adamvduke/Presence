@@ -14,6 +14,11 @@
 @synthesize person;
 @synthesize queue;
 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+	return YES;
+}
+
 // reload the table data and flash the scroll indicators when all of the data has been loaded
 -(void) didFinishLoadingUpdates
 {

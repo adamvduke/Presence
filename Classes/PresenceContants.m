@@ -21,6 +21,20 @@ NSString *const StatusViewTitleKey = @"TweetsKey";
 // key for finding the localized title of the settings view
 NSString *const SettingsViewTitleKey = @"SettingsKey";
 
+// key for finding the localized value for the word "characters"
+NSString *const CharactersLabelKey = @"CharactersLabelKey";
+
+// key for finding the localized value for the word "username"
+NSString *const UsernameLabelKey = @"UsernameLabelKey";
+
+// key for finding the localized value for the word "password"
+NSString *const PasswordLabelKey = @"PasswordLabelKey";
+
+// key for finding the localized value for the words "live data"
+NSString *const LiveDataLabelKey = @"LiveDataLabelKey";
+
+// key for finding the localized title of the compose view
+NSString *const ComposeViewTitleKey = @"ComposeKey";
 
 /*
  Centrally defined strings to avoid misspelling

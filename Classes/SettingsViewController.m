@@ -11,12 +11,19 @@
 
 @implementation SettingsViewController
 
+@synthesize aNavigationItem;
 @synthesize usernameLabel;
 @synthesize passwordLabel;
+@synthesize liveDataLabel;
 @synthesize usernameField;
 @synthesize passwordField;
 @synthesize liveDataSwitch;
 @synthesize delegate;
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+	return YES;
+}
 
 // dismiss the modal view controller
 -(IBAction)dismiss
@@ -38,6 +45,16 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+	[super viewWillAppear:animated];
+	
+	// set the views title
+	self.aNavigationItem.title = NSLocalizedString(SettingsViewTitleKey, @"");
+	
+	// localize the labels on the screen
+	usernameLabel.text = NSLocalizedString(UsernameLabelKey, @"");
+	passwordLabel.text = NSLocalizedString(PasswordLabelKey, @"");
+	liveDataLabel.text = NSLocalizedString(LiveDataLabelKey, @"");
+	
 	// get any values out of NSUserDefaults and set those values on the fields
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	usernameField.text = [defaults objectForKey:UsernameKey];
@@ -51,7 +68,6 @@
 	// set the secureTextEntry property to YES for the passwordField
 	// this cloaks the text in ****** characters
 	passwordField.secureTextEntry = YES;
-	
 }
 
 - (void)didReceiveMemoryWarning 

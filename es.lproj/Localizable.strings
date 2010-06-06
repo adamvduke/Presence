@@ -13,26 +13,23 @@
 // Spanish localization for "Tweets"
 "TweetsKey" = "es_Tweets";
 
-// Spanish localization for "Following"
-"FollowingKey" = "es_Following";
-
-// Spanish localization for "Tweets"
-"TweetsKey" = "es_Tweets";
-
 // Spanish localization for "Settings"
 "SettingsKey" = "es_Settings";
 
 // Spanish localization for "Username"
-"UsernameKey" = "es_Username";
+"UsernameLabelKey" = "es_Username";
 
 // Spanish localization for "Password"
-"PasswordKey" = "es_Password";
+"PasswordLabelKey" = "es_Password";
 
 // Spanish localization for "Live Data"
-"LiveDataKey" = "es_Live Data";
+"LiveDataLabelKey" = "es_Live Data";
 
 // Spanish localization for "Compose"
 "ComposeKey" = "es_Compose";
 
 // Spanish localization for "Tweet"
 "TweetKey" = "es_Tweet";
+
+// Spanish localization for "Characters"
+"CharactersLabelKey" = "es_Characters";

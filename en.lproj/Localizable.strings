@@ -17,16 +17,19 @@
 "SettingsKey" = "Settings";
 
 // English localization for "Username"
-"UsernameKey" = "Username";
+"UsernameLabelKey" = "Username";
 
 // English localization for "Password"
-"PasswordKey" = "Password";
+"PasswordLabelKey" = "Password";
 
 // English localization for "Live Data"
-"LiveDataKey" = "Live Data";
+"LiveDataLabelKey" = "Live Data";
 
 // English localization for "Compose"
 "ComposeKey" = "Compose";
 
 // English localization for "Tweet"
 "TweetKey" = "Tweet";
+
+// English localization for "Characters"
+"CharactersLabelKey" = "Characters";

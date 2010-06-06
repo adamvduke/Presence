@@ -21,10 +21,9 @@
 @synthesize queue;
 @synthesize spinner;
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	// return YES for all orientations except upside down
-	return  (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+	return YES;
 }
 
 // called by synchronousLoadPerson when the load has finished

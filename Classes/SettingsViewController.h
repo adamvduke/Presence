@@ -12,11 +12,17 @@
 
 @interface SettingsViewController : UIViewController 
 {
+	// navigation item
+	IBOutlet UINavigationItem *aNavigationItem;
+	
 	// label to identify the username field
 	IBOutlet UILabel *usernameLabel;
 	
 	// label to identify the password field
 	IBOutlet UILabel *passwordLabel;
+	
+	// label to identify the live data switch
+	IBOutlet UILabel *liveDataLabel;
 	
 	// text field for the username
 	IBOutlet UITextField *usernameField;
@@ -31,8 +37,10 @@
 	id<SettingsViewControllerDelegate> delegate;
 }
 
+@property (retain)UINavigationItem *aNavigationItem;
 @property (retain)UILabel *usernameLabel;
 @property (retain)UILabel *passwordLabel;
+@property (retain)UILabel *liveDataLabel;
 @property (retain)UITextField *usernameField;
 @property (retain)UITextField *passwordField;
 @property (retain)UISwitch *liveDataSwitch;

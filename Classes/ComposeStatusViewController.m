@@ -13,10 +13,15 @@
 
 @implementation ComposeStatusViewController
 
+@synthesize aNavigationItem;
 @synthesize charactersLabel;
-@synthesize countLabel;
 @synthesize textView;
 @synthesize delegate;
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+	return YES;
+}
 
 // save the current content of the text view to NSUserDefaults
 -(void)saveText
@@ -82,8 +87,9 @@
 - (void)textViewDidChange:(UITextView *)theTextView
 {
 	// update the countLabel's text with the current length of the text
-	countLabel.text = [NSString stringWithFormat:@"%d/140",[theTextView.text length]];
-	
+	NSString *localizedText = NSLocalizedString(CharactersLabelKey, @"");
+	NSString *charactersLabelText = [NSString stringWithFormat:@"%@:%d/140",localizedText, [theTextView.text length]];
+	charactersLabel.text = charactersLabelText;
 }
 
 // override viewWillAppear to do some initialization
@@ -91,9 +97,12 @@
 {
 	[super viewWillAppear:animated];
 	
+	// set the navigation item's title to the localized value
+	self.aNavigationItem.title = NSLocalizedString(ComposeViewTitleKey, @"");
+	
 	// get any previous text out of NSUserDefaults, if the content has length set the UITextView's text to that content
 	NSString *previousText = [[NSUserDefaults standardUserDefaults] objectForKey:TweetContentKey];
-	if ([previousText length] > 0 ) 
+	if (previousText != nil ) 
 	{
 		textView.text = previousText;
 	}
@@ -117,8 +126,6 @@
 {
 	//TODO: localize these strings
 	textView.text = @"";
-	charactersLabel.text = @"Characters:";
-	countLabel.text = @"0/140";
 }
 
 - (void)didReceiveMemoryWarning 
@@ -138,7 +145,6 @@
 - (void)dealloc 
 {
 	[charactersLabel release];
-	[countLabel release];
 	[textView release];
     [super dealloc];
 }

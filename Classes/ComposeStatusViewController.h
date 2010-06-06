@@ -13,11 +13,11 @@
 
 @interface ComposeStatusViewController : UIViewController <UITextViewDelegate>
 {
+	// IBOutlet for the navigationItem
+	IBOutlet UINavigationItem *aNavigationItem;
+	
 	// IBOutlet for the label that displays the word representing Characters
 	IBOutlet UILabel *charactersLabel;
-	
-	// IBOutlet for the label that shows the character count
-	IBOutlet UILabel *countLabel;
 	
 	// IBOutlet for the UITextView
 	IBOutlet UITextView *textView;
@@ -26,8 +26,8 @@
 	id<ComposeStatusViewControllerDelegate> delegate;
 }
 
+@property (retain) UINavigationItem *aNavigationItem;
 @property (retain) UILabel *charactersLabel;
-@property (retain) UILabel *countLabel;
 @property (retain) UITextView *textView;
 @property (assign) id<ComposeStatusViewControllerDelegate> delegate;
 
