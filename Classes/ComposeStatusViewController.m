@@ -20,6 +20,7 @@
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
+	// return YES for all interface orientations
 	return YES;
 }
 
@@ -124,7 +125,6 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
-	//TODO: localize these strings
 	textView.text = @"";
 }
 
@@ -144,6 +144,7 @@
 
 - (void)dealloc 
 {
+	[aNavigationItem release];
 	[charactersLabel release];
 	[textView release];
     [super dealloc];

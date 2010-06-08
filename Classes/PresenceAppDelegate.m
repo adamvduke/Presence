@@ -17,7 +17,7 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {
-	// create navigation controller and add it's view to the window
+	// create navigation controller
 	navigationController = [[UINavigationController alloc]init];
 	
 	// set the navigation controller's navigation bar to Black
@@ -26,17 +26,17 @@
 	// add the navigation controller's view to the window's subviews
 	[window addSubview:navigationController.view];
 	
-	// create the list view controller and push it onto the navigation controller's stack
+	// create the list view controller
 	ListViewController *listViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain];
 	
-	// set the listViewController's title to a globally defined string
+	// set the listViewController's title to a localized string
 	NSString *title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	[listViewController setTitle:title];
 	
-	// use the navigation contoller to push a view controller on the stack
+	// push the listViewController onto the navigation stack
 	[navigationController pushViewController:listViewController animated:YES];
 	
-	// release the listViewController, it's memory will now be managed by the navigation controller
+	// release the listViewController
 	[listViewController release];
 	
     [window makeKeyAndVisible];

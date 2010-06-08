@@ -23,6 +23,7 @@
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
+	// return YES for all interface orientations
 	return YES;
 }
 
@@ -41,7 +42,6 @@
 		if ([spinner isAnimating]) 
 		{
 			[spinner stopAnimating];
-			[spinner removeFromSuperview];
 		}
 		
 		// stop the network indicator
@@ -93,6 +93,13 @@
 // start to load data asynchronously so that the UI is not blocked
 - (void)beginLoadingTwitterData
 {
+	
+	// start the device's network activity indicator
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+	
+	// start animating the spinner
+	[spinner startAnimating];
+	
 	//create the NSInvocationOperation and add it to the queue
 	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadTwitterData) object:nil];
 	[queue addOperation:operation];
@@ -124,7 +131,7 @@
 }
 
 // SettingsViewControllerDelegate protocol
--(void)didFinish:(SettingsViewController *)viewController
+-(void)didFinishPresentingViewController:(SettingsViewController *)viewController
 {
 	[self dismissModalViewControllerAnimated:YES];
 }
@@ -142,6 +149,11 @@
 		
 		//allocate the memory for the NSMutableArray of people on this ViewController
 		people = [[NSMutableArray alloc]init];
+		
+		// initialize the UIActivityIndicatorView for this view controller
+		spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		[spinner setCenter:self.view.center]; 
+		[self.view addSubview:spinner];
 		
 		// create a UIBarButtonItem for the right side using the Compose style, this will present the ComposeStatusViewController modally
 		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentUpdateStatusController)];
@@ -164,15 +176,6 @@
 	// if the array of people is empty, start the activity indicators and begin loading data
 	if ([people count] == 0) 
 	{
-		// start the device's network activity indicator
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES; 
-		
-		// initialize and start animating the UIActivityIndicatorView for this view controller
-		spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-		[spinner setCenter:self.view.center]; 
-		[self.view addSubview:spinner];
-		[spinner startAnimating];
-		
 		//begin loading data from twitter
 		[self beginLoadingTwitterData];
 	}

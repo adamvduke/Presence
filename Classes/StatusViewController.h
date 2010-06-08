@@ -16,10 +16,14 @@
 	
 	// operation queue for threading the UI
 	NSOperationQueue *queue;
+	
+	// activity indicator for animation during data access
+	UIActivityIndicatorView	*spinner;
 }
 
 @property (retain) Person *person;
 @property (nonatomic, retain) NSOperationQueue *queue;
+@property (retain) UIActivityIndicatorView *spinner;
 
 // initialize an instance with a UITableViewStyle and Person object
 -(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson;

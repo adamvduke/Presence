@@ -22,13 +22,14 @@
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
+	// return YES for all interface orientations
 	return YES;
 }
 
 // dismiss the modal view controller
 -(IBAction)dismiss
 {
-	[self.delegate didFinish:self];
+	[self.delegate didFinishPresentingViewController:self];
 }
 
 // save the state of the settings to NSUserDefaults

@@ -56,6 +56,6 @@
 
 @protocol SettingsViewControllerDelegate<NSObject>
 
--(void)didFinish:(SettingsViewController *)viewController;
+-(void)didFinishPresentingViewController:(SettingsViewController *)viewController;
 
 @end

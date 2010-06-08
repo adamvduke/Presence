@@ -37,7 +37,7 @@ extern NSString *const LiveDataLabelKey;
 extern NSString *const ComposeViewTitleKey;
 
 /*
-Centrally defined strings to avoid misspelling
+Centrally defined Nib names to avoid misspelling
 */
 
 // string for the ComposeStatusViewController.xib name

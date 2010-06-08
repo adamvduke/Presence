@@ -13,6 +13,7 @@
 @implementation StatusViewController
 @synthesize person;
 @synthesize queue;
+@synthesize spinner;
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -22,6 +23,16 @@
 // reload the table data and flash the scroll indicators when all of the data has been loaded
 -(void) didFinishLoadingUpdates
 {
+	// if the spinner is active stop it
+	if ([spinner isAnimating]) 
+	{
+		[spinner stopAnimating];
+	}
+	
+	// stop the network indicator
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO; 
+	
+	// reload the table data and flash the scroll indicators
 	[self.tableView reloadData];
 	[self.tableView flashScrollIndicators];
 }
@@ -51,6 +62,12 @@
 // begin loading the updates asynchronously
 - (void) beginLoadUpdates
 {	
+	// start the device's network activity indicator
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+	
+	// start animating the spinner
+	[spinner startAnimating];
+	
 	// create the NSInvocationOperation and add it to the queue
 	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadUpdates) object:nil];
 	[queue addOperation:operation];
@@ -62,12 +79,6 @@
 {
 	if (self = [super initWithStyle:style]) 
 	{				
-		// set the right bar button for reloading the data with the Refresh style
-		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(beginLoadUpdates)];
-		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
-		[rightBarButton release];
-		
-		//set the title of the view to "Tweets"
 		//this is the text displayed at the top
 		NSString *statusViewTitle = NSLocalizedString(StatusViewTitleKey, @"");
 		self.title = statusViewTitle;
@@ -80,6 +91,16 @@
 		
 		//set the maxConcurrent operations to 1
 		[queue setMaxConcurrentOperationCount:1];
+		
+		// initialize the UIActivityIndicatorView for this view controller
+		spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		[spinner setCenter:self.view.center]; 
+		[self.view addSubview:spinner];
+		
+		// set the right bar button for reloading the data with the Refresh style
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(beginLoadUpdates)];
+		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
+		[rightBarButton release];
 	}
 	return self;
 }
@@ -198,7 +219,8 @@
 - (void)dealloc 
 {
 	[person release];
-	[queue dealloc];
+	[queue release];
+	[spinner release];
     [super dealloc];
 }
 @end
