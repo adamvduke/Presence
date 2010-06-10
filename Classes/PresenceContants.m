@@ -15,6 +15,12 @@
 // key for finding the localized title of the list view
 NSString *const ListViewControllerTitleKey = @"FollowingKey";
 
+// key for finding the localized title of the favorites view
+NSString *const FavoritesViewControllerTitleKey = @"FavoritesKey";
+
+// key for finding the localized title of the search view
+NSString *const SearchViewControllerTitleKey = @"SearchKey";
+
 // key for finding the localized title of the status view
 NSString *const StatusViewTitleKey = @"TweetsKey";
 

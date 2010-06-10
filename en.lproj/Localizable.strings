@@ -10,6 +10,12 @@
 // English localization for "Following"
 "FollowingKey" = "Following";
 
+// English localization for "Favorites"
+"FavoritesKey" = "Favorites";
+
+// English localization for "Search"
+"SearchKey" = "Search";
+
 // English localization for "Tweets"
 "TweetsKey" = "Tweets";
 

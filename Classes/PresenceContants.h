@@ -12,13 +12,19 @@
 Keys for finding localizable strings 
 */
 
-// key for finding the localized title of the list view
+// key for finding the localized title of the "Following" view
 extern NSString *const ListViewControllerTitleKey;
 
-// key for finding the localized title of the status view
+// key for finding the localized title of the "Favorites" view
+extern NSString *const FavoritesViewControllerTitleKey;
+
+// key for finding the localized title of the "Search" view
+extern NSString *const SearchViewControllerTitleKey;
+
+// key for finding the localized title of the "Status" view
 extern NSString *const StatusViewTitleKey;
 
-// key for finding the localized title of the settings view
+// key for finding the localized title of the "Settings" view
 extern NSString *const SettingsViewTitleKey;
 
 // key for finding the localized value for the word "characters"

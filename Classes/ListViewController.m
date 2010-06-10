@@ -10,7 +10,6 @@
 #import "ListViewController.h"
 #import "Person.h"
 #import "PresenceContants.h"
-#import "SettingsViewController.h"
 #import "StatusViewController.h"
 #import "TwitterHelper.h"
 
@@ -121,21 +120,6 @@
 	[self dismissModalViewControllerAnimated:YES];
 }
 
-// show a modal view controller that will allow a user to enter his/her twitter credentials
--(void)presentSettingsViewController
-{
-	SettingsViewController *settingsViewController = [[SettingsViewController alloc]initWithNibName:SettingsViewControllerNibName bundle:[NSBundle mainBundle]];
-	settingsViewController.delegate = self;
-	[self.navigationController presentModalViewController:settingsViewController animated:YES];
-	[settingsViewController release];
-}
-
-// SettingsViewControllerDelegate protocol
--(void)didFinishPresentingViewController:(SettingsViewController *)viewController
-{
-	[self dismissModalViewControllerAnimated:YES];
-}
-
 // override initWithStyle to do some custom setup for this view controller
 - (id)initWithStyle:(UITableViewStyle)style 
 {
@@ -159,11 +143,6 @@
 		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentUpdateStatusController)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
-		
-		// create a UIBarButton Item for the left side using the Action style, this will present the SettingsViewController modally
-		UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(presentSettingsViewController)];
-		[self.navigationItem setLeftBarButtonItem:leftBarButton];
-		[leftBarButton release];
 	}
 	return self;
 }

@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate, SettingsViewControllerDelegate>
+@interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate>
 {
 	// mutable array of people
 	NSMutableArray *people;

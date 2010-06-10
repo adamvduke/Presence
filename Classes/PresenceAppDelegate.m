@@ -32,7 +32,8 @@
 	// create the navigation controller for the favorites tab
 	UINavigationController *favoritesController = [[UINavigationController alloc]init];
 	favoritesController.navigationBar.barStyle = UIBarStyleBlack;
-	favoritesController.title = @"Favorites";
+	favoritesController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
+	favoritesController.navigationItem.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	favoritesController.tabBarItem.image = [UIImage imageNamed:@"FavoritesIcon.png"];	
 	
 	// create navigation controller for the following tab
@@ -53,12 +54,12 @@
 	// create the navigation controller for the favorites tab
 	UINavigationController *searchController = [[UINavigationController alloc]init];
 	searchController.navigationBar.barStyle = UIBarStyleBlack;
-	searchController.title = @"Search";
+	searchController.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
+	searchController.navigationItem.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
 	searchController.tabBarItem.image = [UIImage imageNamed:@"SearchIcon.png"];
 
-	
 	tabBarController.viewControllers = [NSArray arrayWithObjects:settingsViewController, favoritesController, navigationController, searchController, nil];
-	
+	tabBarController.selectedViewController = favoritesController;
 	
 	// add the navigation controller's view to the window's subviews
 	[window addSubview:tabBarController.view];

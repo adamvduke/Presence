@@ -10,6 +10,12 @@
 // Spanish key for "Following"
 "FollowingKey" = "es_Following";
 
+// Spanish localization for "Favorites"
+"FavoritesKey" = "es_Favorites";
+
+// Spanish localization for "Search"
+"SearchKey" = "es_Search";
+
 // Spanish localization for "Tweets"
 "TweetsKey" = "es_Tweets";
 
