@@ -13,6 +13,10 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		560315A810ABA79A005F649A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* ListViewController.m */; };
 		56129B0F11B87B1F0030E797 /* ErrorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56129B0E11B87B1F0030E797 /* ErrorHelper.m */; };
+		561E68DF11C0A5B30043787E /* SettingsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E68DE11C0A5B30043787E /* SettingsIcon.png */; };
+		561E68E811C0A7070043787E /* FavoritesIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E68E711C0A7070043787E /* FavoritesIcon.png */; };
+		561E68EF11C0A8490043787E /* PeopleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E68EE11C0A8490043787E /* PeopleIcon.png */; };
+		561E693E11C0B0210043787E /* SearchIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E693D11C0B0210043787E /* SearchIcon.png */; };
 		561E9B6211BAE59F005A6BC8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 561E9B6011BAE59F005A6BC8 /* Localizable.strings */; };
 		563329FA11B761BF00BF4184 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563329F911B761BF00BF4184 /* QuartzCore.framework */; };
 		5637324F10B21BD80016B43A /* TwitterUsers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5637324E10B21BD80016B43A /* TwitterUsers.plist */; };
@@ -44,6 +48,10 @@
 		560315A710ABA79A005F649A /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		56129B0D11B87B1F0030E797 /* ErrorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorHelper.h; sourceTree = "<group>"; };
 		56129B0E11B87B1F0030E797 /* ErrorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorHelper.m; sourceTree = "<group>"; };
+		561E68DE11C0A5B30043787E /* SettingsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SettingsIcon.png; path = Resources/SettingsIcon.png; sourceTree = "<group>"; };
+		561E68E711C0A7070043787E /* FavoritesIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FavoritesIcon.png; path = Resources/FavoritesIcon.png; sourceTree = "<group>"; };
+		561E68EE11C0A8490043787E /* PeopleIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PeopleIcon.png; path = Resources/PeopleIcon.png; sourceTree = "<group>"; };
+		561E693D11C0B0210043787E /* SearchIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SearchIcon.png; path = Resources/SearchIcon.png; sourceTree = "<group>"; };
 		561E9B6111BAE59F005A6BC8 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		561E9B6311BAE5AC005A6BC8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		563329F911B761BF00BF4184 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -148,6 +156,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				561E693D11C0B0210043787E /* SearchIcon.png */,
+				561E68EE11C0A8490043787E /* PeopleIcon.png */,
+				561E68E711C0A7070043787E /* FavoritesIcon.png */,
+				561E68DE11C0A5B30043787E /* SettingsIcon.png */,
 				561E9B6011BAE59F005A6BC8 /* Localizable.strings */,
 				5640027011B8C10500355A74 /* Icon.png */,
 				5640026A11B8C0EB00355A74 /* ComposeStatusViewController.xib */,
@@ -243,6 +255,10 @@
 				5640026F11B8C0EB00355A74 /* SettingsViewController.xib in Resources */,
 				5640027111B8C10500355A74 /* Icon.png in Resources */,
 				561E9B6211BAE59F005A6BC8 /* Localizable.strings in Resources */,
+				561E68DF11C0A5B30043787E /* SettingsIcon.png in Resources */,
+				561E68E811C0A7070043787E /* FavoritesIcon.png in Resources */,
+				561E68EF11C0A8490043787E /* PeopleIcon.png in Resources */,
+				561E693E11C0B0210043787E /* SearchIcon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

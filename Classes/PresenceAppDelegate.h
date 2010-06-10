@@ -11,7 +11,7 @@
 @interface PresenceAppDelegate : NSObject <UIApplicationDelegate> 
 {
     UIWindow *window;
-	IBOutlet UINavigationController *navigationController;
+	IBOutlet UITabBarController *tabBarController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

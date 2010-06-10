@@ -29,7 +29,9 @@
 // dismiss the modal view controller
 -(IBAction)dismiss
 {
-	[self.delegate didFinishPresentingViewController:self];
+	if (self.delegate != nil) {
+		[self.delegate didFinishPresentingViewController:self];
+	}
 }
 
 // save the state of the settings to NSUserDefaults
@@ -39,6 +41,10 @@
 	[defaults setObject:usernameField.text forKey:UsernameKey];
 	[defaults setObject:passwordField.text forKey:PasswordKey];
 	[defaults setBool:liveDataSwitch.isOn forKey:LiveDataKey];
+	
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Your credentials have been saved" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	[alert show];
+	[alert release];
 	
 	// after the data is saved, dismiss the modal view controller
 	[self dismiss];
