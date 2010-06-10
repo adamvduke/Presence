@@ -96,7 +96,6 @@
     NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/public_timeline.json", [self twitterHostname]];
 	NSURL *url = [NSURL URLWithString:urlString];
     return [self fetchJSONValueForURL:url];
-    
 }
 
 + (NSDictionary *)fetchSearchResultsForQuery:(NSString *)query
@@ -108,7 +107,6 @@
     NSURL *url = [NSURL URLWithString:urlString];
     
     return [self fetchJSONValueForURL:url];
-    
 }
 
 @end

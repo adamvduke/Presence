@@ -10,18 +10,12 @@
 #import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
 
-
 @implementation PresenceAppDelegate
 
 @synthesize window;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
-{
-	// settings
-	// favorites
-	// following
-	// search
-	
+{	
 	tabBarController = [[UITabBarController alloc]init];
 	
 	// create the view controller for the settings tab
