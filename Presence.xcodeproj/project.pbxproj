@@ -14,7 +14,6 @@
 		560315A810ABA79A005F649A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* ListViewController.m */; };
 		56129B0F11B87B1F0030E797 /* ErrorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56129B0E11B87B1F0030E797 /* ErrorHelper.m */; };
 		5616967411C5634300C07DEF /* FavoriteUsers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5616967211C5634300C07DEF /* FavoriteUsers.plist */; };
-		5616967511C5634300C07DEF /* TwitterUsers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5616967311C5634300C07DEF /* TwitterUsers.plist */; };
 		561E68DF11C0A5B30043787E /* SettingsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E68DE11C0A5B30043787E /* SettingsIcon.png */; };
 		561E68E811C0A7070043787E /* FavoritesIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E68E711C0A7070043787E /* FavoritesIcon.png */; };
 		561E68EF11C0A8490043787E /* PeopleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E68EE11C0A8490043787E /* PeopleIcon.png */; };
@@ -50,7 +49,6 @@
 		56129B0D11B87B1F0030E797 /* ErrorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorHelper.h; sourceTree = "<group>"; };
 		56129B0E11B87B1F0030E797 /* ErrorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorHelper.m; sourceTree = "<group>"; };
 		5616967211C5634300C07DEF /* FavoriteUsers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = FavoriteUsers.plist; path = Resources/FavoriteUsers.plist; sourceTree = "<group>"; };
-		5616967311C5634300C07DEF /* TwitterUsers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = TwitterUsers.plist; path = Resources/TwitterUsers.plist; sourceTree = "<group>"; };
 		561E68DE11C0A5B30043787E /* SettingsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SettingsIcon.png; path = Resources/SettingsIcon.png; sourceTree = "<group>"; };
 		561E68E711C0A7070043787E /* FavoritesIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FavoritesIcon.png; path = Resources/FavoritesIcon.png; sourceTree = "<group>"; };
 		561E68EE11C0A8490043787E /* PeopleIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PeopleIcon.png; path = Resources/PeopleIcon.png; sourceTree = "<group>"; };
@@ -159,7 +157,6 @@
 			isa = PBXGroup;
 			children = (
 				5616967211C5634300C07DEF /* FavoriteUsers.plist */,
-				5616967311C5634300C07DEF /* TwitterUsers.plist */,
 				561E693D11C0B0210043787E /* SearchIcon.png */,
 				561E68EE11C0A8490043787E /* PeopleIcon.png */,
 				561E68E711C0A7070043787E /* FavoritesIcon.png */,
@@ -262,7 +259,6 @@
 				561E68EF11C0A8490043787E /* PeopleIcon.png in Resources */,
 				561E693E11C0B0210043787E /* SearchIcon.png in Resources */,
 				5616967411C5634300C07DEF /* FavoriteUsers.plist in Resources */,
-				5616967511C5634300C07DEF /* TwitterUsers.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
