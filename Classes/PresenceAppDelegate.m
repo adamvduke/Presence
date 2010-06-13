@@ -23,37 +23,50 @@
 	settingsViewController.tabBarItem.image = [UIImage imageNamed:@"SettingsIcon.png"];
 	settingsViewController.title = NSLocalizedString(SettingsViewTitleKey, @"");
 	
-	// create the navigation controller for the favorites tab
-	UINavigationController *favoritesController = [[UINavigationController alloc]init];
-	favoritesController.navigationBar.barStyle = UIBarStyleBlack;
-	favoritesController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
-	favoritesController.navigationItem.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
-	favoritesController.tabBarItem.image = [UIImage imageNamed:@"FavoritesIcon.png"];	
+	// create the view controller for the favorites tab
+	UINavigationController *favoritesNavigationController = [[UINavigationController alloc]init];
+	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
-	// create navigation controller for the following tab
-	UINavigationController *navigationController = [[UINavigationController alloc]init];
-	navigationController.navigationBar.barStyle = UIBarStyleBlack;
+	ListViewController *favoritesListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain listName:@"FavoriteUsers"];
+	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
+	favoritesListViewController.tabBarItem.image = [UIImage imageNamed:@"FavoritesIcon.png"];	
 	
-	// create the list view controller
-	ListViewController *listViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain];
-	listViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
-	listViewController.tabBarItem.image = [UIImage imageNamed:@"PeopleIcon.png"];
+	// push the followingListViewController onto the following navigation stack and release it
+	[favoritesNavigationController pushViewController:favoritesListViewController animated:YES];
+	[favoritesListViewController release];
 	
-	// push the listViewController onto the following navigation stack
-	[navigationController pushViewController:listViewController animated:YES];
+	// create view controller for the following tab
+	UINavigationController *followingNavigationController = [[UINavigationController alloc]init];
+	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
-	// release the listViewController
-	[listViewController release];
+	// create the list view controller to push on the followingNavigationController
+	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain listName:nil];
+	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
+	followingListViewController.tabBarItem.image = [UIImage imageNamed:@"PeopleIcon.png"];
 	
-	// create the navigation controller for the favorites tab
-	UINavigationController *searchController = [[UINavigationController alloc]init];
-	searchController.navigationBar.barStyle = UIBarStyleBlack;
-	searchController.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
-	searchController.navigationItem.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
-	searchController.tabBarItem.image = [UIImage imageNamed:@"SearchIcon.png"];
+	// push the followingListViewController onto the following navigation stack and release it
+	[followingNavigationController pushViewController:followingListViewController animated:YES];
+	[followingListViewController release];
+	
+	// create the view controller for the search tab
+	UINavigationController *searchNavigationController = [[UINavigationController alloc]init];
+	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+	searchNavigationController.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
+	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"SearchIcon.png"];
 
-	tabBarController.viewControllers = [NSArray arrayWithObjects:settingsViewController, favoritesController, navigationController, searchController, nil];
-	tabBarController.selectedViewController = favoritesController;
+	NSMutableArray *viewControllerArray = [[NSMutableArray alloc]init];
+	[viewControllerArray addObject:settingsViewController];
+	[viewControllerArray addObject:favoritesNavigationController];
+	[viewControllerArray addObject:followingListViewController];
+	[viewControllerArray addObject:searchNavigationController];
+	
+	tabBarController.viewControllers = viewControllerArray;
+	tabBarController.selectedViewController = favoritesNavigationController;
+	
+	[settingsViewController release];
+	[favoritesNavigationController release];
+	[followingNavigationController release];
+	[searchNavigationController release];
 	
 	// add the navigation controller's view to the window's subviews
 	[window addSubview:tabBarController.view];

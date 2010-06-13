@@ -13,6 +13,8 @@
 
 @interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate>
 {
+	NSString *personListName;
+	
 	// mutable array of people
 	NSMutableArray *people;
 	
@@ -23,9 +25,11 @@
 	UIActivityIndicatorView	*spinner;
 }
 
+@property (retain) NSString *personListName;
 @property (retain) NSMutableArray *people;
 @property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, retain) UIActivityIndicatorView	*spinner;
 
+-(id)initWithStyle:(UITableViewStyle)style listName:(NSString *)pListName;
 
 @end

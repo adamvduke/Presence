@@ -16,6 +16,7 @@
 
 @implementation ListViewController
 
+@synthesize personListName;
 @synthesize people;
 @synthesize queue;
 @synthesize spinner;
@@ -80,9 +81,24 @@
 // synchronously get the usernames and call beginLoadPerson for each username
 - (void)synchronousLoadTwitterData
 {
-	//read the user names from the TwitterUsers plist and begin a load operation for each person
-	NSString *path = [[NSBundle mainBundle]pathForResource:@"TwitterUsers" ofType:@"plist"];
-	NSArray *userNames = [NSArray arrayWithContentsOfFile:path];
+	NSArray *userNames = nil;
+	if (personListName != nil) {
+		NSString *path = [[NSBundle mainBundle]pathForResource:personListName ofType:@"plist"];
+		userNames = [NSArray arrayWithContentsOfFile:path];
+	}
+	else {
+		// get the list of names that the user is following 
+	}
+
+	if (userNames != nil) {
+		
+		// start the device's network activity indicator
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+		
+		// start animating the spinner
+		[spinner startAnimating];		
+	}
+	
 	for (NSString *userName in userNames) 
 	{
 		[self beginLoadPerson:userName];
@@ -92,13 +108,7 @@
 // start to load data asynchronously so that the UI is not blocked
 - (void)beginLoadingTwitterData
 {
-	
-	// start the device's network activity indicator
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	
-	// start animating the spinner
-	[spinner startAnimating];
-	
+
 	//create the NSInvocationOperation and add it to the queue
 	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadTwitterData) object:nil];
 	[queue addOperation:operation];
@@ -120,11 +130,17 @@
 	[self dismissModalViewControllerAnimated:YES];
 }
 
-// override initWithStyle to do some custom setup for this view controller
-- (id)initWithStyle:(UITableViewStyle)style 
+-(id)initWithStyle:(UITableViewStyle)style listName:(NSString *)pListName
 {
-	if (self = [super initWithStyle:style])
-	{
+	
+	if (self == [super initWithStyle:style]) {
+		
+		if (pListName != nil) {
+			
+			//the pListName if this controller is going to display a static list of people
+			self.personListName = [NSString stringWithString:pListName];
+		}
+		
 		//Create the NSOperationQueue for threading data loading
 		queue = [[NSOperationQueue alloc]init];
 		
