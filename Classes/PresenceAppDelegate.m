@@ -79,8 +79,11 @@
 	// create the view controller for the search tab
 	UINavigationController *searchNavigationController = [self initSearchController];
 	
-	NSArray *viewControllerArray = [[NSArray alloc]initWithObjects:settingsViewController, favoritesNavigationController, 
-									followingNavigationController, searchNavigationController, nil];
+	NSMutableArray *viewControllerArray = [[NSMutableArray alloc]init];
+	[viewControllerArray addObject:settingsViewController];
+	[viewControllerArray addObject:favoritesNavigationController];
+	[viewControllerArray addObject:followingNavigationController];
+	[viewControllerArray addObject:searchNavigationController];
 	
 	[settingsViewController release];
 	[favoritesNavigationController release];
@@ -100,7 +103,6 @@
 	//tabBarController.selectedViewController = favoritesNavigationController;
 	
 	[viewControllerArray release];
-	
 	
 	// add the navigation controller's view to the window's subviews
 	[window addSubview:tabBarController.view];
