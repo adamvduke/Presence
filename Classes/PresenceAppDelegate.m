@@ -14,12 +14,20 @@
 
 @synthesize window;
 
+-(SettingsViewController *)initSettingsViewController
+{
+	SettingsViewController *settingsViewController = [[SettingsViewController alloc]initWithNibName:SettingsViewControllerNibName bundle:[NSBundle mainBundle]];
+	settingsViewController.tabBarItem.image = [UIImage imageNamed:@"SettingsIcon.png"];
+	settingsViewController.title = NSLocalizedString(SettingsViewTitleKey, @"");
+	return settingsViewController;
+}
+
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
 	tabBarController = [[UITabBarController alloc]init];
 	
 	// create the view controller for the settings tab
-	SettingsViewController *settingsViewController = [[SettingsViewController alloc]initWithNibName:SettingsViewControllerNibName bundle:[NSBundle mainBundle]];
+	SettingsViewController *settingsViewController = [self initSettingsViewController];
 	settingsViewController.tabBarItem.image = [UIImage imageNamed:@"SettingsIcon.png"];
 	settingsViewController.title = NSLocalizedString(SettingsViewTitleKey, @"");
 	
