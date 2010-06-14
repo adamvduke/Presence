@@ -54,6 +54,16 @@
 
 	return followingNavigationController;
 }
+
+-(UINavigationController *)initSearchController
+{
+	UINavigationController *searchNavigationController = [[UINavigationController alloc]init];
+	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+	searchNavigationController.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
+	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"SearchIcon.png"];
+
+	return searchNavigationController;
+}
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
 	tabBarController = [[UITabBarController alloc]init];
@@ -68,10 +78,7 @@
 	UINavigationController *followingNavigationController = [self initFollowingController];	
 	
 	// create the view controller for the search tab
-	UINavigationController *searchNavigationController = [[UINavigationController alloc]init];
-	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-	searchNavigationController.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
-	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"SearchIcon.png"];
+	UINavigationController *searchNavigationController = [self initSearchController];
 
 	NSMutableArray *viewControllerArray = [[NSMutableArray alloc]init];
 	[viewControllerArray addObject:settingsViewController];
