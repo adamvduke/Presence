@@ -22,16 +22,8 @@
 	return settingsViewController;
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application 
-{	
-	tabBarController = [[UITabBarController alloc]init];
-	
-	// create the view controller for the settings tab
-	SettingsViewController *settingsViewController = [self initSettingsViewController];
-	settingsViewController.tabBarItem.image = [UIImage imageNamed:@"SettingsIcon.png"];
-	settingsViewController.title = NSLocalizedString(SettingsViewTitleKey, @"");
-	
-	// create the view controller for the favorites tab
+-(UINavigationController *)initFavoritesController
+{
 	UINavigationController *favoritesNavigationController = [[UINavigationController alloc]init];
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
@@ -43,6 +35,18 @@
 	[favoritesNavigationController pushViewController:favoritesListViewController animated:YES];
 	[favoritesListViewController release];
 	
+	return favoritesNavigationController;
+}
+
+- (void)applicationDidFinishLaunching:(UIApplication *)application 
+{	
+	tabBarController = [[UITabBarController alloc]init];
+	
+	// create the view controller for the settings tab
+	SettingsViewController *settingsViewController = [self initSettingsViewController];
+	
+	// create the view controller for the favorites tab
+	UINavigationController *favoritesNavigationController = [self initFavoritesController];	
 	// create view controller for the following tab
 	UINavigationController *followingNavigationController = [[UINavigationController alloc]init];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
