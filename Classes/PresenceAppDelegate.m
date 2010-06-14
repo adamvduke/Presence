@@ -38,16 +38,8 @@
 	return favoritesNavigationController;
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application 
-{	
-	tabBarController = [[UITabBarController alloc]init];
-	
-	// create the view controller for the settings tab
-	SettingsViewController *settingsViewController = [self initSettingsViewController];
-	
-	// create the view controller for the favorites tab
-	UINavigationController *favoritesNavigationController = [self initFavoritesController];	
-	// create view controller for the following tab
+-(UINavigationController *)initFollowingController
+{
 	UINavigationController *followingNavigationController = [[UINavigationController alloc]init];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
@@ -59,6 +51,21 @@
 	// push the followingListViewController onto the following navigation stack and release it
 	[followingNavigationController pushViewController:followingListViewController animated:YES];
 	[followingListViewController release];
+
+	return followingNavigationController;
+}
+- (void)applicationDidFinishLaunching:(UIApplication *)application 
+{	
+	tabBarController = [[UITabBarController alloc]init];
+	
+	// create the view controller for the settings tab
+	SettingsViewController *settingsViewController = [self initSettingsViewController];
+	
+	// create the view controller for the favorites tab
+	UINavigationController *favoritesNavigationController = [self initFavoritesController];	
+	
+	// create view controller for the following tab
+	UINavigationController *followingNavigationController = [self initFollowingController];	
 	
 	// create the view controller for the search tab
 	UINavigationController *searchNavigationController = [[UINavigationController alloc]init];
@@ -69,7 +76,7 @@
 	NSMutableArray *viewControllerArray = [[NSMutableArray alloc]init];
 	[viewControllerArray addObject:settingsViewController];
 	[viewControllerArray addObject:favoritesNavigationController];
-	[viewControllerArray addObject:followingListViewController];
+	[viewControllerArray addObject:followingNavigationController];
 	[viewControllerArray addObject:searchNavigationController];
 	
 	tabBarController.viewControllers = viewControllerArray;
