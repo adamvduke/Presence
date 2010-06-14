@@ -63,6 +63,7 @@
 	tabBarController.viewControllers = viewControllerArray;
 	tabBarController.selectedViewController = favoritesNavigationController;
 	
+	[viewControllerArray release];
 	[settingsViewController release];
 	[favoritesNavigationController release];
 	[followingNavigationController release];
