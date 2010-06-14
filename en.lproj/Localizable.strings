@@ -39,3 +39,12 @@
 
 // English localization for "Characters"
 "CharactersLabelKey" = "Characters";
+
+// English localization for "Dismiss"
+"DismissKey" = "Dismiss";
+
+// English localization for "Missing Credentials"
+"MissingCrendentialsTitleKey" = "Missing Credentials";
+
+// English localization for the missing credentials message
+"MissingCredentialsMessageKey" = "Your twitter username and/or password are not set.";

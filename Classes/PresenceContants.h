@@ -27,6 +27,9 @@ extern NSString *const StatusViewTitleKey;
 // key for finding the localized title of the "Settings" view
 extern NSString *const SettingsViewTitleKey;
 
+// key for finding the localized title of the compose view
+extern NSString *const ComposeViewTitleKey;
+
 // key for finding the localized value for the word "characters"
 extern NSString *const CharactersLabelKey;
 
@@ -39,8 +42,18 @@ extern NSString *const PasswordLabelKey;
 // key for finding the localized value for the words "live data"
 extern NSString *const LiveDataLabelKey;
 
-// key for finding the localized title of the compose view
-extern NSString *const ComposeViewTitleKey;
+// key for finding the localized value for the word "dismiss"
+extern NSString *const DismissKey;
+
+/*
+Keys for finding localized exception messages
+*/
+
+// key for finding the localized button title for missing credentials alert
+extern NSString *const MissingCredentialsTitleKey;
+
+// key for finding the localized message for missing credentials alert
+extern NSString *const MissingCredentialsMessageKey;
 
 /*
 Centrally defined Nib names to avoid misspelling

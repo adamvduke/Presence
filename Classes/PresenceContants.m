@@ -27,6 +27,9 @@ NSString *const StatusViewTitleKey = @"TweetsKey";
 // key for finding the localized title of the settings view
 NSString *const SettingsViewTitleKey = @"SettingsKey";
 
+// key for finding the localized title of the compose view
+NSString *const ComposeViewTitleKey = @"ComposeKey";
+
 // key for finding the localized value for the word "characters"
 NSString *const CharactersLabelKey = @"CharactersLabelKey";
 
@@ -39,8 +42,18 @@ NSString *const PasswordLabelKey = @"PasswordLabelKey";
 // key for finding the localized value for the words "live data"
 NSString *const LiveDataLabelKey = @"LiveDataLabelKey";
 
-// key for finding the localized title of the compose view
-NSString *const ComposeViewTitleKey = @"ComposeKey";
+// key for finding the localized value for the word "dismiss"
+NSString *const DismissKey = @"DismissKey";
+
+/*
+ Keys for finding localized exception messages
+ */
+
+// key for finding the localized button title for missing credentials alert
+NSString *const MissingCredentialsTitleKey = @"MissingCrendentialsTitleKey";
+
+// key for finding the localized message for missing credentials alert
+NSString *const MissingCredentialsMessageKey = @"MissingCredentialsMessageKey";
 
 /*
  Centrally defined strings to avoid misspelling
