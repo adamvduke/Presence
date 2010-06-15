@@ -17,7 +17,7 @@
 	}
 	else
 	{
-		return @"www.adamvduke.com/development/CS193P";
+		return @"localhost/~adamd/development/CS193P";
 	}
 }
 
