@@ -45,6 +45,20 @@
     return [self fetchJSONValueForURL:url];
 }
 
++ (NSArray *)fetchFriendsForUsername:(NSString *)username
+{
+    NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/friends/%@.json", [self twitterHostname], username];
+    NSURL *url = [NSURL URLWithString:urlString];
+    return [self fetchJSONValueForURL:url];
+}
+
++ (NSArray *)fetchPublicTimeline
+{
+    NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/public_timeline.json", [self twitterHostname]];
+	NSURL *url = [NSURL URLWithString:urlString];
+    return [self fetchJSONValueForURL:url];
+}
+
 +(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
 	
 	NSMutableArray *returnArray = [[[NSMutableArray alloc]init]autorelease];
@@ -54,6 +68,16 @@
 		[returnArray addObject:formatString];
 	}
 	return returnArray;
+}
+
++ (NSDictionary *)fetchSearchResultsForQuery:(NSString *)query
+{
+    // Sanitize the query string.
+	query = [query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *urlString = [NSString stringWithFormat:@"http://search.twitter.com/search.json?q=%@", query];
+    NSURL *url = [NSURL URLWithString:urlString];
+    return [self fetchJSONValueForURL:url];
 }
 
 + (BOOL)updateStatus:(NSString *)status forUsername:(NSString *)username withPassword:(NSString *)password
@@ -80,33 +104,7 @@
     NSError *error;
 	// We should probably be parsing the data returned by this call, for now just check the error.
     [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
     return (error == nil);
-}
-
-+ (NSArray *)fetchFriendsForUsername:(NSString *)username
-{
-    NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/friends/%@.json", [self twitterHostname], username];
-    NSURL *url = [NSURL URLWithString:urlString];
-    return [self fetchJSONValueForURL:url];
-}
-
-+ (NSArray *)fetchPublicTimeline
-{
-    NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/public_timeline.json", [self twitterHostname]];
-	NSURL *url = [NSURL URLWithString:urlString];
-    return [self fetchJSONValueForURL:url];
-}
-
-+ (NSDictionary *)fetchSearchResultsForQuery:(NSString *)query
-{
-    // Sanitize the query string.
-	query = [query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    NSString *urlString = [NSString stringWithFormat:@"http://search.twitter.com/search.json?q=%@", query];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    return [self fetchJSONValueForURL:url];
 }
 
 @end
