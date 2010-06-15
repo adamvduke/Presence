@@ -9,6 +9,7 @@
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
+#import "TwitterHelper.h"
 
 @implementation PresenceAppDelegate
 
@@ -46,8 +47,12 @@
 	UINavigationController *followingNavigationController = [[UINavigationController alloc]init];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
+	NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
+
+	NSArray *idsArray = [TwitterHelper fetchFollowingIdsForUsername:username];
+	
 	// create the list view controller to push on the followingNavigationController
-	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:nil];
+	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:idsArray];
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	followingListViewController.tabBarItem.image = [UIImage imageNamed:@"PeopleIcon.png"];
 	
