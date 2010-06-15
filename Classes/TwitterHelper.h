@@ -30,7 +30,7 @@
 + (NSArray *)fetchTimelineForUsername:(NSString *)username;
 
 // Returns the array of user id's representing the users that the given user is following
-+(id)fetchFollowingIdsForUsername:(NSString *)username;
++(NSArray *)fetchFollowingIdsForUsername:(NSString *)username;
 
 // Returns an array that contains the individual status updates from a timeline
 // This method is synchronous (it will block the calling thread).
