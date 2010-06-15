@@ -16,7 +16,7 @@
 
 @implementation ListViewController
 
-@synthesize personListName;
+@synthesize usernameArray;
 @synthesize people;
 @synthesize queue;
 @synthesize spinner;
@@ -81,16 +81,8 @@
 // synchronously get the usernames and call beginLoadPerson for each username
 - (void)synchronousLoadTwitterData
 {
-	NSArray *userNames = nil;
-	if (personListName != nil) {
-		NSString *path = [[NSBundle mainBundle]pathForResource:personListName ofType:@"plist"];
-		userNames = [NSArray arrayWithContentsOfFile:path];
-	}
-	else {
-		// get the list of names that the user is following 
-	}
-
-	if (userNames != nil) {
+	
+	if (usernameArray != nil) {
 		
 		// start the device's network activity indicator
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -99,9 +91,9 @@
 		[spinner startAnimating];		
 	}
 	
-	for (NSString *userName in userNames) 
+	for (NSString *username in usernameArray) 
 	{
-		[self beginLoadPerson:userName];
+		[self beginLoadPerson:username];
 	}
 }
 
@@ -130,16 +122,13 @@
 	[self dismissModalViewControllerAnimated:YES];
 }
 
--(id)initWithStyle:(UITableViewStyle)style listName:(NSString *)pListName
+-(id)initWithStyle:(UITableViewStyle)style usernameArray:(NSArray *)usernames
 {
 	
 	if (self == [super initWithStyle:style]) {
 		
-		if (pListName != nil) {
-			
-			//the pListName if this controller is going to display a static list of people
-			self.personListName = [NSString stringWithString:pListName];
-		}
+		// set the list of users to load
+		self.usernameArray = usernames;
 		
 		//Create the NSOperationQueue for threading data loading
 		queue = [[NSOperationQueue alloc]init];

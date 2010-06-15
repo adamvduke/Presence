@@ -27,7 +27,10 @@
 	UINavigationController *favoritesNavigationController = [[UINavigationController alloc]init];
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
-	ListViewController *favoritesListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain listName:@"FavoriteUsers"];
+	NSString *path = [[NSBundle mainBundle]pathForResource:@"FavoriteUsers" ofType:@"plist"];
+	NSArray *favoriteUsersArray = [NSArray arrayWithContentsOfFile:path];
+
+	ListViewController *favoritesListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:favoriteUsersArray];
 	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	favoritesListViewController.tabBarItem.image = [UIImage imageNamed:@"FavoritesIcon.png"];	
 	
@@ -44,7 +47,7 @@
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
 	// create the list view controller to push on the followingNavigationController
-	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain listName:nil];
+	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:nil];
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	followingListViewController.tabBarItem.image = [UIImage imageNamed:@"PeopleIcon.png"];
 	
