@@ -59,6 +59,13 @@
     return [self fetchJSONValueForURL:url];
 }
 
++(id)fetchFollowingIdsForUsername:(NSString *)username
+{
+	NSString *urlString = [NSString stringWithFormat:@"http://%@/friends/ids/%@.json", [self twitterHostname], username];
+    NSURL *url = [NSURL URLWithString:urlString];
+    return [self fetchJSONValueForURL:url];
+}
+
 +(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
 	
 	NSMutableArray *returnArray = [[[NSMutableArray alloc]init]autorelease];
