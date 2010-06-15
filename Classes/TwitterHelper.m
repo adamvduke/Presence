@@ -59,11 +59,17 @@
     return [self fetchJSONValueForURL:url];
 }
 
-+(id)fetchFollowingIdsForUsername:(NSString *)username
++(NSArray *)fetchFollowingIdsForUsername:(NSString *)username
 {
 	NSString *urlString = [NSString stringWithFormat:@"http://%@/friends/ids/%@.json", [self twitterHostname], username];
     NSURL *url = [NSURL URLWithString:urlString];
-    return [self fetchJSONValueForURL:url];
+	NSArray *idsArray = [self fetchJSONValueForURL:url];
+	NSMutableArray *stringIdsArray = [[[NSMutableArray alloc] init]autorelease];
+	for (NSDecimalNumber *decimalID in idsArray){
+		NSString *anID = [NSString stringWithFormat:@"%@", decimalID];
+		[stringIdsArray addObject:anID];
+	}
+    return stringIdsArray;
 }
 
 +(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
