@@ -37,13 +37,13 @@
 	id<SettingsViewControllerDelegate> delegate;
 }
 
-@property (retain)UINavigationItem *aNavigationItem;
-@property (retain)UILabel *usernameLabel;
-@property (retain)UILabel *passwordLabel;
-@property (retain)UILabel *liveDataLabel;
-@property (retain)UITextField *usernameField;
-@property (retain)UITextField *passwordField;
-@property (retain)UISwitch *liveDataSwitch;
+@property (nonatomic, retain)UINavigationItem *aNavigationItem;
+@property (nonatomic, retain)UILabel *usernameLabel;
+@property (nonatomic, retain)UILabel *passwordLabel;
+@property (nonatomic, retain)UILabel *liveDataLabel;
+@property (nonatomic, retain)UITextField *usernameField;
+@property (nonatomic, retain)UITextField *passwordField;
+@property (nonatomic, retain)UISwitch *liveDataSwitch;
 @property (assign) id<SettingsViewControllerDelegate> delegate;
 
 // Provide an implementation to dismiss this view contoller when presented modally
@@ -52,7 +52,6 @@
 // Provide an implementation to save the user's settings
 -(IBAction)save;
 @end
-
 
 @protocol SettingsViewControllerDelegate<NSObject>
 

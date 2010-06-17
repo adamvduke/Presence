@@ -24,6 +24,10 @@
 		NSString *theImageUrlString = [userInfo valueForKey:@"profile_image_url"];
 		NSString *theDisplayName = [userInfo valueForKey:@"screen_name"];
 		
+		if (theImageUrlString == nil || theDisplayName == nil) {
+			return nil;
+		}
+		
 		self.userName = theUserName;
 		self.displayName = theDisplayName;
 		self.imageUrlString = theImageUrlString;

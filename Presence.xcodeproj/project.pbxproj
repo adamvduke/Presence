@@ -19,6 +19,8 @@
 		561E68EF11C0A8490043787E /* PeopleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E68EE11C0A8490043787E /* PeopleIcon.png */; };
 		561E693E11C0B0210043787E /* SearchIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 561E693D11C0B0210043787E /* SearchIcon.png */; };
 		561E9B6211BAE59F005A6BC8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 561E9B6011BAE59F005A6BC8 /* Localizable.strings */; };
+		562BCB0311CA7B28001E4BA2 /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 562BCB0211CA7B28001E4BA2 /* Placeholder.png */; };
+		562BCB0611CA7CD7001E4BA2 /* IconDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */; };
 		563329FA11B761BF00BF4184 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563329F911B761BF00BF4184 /* QuartzCore.framework */; };
 		5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */; };
 		563C65EF11B89639001430C9 /* PresenceContants.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C65EE11B89639001430C9 /* PresenceContants.m */; };
@@ -55,6 +57,9 @@
 		561E693D11C0B0210043787E /* SearchIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SearchIcon.png; path = Resources/SearchIcon.png; sourceTree = "<group>"; };
 		561E9B6111BAE59F005A6BC8 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		561E9B6311BAE5AC005A6BC8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		562BCB0211CA7B28001E4BA2 /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Placeholder.png; path = Resources/Placeholder.png; sourceTree = "<group>"; };
+		562BCB0411CA7CD7001E4BA2 /* IconDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconDownloader.h; sourceTree = "<group>"; };
+		562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IconDownloader.m; sourceTree = "<group>"; };
 		563329F911B761BF00BF4184 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeStatusViewController.h; sourceTree = "<group>"; };
 		5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeStatusViewController.m; sourceTree = "<group>"; };
@@ -101,24 +106,14 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */,
-				5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */,
-				56129B0D11B87B1F0030E797 /* ErrorHelper.h */,
-				56129B0E11B87B1F0030E797 /* ErrorHelper.m */,
-				560315A610ABA79A005F649A /* ListViewController.h */,
-				560315A710ABA79A005F649A /* ListViewController.m */,
-				566ADEE411B8BFBF00931CFD /* Person.h */,
-				566ADEE511B8BFBF00931CFD /* Person.m */,
-				566ADEE611B8BFBF00931CFD /* SettingsViewController.h */,
-				566ADEE711B8BFBF00931CFD /* SettingsViewController.m */,
+				562BCB6911CAA287001E4BA2 /* Constants */,
+				562BCB6811CAA26A001E4BA2 /* Helper */,
+				562BCB6711CAA25A001E4BA2 /* Model */,
+				562BCB6611CAA223001E4BA2 /* ViewController */,
+				562BCB0411CA7CD7001E4BA2 /* IconDownloader.h */,
+				562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */,
 				1D3623240D0F684500981E51 /* PresenceAppDelegate.h */,
 				1D3623250D0F684500981E51 /* PresenceAppDelegate.m */,
-				56B897BB10B34DB400C7C5FF /* StatusViewController.h */,
-				56B897BC10B34DB400C7C5FF /* StatusViewController.m */,
-				56C5613010B248120014D33C /* TwitterHelper.h */,
-				56C5613110B248120014D33C /* TwitterHelper.m */,
-				563C65ED11B89639001430C9 /* PresenceContants.h */,
-				563C65EE11B89639001430C9 /* PresenceContants.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -156,6 +151,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				562BCB0211CA7B28001E4BA2 /* Placeholder.png */,
 				5616967211C5634300C07DEF /* FavoriteUsers.plist */,
 				561E693D11C0B0210043787E /* SearchIcon.png */,
 				561E68EE11C0A8490043787E /* PeopleIcon.png */,
@@ -180,6 +176,50 @@
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		562BCB6611CAA223001E4BA2 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */,
+				5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */,
+				560315A610ABA79A005F649A /* ListViewController.h */,
+				560315A710ABA79A005F649A /* ListViewController.m */,
+				566ADEE611B8BFBF00931CFD /* SettingsViewController.h */,
+				566ADEE711B8BFBF00931CFD /* SettingsViewController.m */,
+				56B897BB10B34DB400C7C5FF /* StatusViewController.h */,
+				56B897BC10B34DB400C7C5FF /* StatusViewController.m */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		562BCB6711CAA25A001E4BA2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				566ADEE411B8BFBF00931CFD /* Person.h */,
+				566ADEE511B8BFBF00931CFD /* Person.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		562BCB6811CAA26A001E4BA2 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				56129B0D11B87B1F0030E797 /* ErrorHelper.h */,
+				56129B0E11B87B1F0030E797 /* ErrorHelper.m */,
+				56C5613010B248120014D33C /* TwitterHelper.h */,
+				56C5613110B248120014D33C /* TwitterHelper.m */,
+			);
+			name = Helper;
+			sourceTree = "<group>";
+		};
+		562BCB6911CAA287001E4BA2 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				563C65ED11B89639001430C9 /* PresenceContants.h */,
+				563C65EE11B89639001430C9 /* PresenceContants.m */,
+			);
+			name = Constants;
 			sourceTree = "<group>";
 		};
 		56C5613310B2481E0014D33C /* JSON */ = {
@@ -259,6 +299,7 @@
 				561E68EF11C0A8490043787E /* PeopleIcon.png in Resources */,
 				561E693E11C0B0210043787E /* SearchIcon.png in Resources */,
 				5616967411C5634300C07DEF /* FavoriteUsers.plist in Resources */,
+				562BCB0311CA7B28001E4BA2 /* Placeholder.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +323,7 @@
 				566ADEE811B8BFBF00931CFD /* Person.m in Sources */,
 				566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */,
 				5640027311B8C13100355A74 /* main.m in Sources */,
+				562BCB0611CA7CD7001E4BA2 /* IconDownloader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,25 +6,143 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-
+#import "IconDownloader.h"
 #import "ListViewController.h"
 #import "Person.h"
 #import "PresenceContants.h"
 #import "StatusViewController.h"
 #import "TwitterHelper.h"
 
+#define kCustomRowCount 7
+
+@interface ListViewController ()
+
+- (void) startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
+- (void) beginLoadingTwitterData;
+- (void) synchronousLoadTwitterData;
+- (void) beginLoadPerson:(NSString *)userName;
+- (void) synchronousLoadPerson:(NSString *)userName;
+- (void) didFinishLoadingPerson;
+
+@end
 
 @implementation ListViewController
 
 @synthesize usernameArray;
 @synthesize people;
+@synthesize imageDownloadsInProgress;
 @synthesize queue;
 @synthesize spinner;
 
+- (void)dealloc 
+{	
+	// make sure to deallocate the people array and the operation queue
+	[people release];
+	[queue release];
+	[spinner release];
+	[imageDownloadsInProgress release];
+	
+	// always call the dealloc of the super class
+    [super dealloc];
+}
+
+#pragma mark -
+#pragma mark UIViewController methods
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	// return YES for all interface orientations
 	return YES;
+}
+
+- (void)viewDidLoad
+{
+	self.imageDownloadsInProgress = [NSMutableDictionary dictionary];
+}
+
+// override viewWillAppear to begin the data load
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	
+	// if the array of people is empty, start the activity indicators and begin loading data
+	if ([people count] == 0) 
+	{
+		//begin loading data from twitter
+		[self beginLoadingTwitterData];
+	}
+}
+
+- (void)didReceiveMemoryWarning 
+{
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+	
+	// terminate all pending download connections
+    NSArray *allDownloads = [self.imageDownloadsInProgress allValues];
+    [allDownloads performSelector:@selector(cancelDownload)];
+}
+
+- (void)viewDidUnload 
+{
+	// Release any retained subviews of the main view.
+	// e.g. self.myOutlet = nil;
+}
+
+#pragma mark -
+#pragma mark Data loading
+// start to load data asynchronously so that the UI is not blocked
+- (void)beginLoadingTwitterData
+{
+	//create the NSInvocationOperation and add it to the queue
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadTwitterData) object:nil];
+	[self.queue addOperation:operation];
+	[operation release];
+}
+
+// synchronously get the usernames and call beginLoadPerson for each username
+- (void)synchronousLoadTwitterData
+{
+	if (self.usernameArray != nil) {
+		
+		// start the device's network activity indicator
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+		
+		// start animating the spinner
+		[self.spinner startAnimating];		
+	}
+	
+	for (NSString *username in usernameArray) 
+	{
+		[self beginLoadPerson:username];
+	}
+}
+
+// start to load a person object asynchronously
+- (void) beginLoadPerson:(NSString *)userName
+{
+	//create an NSInvocationOperation and add it to the queue
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userName];
+	[self.queue addOperation:operation];
+	[operation release];
+}
+
+// synchronously fetch data, initialize a person object, and add it to the list of people
+// call the main thread when finished
+-(void) synchronousLoadPerson:(NSString *)userName
+{
+	// get the user's information from Twitter
+	NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
+	if (userInfo != nil) 
+	{
+		Person *person = [[Person alloc]initPersonWithInfo:userInfo userName:userName];
+		if (person != nil) {
+			[self.people addObject:person];
+			[person release];
+		}
+	}
+	
+	// call the main thread to notify that the person has finished loading
+	[self performSelectorOnMainThread:@selector(didFinishLoadingPerson) withObject:nil waitUntilDone:NO];
 }
 
 // called by synchronousLoadPerson when the load has finished
@@ -37,11 +155,10 @@
 	NSArray *operations = [queue operations];
 	if ([operations count] <= 1) 
 	{
-		
 		// if the spinner is active stop it
-		if ([spinner isAnimating]) 
+		if ([self.spinner isAnimating]) 
 		{
-			[spinner stopAnimating];
+			[self.spinner stopAnimating];
 		}
 		
 		// stop the network indicator
@@ -52,61 +169,8 @@
 	}
 }
 
-// synchronously fetch data, initialize a person object, and add it to the list of people
-// call the main thread when finished
--(void) synchronousLoadPerson:(NSString *)userName
-{
-	// get the user's information from Twitter
-	NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
-	if (userInfo != nil) 
-	{
-		Person *person = [[Person alloc]initPersonWithInfo:userInfo userName:userName];
-		[people addObject:person];
-		[person release];
-	}
-	
-	// call the main thread to notify that the person has finished loading
-	[self performSelectorOnMainThread:@selector(didFinishLoadingPerson) withObject:nil waitUntilDone:NO];
-}
-
-// start to load a person object asynchronously
-- (void) beginLoadPerson:(NSString *)userName
-{
-	//create an NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userName];
-	[queue addOperation:operation];
-	[operation release];
-}
-
-// synchronously get the usernames and call beginLoadPerson for each username
-- (void)synchronousLoadTwitterData
-{
-	
-	if (usernameArray != nil) {
-		
-		// start the device's network activity indicator
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-		
-		// start animating the spinner
-		[spinner startAnimating];		
-	}
-	
-	for (NSString *username in usernameArray) 
-	{
-		[self beginLoadPerson:username];
-	}
-}
-
-// start to load data asynchronously so that the UI is not blocked
-- (void)beginLoadingTwitterData
-{
-
-	//create the NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadTwitterData) object:nil];
-	[queue addOperation:operation];
-	[operation release];
-}
-
+#pragma mark -
+#pragma mark Modal status view controller
 // show a modal view controller that will allow a user to compose a twitter status
 -(void)presentUpdateStatusController
 {
@@ -131,17 +195,17 @@
 		self.usernameArray = usernames;
 		
 		//Create the NSOperationQueue for threading data loading
-		queue = [[NSOperationQueue alloc]init];
+		self.queue = [[NSOperationQueue alloc]init];
 		
 		//set the maxConcurrent operations to 1
-		[queue setMaxConcurrentOperationCount:1];
+		[self.queue setMaxConcurrentOperationCount:1];
 		
 		//allocate the memory for the NSMutableArray of people on this ViewController
-		people = [[NSMutableArray alloc]init];
+		self.people = [[NSMutableArray alloc]init];
 		
 		// initialize the UIActivityIndicatorView for this view controller
-		spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-		[spinner setCenter:self.view.center]; 
+		self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		[self.spinner setCenter:self.view.center]; 
 		[self.view addSubview:spinner];
 		
 		// create a UIBarButtonItem for the right side using the Compose style, this will present the ComposeStatusViewController modally
@@ -152,52 +216,21 @@
 	return self;
 }
 
-// override viewWillAppear to begin the data load
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	// if the array of people is empty, start the activity indicators and begin loading data
-	if ([people count] == 0) 
-	{
-		//begin loading data from twitter
-		[self beginLoadingTwitterData];
-	}
-	
-}
-
-
-- (void)didReceiveMemoryWarning 
-{
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload 
-{
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
+#pragma mark -
 #pragma mark Table view methods
-
-// number of sections in the table view
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
-{
-	//the main view only has 1 section
-    return 1;
-}
-
 
 // Customize the number of rows per section
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	//the size of the main view's section is the length of the array "people"
-    return [people count];
+	int count = [self.people count];
+	
+	// if there's no data yet, return enough rows to fill the screen
+    if (count == 0)
+	{
+        return kCustomRowCount;
+    }
+    return count;
 }
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
@@ -205,31 +238,60 @@
 	//if there is already a cell with the identifier that can be reused, get it
 	//otherwise create a new cell
     static NSString *CellIdentifier = @"ListCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) 
-	{
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-	//get a person object out of the people array for the correct IndexPath
-	//set the person's properties on the cell
-	Person *person = [people objectAtIndex:indexPath.row];
+	static NSString *PlaceHolderIdentifier = @"PlaceHolder";
 	
-	if (person.image == nil) 
+	// add a placeholder cell while waiting on table data
+    int nodeCount = [self.people count];
+	
+	if (nodeCount == 0 && indexPath.row == 0)
 	{
-		//Initialize the UIImage for the person
-		NSURL *imageUrl = [NSURL URLWithString:person.imageUrlString];
-		NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
-		UIImage *image = [[UIImage alloc] initWithData:imageData];
-		person.image = image;
-		[image release];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PlaceHolderIdentifier];
+        if (cell == nil)
+		{
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PlaceHolderIdentifier] autorelease];   
+            cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+		
+		cell.detailTextLabel.text = @"Loading…";
+		
+		return cell;
 	}
 	
-	// set the image, text and accesory type on the cell
-	cell.imageView.image = person.image;
-    cell.textLabel.text = person.userName;
-	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    return cell;
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil)
+	{
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+	// Leave cells empty if there's no data yet
+	if (nodeCount > 0)
+	{
+		// Set up the cell...
+		Person *person = [self.people objectAtIndex:indexPath.row];
+		
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		cell.textLabel.text = person.userName;
+		
+		// TODO: add field to person for the detail text label
+		//cell.detailTextLabel.text = appRecord.artist;
+		
+		// Only load cached images; defer new downloads until scrolling ends
+		if (!person.image)
+		{
+			if (self.tableView.dragging == NO && self.tableView.decelerating == NO)
+			{
+				[self startIconDownload:person forIndexPath:indexPath];
+			}
+			// if a download is deferred or in progress, return a placeholder image
+			cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];                
+		}
+		else
+		{
+			cell.imageView.image = person.image;
+		}
+	}
+	return cell;
 }
 
 // override didSelectRowAtIndexPath to push a StatusViewController onto the navigation stack when a row is selected
@@ -244,15 +306,70 @@
 	[self.navigationController pushViewController:statusViewController animated:YES];
 	[statusViewController release];
 }
+#pragma mark -
+#pragma mark Table cell image support
 
-- (void)dealloc 
-{	
-	// make sure to deallocate the people array and the operation queue
-	[people release];
-	[queue release];
-	[spinner release];
-	
-	// always call the dealloc of the super class
-    [super dealloc];
+- (void)startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath
+{
+    IconDownloader *iconDownloader = [imageDownloadsInProgress objectForKey:indexPath];
+    if (iconDownloader == nil) 
+    {
+        iconDownloader = [[IconDownloader alloc] init];
+        iconDownloader.person = aPerson;
+        iconDownloader.indexPathInTableView = indexPath;
+        iconDownloader.delegate = self;
+        [imageDownloadsInProgress setObject:iconDownloader forKey:indexPath];
+        [iconDownloader startDownload];
+        [iconDownloader release];   
+    }
 }
+
+// this method is used in case the user scrolled into a set of cells that don't have their app icons yet
+- (void)loadImagesForOnscreenRows
+{
+    if ([self.people count] > 0)
+    {
+        NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
+        for (NSIndexPath *indexPath in visiblePaths)
+        {
+            Person *person = [self.people objectAtIndex:indexPath.row];
+            
+            if (!person.image) // avoid the app icon download if the app already has an icon
+            {
+                [self startIconDownload:person forIndexPath:indexPath];
+            }
+        }
+    }
+}
+
+// called by our ImageDownloader when an icon is ready to be displayed
+- (void)appImageDidLoad:(NSIndexPath *)indexPath
+{
+    IconDownloader *iconDownloader = [imageDownloadsInProgress objectForKey:indexPath];
+    if (iconDownloader != nil)
+    {
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:iconDownloader.indexPathInTableView];
+        
+        // Display the newly loaded image
+        cell.imageView.image = iconDownloader.person.image;
+    }
+}
+
+#pragma mark -
+#pragma mark Deferred image loading (UIScrollViewDelegate)
+
+// Load images for all onscreen rows when scrolling is finished
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!decelerate)
+	{
+        [self loadImagesForOnscreenRows];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self loadImagesForOnscreenRows];
+}
+
 @end

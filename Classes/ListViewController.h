@@ -8,15 +8,20 @@
 
 #import "ComposeStatusViewController.h"
 #import "SettingsViewController.h"
+#import "IconDownloader.h"
 #import <UIKit/UIKit.h>
 
 
-@interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate>
+@interface ListViewController : UITableViewController < ComposeStatusViewControllerDelegate, UIScrollViewDelegate, IconDownloaderDelegate>
 {
+	// the list of users to display
 	NSArray *usernameArray;
 	
 	// mutable array of people
 	NSMutableArray *people;
+	
+	// set of icon downloader objects
+	NSMutableDictionary *imageDownloadsInProgress;
 	
 	// operation queue for UI threading
 	NSOperationQueue *queue;
@@ -25,11 +30,13 @@
 	UIActivityIndicatorView	*spinner;
 }
 
-@property (retain) NSArray *usernameArray;
-@property (retain) NSMutableArray *people;
+@property (nonatomic, retain) NSArray *usernameArray;
+@property (nonatomic, retain) NSMutableArray *people;
+@property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
 @property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, retain) UIActivityIndicatorView	*spinner;
 
--(id)initWithStyle:(UITableViewStyle)style usernameArray:(NSArray *)usernames;
+- (id)initWithStyle:(UITableViewStyle)style usernameArray:(NSArray *)usernames;
+- (void)appImageDidLoad:(NSIndexPath *)indexPath;
 
 @end

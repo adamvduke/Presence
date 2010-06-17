@@ -28,7 +28,7 @@
 -(void)saveText
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:textView.text forKey:TweetContentKey];
+	[defaults setObject:self.textView.text forKey:TweetContentKey];
 }
 
 // action to call to dismiss this view controller when displayed modally, should be called from a successful status update because
@@ -67,7 +67,7 @@
 	else 
 	{
 		// if the update was a success, set the text to nil and dismiss the view
-		textView.text = nil;
+		self.textView.text = nil;
 		[self dismiss];
 	}
 }
@@ -90,7 +90,7 @@
 	// update the countLabel's text with the current length of the text
 	NSString *localizedText = NSLocalizedString(CharactersLabelKey, @"");
 	NSString *charactersLabelText = [NSString stringWithFormat:@"%@:%d/140",localizedText, [theTextView.text length]];
-	charactersLabel.text = charactersLabelText;
+	self.charactersLabel.text = charactersLabelText;
 }
 
 // override viewWillAppear to do some initialization
@@ -105,19 +105,19 @@
 	NSString *previousText = [[NSUserDefaults standardUserDefaults] objectForKey:TweetContentKey];
 	if (previousText != nil ) 
 	{
-		textView.text = previousText;
+		self.textView.text = previousText;
 	}
 	
 	// tell the UITextView to becomeFirstResponder, this brings up the keyboard
-	[textView becomeFirstResponder];
+	[self.textView becomeFirstResponder];
 	
 	// set the cornerRadius property to 8, this creates rounded corners for the UITextView
-	textView.layer.cornerRadius = 8;
+	self.textView.layer.cornerRadius = 8;
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-	if (textView.text != nil) 
+	if (self.textView.text != nil) 
 	{
 		[self saveText];
 	}
@@ -125,7 +125,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
-	textView.text = @"";
+	self.textView.text = @"";
 }
 
 - (void)didReceiveMemoryWarning 

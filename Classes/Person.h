@@ -18,11 +18,11 @@
 	UIImage *image;
 }
 
-@property (retain) NSString *userName;
-@property (retain) NSString *displayName;
-@property (retain) NSString *imageUrlString;
-@property (retain) NSArray *statusUpdates;
-@property (retain) UIImage *image;
+@property (nonatomic, retain) NSString *userName;
+@property (nonatomic, retain) NSString *displayName;
+@property (nonatomic, retain) NSString *imageUrlString;
+@property (nonatomic, retain) NSArray *statusUpdates;
+@property (nonatomic, retain) UIImage *image;
 
 -(Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName;
 

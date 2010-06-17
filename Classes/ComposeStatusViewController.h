@@ -26,10 +26,10 @@
 	id<ComposeStatusViewControllerDelegate> delegate;
 }
 
-@property (retain) UINavigationItem *aNavigationItem;
-@property (retain) UILabel *charactersLabel;
-@property (retain) UITextView *textView;
-@property (assign) id<ComposeStatusViewControllerDelegate> delegate;
+@property (nonatomic, retain) UINavigationItem *aNavigationItem;
+@property (nonatomic, retain) UILabel *charactersLabel;
+@property (nonatomic, retain) UITextView *textView;
+@property (nonatomic, retain) id<ComposeStatusViewControllerDelegate> delegate;
 
 // action to call to dismiss this view controller when displayed modally
 -(IBAction)dismiss;

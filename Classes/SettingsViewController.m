@@ -42,6 +42,7 @@
 	[defaults setObject:passwordField.text forKey:PasswordKey];
 	[defaults setBool:liveDataSwitch.isOn forKey:LiveDataKey];
 	
+	// TODO: decide what to do with this, the error message helper is very helpful
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Your credentials have been saved" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
@@ -58,23 +59,23 @@
 	self.aNavigationItem.title = NSLocalizedString(SettingsViewTitleKey, @"");
 	
 	// localize the labels on the screen
-	usernameLabel.text = NSLocalizedString(UsernameLabelKey, @"");
-	passwordLabel.text = NSLocalizedString(PasswordLabelKey, @"");
-	liveDataLabel.text = NSLocalizedString(LiveDataLabelKey, @"");
+	self.usernameLabel.text = NSLocalizedString(UsernameLabelKey, @"");
+	self.passwordLabel.text = NSLocalizedString(PasswordLabelKey, @"");
+	self.liveDataLabel.text = NSLocalizedString(LiveDataLabelKey, @"");
 	
 	// get any values out of NSUserDefaults and set those values on the fields
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	usernameField.text = [defaults objectForKey:UsernameKey];
-	passwordField.text = [defaults objectForKey:PasswordKey];
-	liveDataSwitch.on = [defaults boolForKey:LiveDataKey];
+	self.usernameField.text = [defaults objectForKey:UsernameKey];
+	self.passwordField.text = [defaults objectForKey:PasswordKey];
+	self.liveDataSwitch.on = [defaults boolForKey:LiveDataKey];
 	
 	// set the clearsOnBeginEditing property to NO, allow the user to decide to delete the current values
-	usernameField.clearsOnBeginEditing = NO;
-	passwordField.clearsOnBeginEditing = NO;
+	self.usernameField.clearsOnBeginEditing = NO;
+	self.passwordField.clearsOnBeginEditing = NO;
 	
 	// set the secureTextEntry property to YES for the passwordField
 	// this cloaks the text in ****** characters
-	passwordField.secureTextEntry = YES;
+	self.passwordField.secureTextEntry = YES;
 }
 
 - (void)didReceiveMemoryWarning 

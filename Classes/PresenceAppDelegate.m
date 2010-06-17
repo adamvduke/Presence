@@ -11,9 +11,63 @@
 #import "PresenceContants.h"
 #import "TwitterHelper.h"
 
+@interface PresenceAppDelegate ()
+
+- (SettingsViewController *)initSettingsViewController;
+- (UINavigationController *)initFavoritesController;
+- (UINavigationController *)initFollowingController;
+- (UINavigationController *)initSearchController;
+- (NSArray *)initViewControllerArray;
+
+@end
+
 @implementation PresenceAppDelegate
 
 @synthesize window;
+
+- (void)applicationDidFinishLaunching:(UIApplication *)application 
+{	
+	tabBarController = [[UITabBarController alloc]init];
+	
+	NSArray *viewControllerArray = [self initViewControllerArray];
+	
+	tabBarController.viewControllers = viewControllerArray;
+	//tabBarController.selectedViewController = favoritesNavigationController;
+	
+	[viewControllerArray release];
+	
+	// add the navigation controller's view to the window's subviews
+	[window addSubview:tabBarController.view];
+    [window makeKeyAndVisible];
+}
+
+-(NSArray *)initViewControllerArray
+{
+	// create the view controller for the settings tab
+	SettingsViewController *settingsViewController = [self initSettingsViewController];
+	
+	// create the view controller for the favorites tab
+	UINavigationController *favoritesNavigationController = [self initFavoritesController];	
+	
+	// create view controller for the following tab
+	UINavigationController *followingNavigationController = [self initFollowingController];	
+	
+	// create the view controller for the search tab
+	UINavigationController *searchNavigationController = [self initSearchController];
+	
+	NSMutableArray *viewControllerArray = [[NSMutableArray alloc]init];
+	[viewControllerArray addObject:settingsViewController];
+	[viewControllerArray addObject:favoritesNavigationController];
+	[viewControllerArray addObject:followingNavigationController];
+	[viewControllerArray addObject:searchNavigationController];
+	
+	[settingsViewController release];
+	[favoritesNavigationController release];
+	[followingNavigationController release];
+	[searchNavigationController release];
+	
+	return viewControllerArray;	
+}
 
 -(SettingsViewController *)initSettingsViewController
 {
@@ -71,50 +125,6 @@
 	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"SearchIcon.png"];
 
 	return searchNavigationController;
-}
-
--(NSArray *)initViewControllerArray
-{
-	// create the view controller for the settings tab
-	SettingsViewController *settingsViewController = [self initSettingsViewController];
-	
-	// create the view controller for the favorites tab
-	UINavigationController *favoritesNavigationController = [self initFavoritesController];	
-	
-	// create view controller for the following tab
-	UINavigationController *followingNavigationController = [self initFollowingController];	
-	
-	// create the view controller for the search tab
-	UINavigationController *searchNavigationController = [self initSearchController];
-	
-	NSMutableArray *viewControllerArray = [[NSMutableArray alloc]init];
-	[viewControllerArray addObject:settingsViewController];
-	[viewControllerArray addObject:favoritesNavigationController];
-	[viewControllerArray addObject:followingNavigationController];
-	[viewControllerArray addObject:searchNavigationController];
-	
-	[settingsViewController release];
-	[favoritesNavigationController release];
-	[followingNavigationController release];
-	[searchNavigationController release];
-	
-	return viewControllerArray;	
-}
-
-- (void)applicationDidFinishLaunching:(UIApplication *)application 
-{	
-	tabBarController = [[UITabBarController alloc]init];
-
-	NSArray *viewControllerArray = [self initViewControllerArray];
-	
-	tabBarController.viewControllers = viewControllerArray;
-	//tabBarController.selectedViewController = favoritesNavigationController;
-	
-	[viewControllerArray release];
-	
-	// add the navigation controller's view to the window's subviews
-	[window addSubview:tabBarController.view];
-    [window makeKeyAndVisible];
 }
 
 - (void)dealloc 

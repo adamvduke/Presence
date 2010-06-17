@@ -21,9 +21,9 @@
 	UIActivityIndicatorView	*spinner;
 }
 
-@property (retain) Person *person;
+@property (nonatomic, retain) Person *person;
 @property (nonatomic, retain) NSOperationQueue *queue;
-@property (retain) UIActivityIndicatorView *spinner;
+@property (nonatomic, retain) UIActivityIndicatorView *spinner;
 
 // initialize an instance with a UITableViewStyle and Person object
 -(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson;

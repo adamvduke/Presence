@@ -24,9 +24,9 @@
 -(void) didFinishLoadingUpdates
 {
 	// if the spinner is active stop it
-	if ([spinner isAnimating]) 
+	if ([self.spinner isAnimating]) 
 	{
-		[spinner stopAnimating];
+		[self.spinner stopAnimating];
 	}
 	
 	// stop the network indicator
@@ -44,13 +44,13 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
 	
 	// get the user's timeline
-	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:person.userName];
+	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:self.person.userName];
 	
 	// parse the individual statuses out of the timeline
 	NSArray *statusArray = [TwitterHelper parseStatusUpdatesFromTimeline:userTimeline];
 	
 	// set the statusUpdates array on the person object so that they don't need to be fetched again
-	person.statusUpdates = statusArray;
+	self.person.statusUpdates = statusArray;
 	
 	//call the main thread to notify that the data has finished loading
 	[self performSelectorOnMainThread:@selector(didFinishLoadingUpdates) withObject:nil waitUntilDone:NO];
@@ -66,11 +66,11 @@
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	
 	// start animating the spinner
-	[spinner startAnimating];
+	[self.spinner startAnimating];
 	
 	// create the NSInvocationOperation and add it to the queue
 	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadUpdates) object:nil];
-	[queue addOperation:operation];
+	[self.queue addOperation:operation];
 	[operation release];
 }
 
@@ -87,14 +87,14 @@
 		self.person = aPerson;
 		
 		//Create the NSOperationQueue for threading data loading
-		queue = [[NSOperationQueue alloc]init];
+		self.queue = [[NSOperationQueue alloc]init];
 		
 		//set the maxConcurrent operations to 1
-		[queue setMaxConcurrentOperationCount:1];
+		[self.queue setMaxConcurrentOperationCount:1];
 		
 		// initialize the UIActivityIndicatorView for this view controller
-		spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-		[spinner setCenter:self.view.center]; 
+		self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		[self.spinner setCenter:self.view.center]; 
 		[self.view addSubview:spinner];
 		
 		// set the right bar button for reloading the data with the Refresh style
@@ -111,7 +111,7 @@
 	[super viewWillAppear:animated];
 	
 	//if the person's status updates have not been loaded, load them
-	if (person.statusUpdates == nil) 
+	if (self.person.statusUpdates == nil) 
 	{
 		[self beginLoadUpdates];
 	}
@@ -150,7 +150,7 @@
 	{
 		return 1;
 	}
-    return [person.statusUpdates count];
+    return [self.person.statusUpdates count];
 }
 
 // Customize the content of table view cells.
@@ -174,8 +174,8 @@
 		}
 		
 		// set only the text and image properties on the cell
-		cell.textLabel.text = person.userName;
-		cell.imageView.image = person.image;
+		cell.textLabel.text = self.person.userName;
+		cell.imageView.image = self.person.image;
 	}
 	
 	// because there are only two sections, the else block will always create cells styled for statuses
@@ -190,7 +190,7 @@
 		// set the numberOfLines, font, and text properties on the cell's text label
 		cell.textLabel.numberOfLines = 0;
 		cell.textLabel.font = [UIFont systemFontOfSize:14];
-		cell.textLabel.text = [person.statusUpdates objectAtIndex:indexPath.row];
+		cell.textLabel.text = [self.person.statusUpdates objectAtIndex:indexPath.row];
 	}
 	
 	// set the selection style to None, these cells are not selectable
@@ -204,7 +204,7 @@
 	//if the index path represents the "Title cell" return the height of the user's image plus 15
 	NSUInteger section = indexPath.section;
 	if (section == 0) {
-		CGSize imageSize = person.image.size;
+		CGSize imageSize = self.person.image.size;
 		return imageSize.height + 15;
 	}
 	
