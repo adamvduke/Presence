@@ -34,6 +34,13 @@
 	}
 }
 
+-(void)hideKeyBoardForTextField:(UITextField *)textField
+{
+	if ([textField isFirstResponder]) {
+		[textField resignFirstResponder];
+	}
+}
+
 // save the state of the settings to NSUserDefaults
 -(IBAction)save
 {	
@@ -46,6 +53,9 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Your credentials have been saved" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
+	
+	[self hideKeyBoardForTextField:usernameField];
+	[self hideKeyBoardForTextField:passwordField];
 	
 	// after the data is saved, dismiss the modal view controller
 	[self dismiss];
