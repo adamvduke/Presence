@@ -170,7 +170,7 @@
 }
 
 #pragma mark -
-#pragma mark Modal status view controller
+#pragma mark Modal ComposeStatusViewController
 // show a modal view controller that will allow a user to compose a twitter status
 -(void)presentUpdateStatusController
 {
@@ -186,6 +186,8 @@
 	[self dismissModalViewControllerAnimated:YES];
 }
 
+#pragma mark -
+#pragma mark custom init method
 -(id)initWithStyle:(UITableViewStyle)style usernameArray:(NSArray *)usernames
 {
 	
