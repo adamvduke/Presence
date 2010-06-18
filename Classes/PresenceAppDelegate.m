@@ -32,6 +32,7 @@
 	NSArray *viewControllerArray = [self initViewControllerArray];
 	
 	tabBarController.viewControllers = viewControllerArray;
+	tabBarController.selectedIndex = 1;
 	//tabBarController.selectedViewController = favoritesNavigationController;
 	
 	[viewControllerArray release];
@@ -103,6 +104,7 @@
 	
 	NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
 
+	// TODO: if the username isn't valid, display an alert indicating that the "Following" view won't function
 	NSArray *idsArray = [TwitterHelper fetchFollowingIdsForUsername:username];
 	
 	// create the list view controller to push on the followingNavigationController
