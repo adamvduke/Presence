@@ -17,23 +17,24 @@
 - (UINavigationController *)initFavoritesController;
 - (UINavigationController *)initFollowingController;
 - (UINavigationController *)initSearchController;
-- (NSArray *)initViewControllerArray;
+- (NSMutableArray *)initViewControllerArray;
+- (void)didFinishLoadingIdsArray:(NSArray *)idArray;
 
 @end
 
 @implementation PresenceAppDelegate
 
 @synthesize window;
+@synthesize viewControllerArray;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
 	tabBarController = [[UITabBarController alloc]init];
 	
-	NSArray *viewControllerArray = [self initViewControllerArray];
+	self.viewControllerArray = [self initViewControllerArray];
 	
 	tabBarController.viewControllers = viewControllerArray;
 	tabBarController.selectedIndex = 1;
-	//tabBarController.selectedViewController = favoritesNavigationController;
 	
 	[viewControllerArray release];
 	
@@ -42,7 +43,7 @@
     [window makeKeyAndVisible];
 }
 
--(NSArray *)initViewControllerArray
+-(NSMutableArray *)initViewControllerArray
 {
 	// create the view controller for the settings tab
 	SettingsViewController *settingsViewController = [self initSettingsViewController];
@@ -56,18 +57,18 @@
 	// create the view controller for the search tab
 	UINavigationController *searchNavigationController = [self initSearchController];
 	
-	NSMutableArray *viewControllerArray = [[NSMutableArray alloc]init];
-	[viewControllerArray addObject:settingsViewController];
-	[viewControllerArray addObject:favoritesNavigationController];
-	[viewControllerArray addObject:followingNavigationController];
-	[viewControllerArray addObject:searchNavigationController];
+	NSMutableArray *aViewControllerArray = [[NSMutableArray alloc]init];
+	[aViewControllerArray addObject:settingsViewController];
+	[aViewControllerArray addObject:favoritesNavigationController];
+	[aViewControllerArray addObject:followingNavigationController];
+	[aViewControllerArray addObject:searchNavigationController];
 	
 	[settingsViewController release];
 	[favoritesNavigationController release];
 	[followingNavigationController release];
 	[searchNavigationController release];
 	
-	return viewControllerArray;	
+	return aViewControllerArray;	
 }
 
 -(SettingsViewController *)initSettingsViewController
@@ -81,14 +82,15 @@
 -(UINavigationController *)initFavoritesController
 {
 	UINavigationController *favoritesNavigationController = [[UINavigationController alloc]init];
+	favoritesNavigationController.title =  NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-	
+	favoritesNavigationController.tabBarItem.image = [UIImage imageNamed:@"FavoritesIcon.png"];	
+
 	NSString *path = [[NSBundle mainBundle]pathForResource:@"FavoriteUsers" ofType:@"plist"];
 	NSArray *favoriteUsersArray = [NSArray arrayWithContentsOfFile:path];
 
 	ListViewController *favoritesListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:favoriteUsersArray];
 	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
-	favoritesListViewController.tabBarItem.image = [UIImage imageNamed:@"FavoritesIcon.png"];	
 	
 	// push the followingListViewController onto the following navigation stack and release it
 	[favoritesNavigationController pushViewController:favoritesListViewController animated:YES];
@@ -100,23 +102,47 @@
 -(UINavigationController *)initFollowingController
 {
 	UINavigationController *followingNavigationController = [[UINavigationController alloc]init];
+	followingNavigationController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+	followingNavigationController.tabBarItem.image = [UIImage imageNamed:@"PeopleIcon.png"];
 	
 	NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
 
-	// TODO: if the username isn't valid, display an alert indicating that the "Following" view won't function
-	NSArray *idsArray = [TwitterHelper fetchFollowingIdsForUsername:username];
-	
-	// create the list view controller to push on the followingNavigationController
-	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:idsArray];
-	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
-	followingListViewController.tabBarItem.image = [UIImage imageNamed:@"PeopleIcon.png"];
-	
-	// push the followingListViewController onto the following navigation stack and release it
-	[followingNavigationController pushViewController:followingListViewController animated:YES];
-	[followingListViewController release];
+	// ex.[NSThread detachNewThreadSelector:@selector(dowork:) withTarget:self object:someData]; 
+	[NSThread detachNewThreadSelector:@selector(initFollowingIdsArrayForUsername:) toTarget:self withObject:username];
 
 	return followingNavigationController;
+}
+
+-(void)initFollowingIdsArrayForUsername:(NSString *)username
+{
+	// init an autorelease pool for a detached thread
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+	
+	// fetch the names from the data source
+	NSArray *idsArray = [TwitterHelper fetchFollowingIdsForUsername:username];
+	
+	// perform the did finish selector on the main thread because UIKit classes
+	// can't act on a detached thread
+	[self performSelectorOnMainThread:@selector(didFinishLoadingIdsArray:) withObject:idsArray waitUntilDone:NO];
+	[pool release];
+}
+
+-(void)didFinishLoadingIdsArray:(NSArray *)idArray
+{
+	// retain the array in case the autorelease pool releases it
+	[idArray retain];
+	
+	// create the list view controller to push on the followingNavigationController
+	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:idArray];
+	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
+	
+	UINavigationController *followingController = [self.viewControllerArray objectAtIndex:2];
+	[followingController pushViewController:followingListViewController animated:YES];
+	[followingListViewController release];
+	
+	// balance the call to retain
+	[idArray release];
 }
 
 -(UINavigationController *)initSearchController
