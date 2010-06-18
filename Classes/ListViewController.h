@@ -25,16 +25,12 @@
 	
 	// operation queue for UI threading
 	NSOperationQueue *queue;
-	
-	// activity indicator for animation during data access
-	UIActivityIndicatorView	*spinner;
 }
 
 @property (nonatomic, retain) NSArray *usernameArray;
 @property (nonatomic, retain) NSMutableArray *people;
 @property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
 @property (nonatomic, retain) NSOperationQueue *queue;
-@property (nonatomic, retain) UIActivityIndicatorView	*spinner;
 
 - (id)initWithStyle:(UITableViewStyle)style usernameArray:(NSArray *)usernames;
 - (void)appImageDidLoad:(NSIndexPath *)indexPath;

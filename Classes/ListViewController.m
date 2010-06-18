@@ -32,14 +32,12 @@
 @synthesize people;
 @synthesize imageDownloadsInProgress;
 @synthesize queue;
-@synthesize spinner;
 
 - (void)dealloc 
 {	
 	// make sure to deallocate the people array and the operation queue
 	[people release];
 	[queue release];
-	[spinner release];
 	[imageDownloadsInProgress release];
 	
 	// always call the dealloc of the super class
@@ -106,9 +104,6 @@
 		
 		// start the device's network activity indicator
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-		
-		// start animating the spinner
-		[self.spinner startAnimating];		
 	}
 	
 	for (NSString *username in usernameArray) 
@@ -154,13 +149,7 @@
 	// if this is the last operation in the queue
 	NSArray *operations = [queue operations];
 	if ([operations count] <= 1) 
-	{
-		// if the spinner is active stop it
-		if ([self.spinner isAnimating]) 
-		{
-			[self.spinner stopAnimating];
-		}
-		
+	{		
 		// stop the network indicator
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO; 
 		
@@ -204,11 +193,6 @@
 		
 		//allocate the memory for the NSMutableArray of people on this ViewController
 		self.people = [[NSMutableArray alloc]init];
-		
-		// initialize the UIActivityIndicatorView for this view controller
-		self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-		[self.spinner setCenter:self.view.center]; 
-		[self.view addSubview:spinner];
 		
 		// create a UIBarButtonItem for the right side using the Compose style, this will present the ComposeStatusViewController modally
 		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentUpdateStatusController)];
