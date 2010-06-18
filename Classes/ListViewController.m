@@ -262,7 +262,7 @@
     if (cell == nil)
 	{
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
 	// Leave cells empty if there's no data yet
 	if (nodeCount > 0)
