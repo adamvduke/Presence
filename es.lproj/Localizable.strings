@@ -43,8 +43,14 @@
 // Spanish localization for "Dismiss"
 "DismissKey" = "es_Dismiss";
 
+// Spanish localization for "Update failed"
+"UpdateFailedTitleKey" = "es_Update failed!";
+
+// Spanish localization for "The status update failed. Please check your network settings and try again."
+"UpdateFailedMessageKey" = "es_The status update failed. Please check your network settings and try again.";
+
 // Spanish localization for "Missing Credentials"
 "MissingCrendentialsTitleKey" = "es_Missing Credentials";
 
 // Spanish localization for the missing credentials message
-"MissingCredentialsMessageKey" = "es_Your twitter username and/or password are not set.";
+"MissingCredentialsMessageKey" = "es_Your twitter username and/or password are not set. Some features may not function as expected. Please enter your username and password in the application settings.";

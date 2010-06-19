@@ -13,6 +13,9 @@
 
 @interface ComposeStatusViewController : UIViewController <UITextViewDelegate>
 {
+	NSString *password;
+	NSString *username;
+	
 	// IBOutlet for the navigationItem
 	IBOutlet UINavigationItem *aNavigationItem;
 	
@@ -26,6 +29,8 @@
 	id<ComposeStatusViewControllerDelegate> delegate;
 }
 
+@property (nonatomic, retain) NSString *password;
+@property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) UINavigationItem *aNavigationItem;
 @property (nonatomic, retain) UILabel *charactersLabel;
 @property (nonatomic, retain) UITextView *textView;

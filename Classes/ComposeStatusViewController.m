@@ -7,12 +7,13 @@
 //
 
 #import "ComposeStatusViewController.h"
-#import "ErrorHelper.h"
 #import "PresenceContants.h"
 #import "TwitterHelper.h"
 
 @implementation ComposeStatusViewController
 
+@synthesize password;
+@synthesize username;
 @synthesize aNavigationItem;
 @synthesize charactersLabel;
 @synthesize textView;
@@ -41,27 +42,18 @@
 
 // action to call to post a status update to twitter
 -(IBAction)tweetAction
-{
-	// get the username and password out of NSUserDefaults
-	NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
-	NSString *password = [[NSUserDefaults standardUserDefaults] objectForKey:PasswordKey];
-	
-	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
-	if (![username length] > 0 && ![password length] > 0) 
-	{
-		//TODO: localize these strings
-		[ErrorHelper displayErrorWithTitle:@"Invalid Credentials" Message:@"Please set your credentials in the Settings Menu" CloseButtonTitle:@"OK"];
-		return;
-	}
-	
+{	
 	// call the TwitterHelper to update the status
-	BOOL success = [TwitterHelper updateStatus:textView.text forUsername:username withPassword:password];
+	BOOL success = [TwitterHelper updateStatus:textView.text forUsername:self.username withPassword:self.password];
 	
 	// if the update was not a sucess, display an error message and save the text
 	if (!success) 
 	{
-		//TODO: Localize these strings
-		[ErrorHelper displayErrorWithTitle:@"Update Failed" Message:@"Your update failed. Check your network settings and try again." CloseButtonTitle:@"Close"];	
+		UIAlertView *alert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"") 
+													   message:NSLocalizedString(UpdateFailedMessageKey, @"") 
+													  delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
+		[alert show];
+		[alert release];
 		return;
 	}
 	else 
@@ -98,6 +90,20 @@
 {
 	[super viewWillAppear:animated];
 	
+	self.username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
+	self.password = [[NSUserDefaults standardUserDefaults] objectForKey:PasswordKey];
+	
+	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
+	if ([self.username length] == 0 || [self.password length] == 0) 
+	{
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
+														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
+													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
+		[alert show];
+		[alert release];
+		return;
+	}
+	
 	// set the navigation item's title to the localized value
 	self.aNavigationItem.title = NSLocalizedString(ComposeViewTitleKey, @"");
 	
@@ -110,9 +116,6 @@
 	
 	// tell the UITextView to becomeFirstResponder, this brings up the keyboard
 	[self.textView becomeFirstResponder];
-	
-	// set the cornerRadius property to 8, this creates rounded corners for the UITextView
-	self.textView.layer.cornerRadius = 8;
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -122,10 +125,14 @@
 		[self saveText];
 	}
 }
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
 	self.textView.text = @"";
+	
+	// set the cornerRadius property to 8, this creates rounded corners for the UITextView
+	self.textView.layer.cornerRadius = 8;
 }
 
 - (void)didReceiveMemoryWarning 

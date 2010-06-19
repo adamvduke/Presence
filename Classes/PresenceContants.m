@@ -49,6 +49,12 @@ NSString *const DismissKey = @"DismissKey";
  Keys for finding localized exception messages
  */
 
+// key for finding the localized button title for the update failed alert
+NSString *const UpdateFailedTitleKey = @"UpdateFailedTitleKey";
+
+// key for finding the localized message for the update failed alert
+NSString *const UpdateFailedMessageKey = @"UpdateFailedMessageKey";
+
 // key for finding the localized button title for missing credentials alert
 NSString *const MissingCredentialsTitleKey = @"MissingCrendentialsTitleKey";
 

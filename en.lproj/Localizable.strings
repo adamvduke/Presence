@@ -43,8 +43,14 @@
 // English localization for "Dismiss"
 "DismissKey" = "Dismiss";
 
+// Enlish localization for "Update failed"
+"UpdateFailedTitleKey" = "Update failed!";
+
+// English localization for "The status update failed. Please check your network settings and try again."
+"UpdateFailedMessageKey" = "The status update failed. Please check your network settings and try again.";
+
 // English localization for "Missing Credentials"
-"MissingCrendentialsTitleKey" = "Missing Credentials";
+"MissingCrendentialsTitleKey" = "Missing Credentials!";
 
 // English localization for the missing credentials message
-"MissingCredentialsMessageKey" = "Your twitter username and/or password are not set.";
+"MissingCredentialsMessageKey" = "Your twitter username and/or password are not set. Some features may not function as expected. Please enter your username and password in the application settings.";
