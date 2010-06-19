@@ -46,8 +46,13 @@ NSString *const LiveDataLabelKey = @"LiveDataLabelKey";
 NSString *const DismissKey = @"DismissKey";
 
 /*
- Keys for finding localized exception messages
+ Keys for finding localized alert messages
  */
+// key for finding the localized button title for the word "Success!"
+NSString *const SuccessTitleKey = @"SuccessTitleKey";
+
+// key for finding the localized message for the message indicating the credentials have been saved
+NSString *const CredentialsSavedMessageKey = @"CrendtialsSavedMessageKey";
 
 // key for finding the localized button title for the update failed alert
 NSString *const UpdateFailedTitleKey = @"UpdateFailedTitleKey";

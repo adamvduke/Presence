@@ -54,3 +54,9 @@
 
 // Spanish localization for the missing credentials message
 "MissingCredentialsMessageKey" = "es_Your twitter username and/or password are not set. Some features may not function as expected. Please enter your username and password in the application settings.";
+
+// Spanish localization for the word "Success!"
+"SuccessTitleKey" = "es_Success!";
+
+// Spanish localization for the message "Your credentials have been saved."
+"CrendtialsSavedMessageKey" = "es_Your credentials have been saved.";

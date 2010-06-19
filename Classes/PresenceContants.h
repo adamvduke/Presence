@@ -46,8 +46,14 @@ extern NSString *const LiveDataLabelKey;
 extern NSString *const DismissKey;
 
 /*
-Keys for finding localized exception messages
+Keys for finding localized alert messages
 */
+
+// key for finding the localized button title for the word "Success!"
+extern NSString *const SuccessTitleKey;
+
+// key for finding the localized message for the message indicating the credentials have been saved
+extern NSString *const CredentialsSavedMessageKey;
 
 // key for finding the localized button title for the update failed alert
 extern NSString *const UpdateFailedTitleKey;

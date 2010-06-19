@@ -49,8 +49,10 @@
 	[defaults setObject:passwordField.text forKey:PasswordKey];
 	[defaults setBool:liveDataSwitch.isOn forKey:LiveDataKey];
 	
-	// TODO: decide what to do with this, the error message helper is very helpful
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"Your credentials have been saved" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	// display an alert indicating the values were saved
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(SuccessTitleKey, @"") 
+													message:NSLocalizedString(CredentialsSavedMessageKey, @"") 
+												   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
 	[alert show];
 	[alert release];
 	

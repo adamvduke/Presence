@@ -54,3 +54,9 @@
 
 // English localization for the missing credentials message
 "MissingCredentialsMessageKey" = "Your twitter username and/or password are not set. Some features may not function as expected. Please enter your username and password in the application settings.";
+
+// English localization for the word "Success!"
+"SuccessTitleKey" = "Success!";
+
+// English localization for the message "Your credentials have been saved."
+"CrendtialsSavedMessageKey" = "Your credentials have been saved.";
