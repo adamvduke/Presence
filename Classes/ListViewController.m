@@ -100,7 +100,7 @@
 // synchronously get the usernames and call beginLoadPerson for each username
 - (void)synchronousLoadTwitterData
 {
-	if (self.usernameArray != nil) {
+	if (self.usernameArray != nil && [self.usernameArray count] > 0 ) {
 		
 		// start the device's network activity indicator
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -238,9 +238,7 @@
             cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-		
 		cell.detailTextLabel.text = @"Loading…";
-		
 		return cell;
 	}
 	
@@ -285,12 +283,14 @@
 {    
 	// Create and push another view controller.
 	// get the correct person out of the people array and initialize the status view controller for that person
-	Person *person = [people objectAtIndex:indexPath.row];
-	StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
-	
-	// push the new view controller onto the navigation stack
-	[self.navigationController pushViewController:statusViewController animated:YES];
-	[statusViewController release];
+	if ([self.people count] > 0) {
+		Person *person = [people objectAtIndex:indexPath.row];
+		StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
+		
+		// push the new view controller onto the navigation stack
+		[self.navigationController pushViewController:statusViewController animated:YES];
+		[statusViewController release];
+	}
 }
 #pragma mark -
 #pragma mark Table cell image support
@@ -313,7 +313,7 @@
 // this method is used in case the user scrolled into a set of cells that don't have their app icons yet
 - (void)loadImagesForOnscreenRows
 {
-    if ([self.people count] > 0)
+    if ([self.usernameArray count] > 0)
     {
         NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
         for (NSIndexPath *indexPath in visiblePaths)
