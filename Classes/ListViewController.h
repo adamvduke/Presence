@@ -33,6 +33,6 @@
 @property (nonatomic, retain) NSOperationQueue *queue;
 
 - (id)initWithStyle:(UITableViewStyle)style usernameArray:(NSArray *)usernames;
-- (void)appImageDidLoad:(NSIndexPath *)indexPath;
+- (void)imageDidLoad:(NSIndexPath *)indexPath;
 
 @end

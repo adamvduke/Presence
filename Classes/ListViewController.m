@@ -329,7 +329,7 @@
 }
 
 // called by our ImageDownloader when an icon is ready to be displayed
-- (void)appImageDidLoad:(NSIndexPath *)indexPath
+- (void)imageDidLoad:(NSIndexPath *)indexPath
 {
     IconDownloader *iconDownloader = [imageDownloadsInProgress objectForKey:indexPath];
     if (iconDownloader != nil)
