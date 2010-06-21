@@ -333,7 +333,7 @@
 		Person *person = [self.people objectAtIndex:indexPath.row];
 		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.textLabel.text = person.userName;
+		cell.textLabel.text = person.displayName;
 		
 		// TODO: add field to person for the detail text label
 		//cell.detailTextLabel.text = appRecord.artist;
