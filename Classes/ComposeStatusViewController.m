@@ -11,6 +11,13 @@
 #import "PresenceContants.h"
 #import "TwitterHelper.h"
 
+@interface ComposeStatusViewController ()
+
+-(void)keyboardWillShow:(NSNotification *)note;
+-(void)keyboardWillHide:(NSNotification *)note;
+
+@end
+
 @implementation ComposeStatusViewController
 
 @synthesize password;
@@ -23,7 +30,7 @@
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	// return YES for all interface orientations
-	return YES;
+	return toInterfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
 // save the current content of the text view to NSUserDefaults
@@ -135,8 +142,31 @@
 	
 	// set the cornerRadius property to 8, this creates rounded corners for the UITextView
 	self.textView.layer.cornerRadius = 8;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+
 }
 
+-(void)keyboardWillShow:(NSNotification *)note
+{
+	//[self.textView setFrame:CGRectMake(6.0, 77.0, 306.0, 170)];
+	CGRect bounds = [[[note userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
+	CGPoint center = [[[note userInfo] objectForKey:UIKeyboardCenterEndUserInfoKey] CGPointValue];
+	CGRect keyboardFrame = CGRectMake(round(center.x - bounds.size.width/2.0),
+									  round(center.y - bounds.size.height/2.0), 
+									  bounds.size.width, 
+									  bounds.size.height);
+	CGRect windowFrame = self.textView.window.frame;	
+	CGRect textViewFrame = self.textView.frame;
+	CGFloat newHeight = windowFrame.size.height - keyboardFrame.size.height - textViewFrame.origin.y - 35.0 ;
+	[self.textView setFrame:CGRectMake(textViewFrame.origin.x, textViewFrame.origin.y,
+									   textViewFrame.size.width, newHeight)];
+}
+
+-(void)keyboardWillHide:(NSNotification *)note
+{
+}
 - (void)didReceiveMemoryWarning 
 {
 	// Releases the view if it doesn't have a superview.
@@ -153,6 +183,7 @@
 
 - (void)dealloc 
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[aNavigationItem release];
 	[charactersLabel release];
 	[textView release];
