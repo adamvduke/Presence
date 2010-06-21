@@ -7,8 +7,9 @@
 //
 
 #import "ComposeStatusViewController.h"
-#import "SettingsViewController.h"
 #import "IconDownloader.h"
+#import "SettingsViewController.h"
+
 #import <UIKit/UIKit.h>
 
 

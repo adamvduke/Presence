@@ -8,7 +8,6 @@
 
 #import "CredentialHelper.h"
 #import "FavoritesHelper.h"
-#import "IconDownloader.h"
 #import "ListViewController.h"
 #import "Person.h"
 #import "PresenceContants.h"
