@@ -316,7 +316,7 @@
             cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-		cell.detailTextLabel.text = @"Loading…";
+		cell.detailTextLabel.text = NSLocalizedString(LoadingKey, @"");
 		return cell;
 	}
 	

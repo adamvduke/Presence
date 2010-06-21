@@ -45,6 +45,9 @@ extern NSString *const LiveDataLabelKey;
 // key for finding the localized value for the word "dismiss"
 extern NSString *const DismissKey;
 
+// key for finding the localized value for the word "Loading..."
+extern NSString *const LoadingKey;
+
 /*
 Keys for finding localized alert messages
 */

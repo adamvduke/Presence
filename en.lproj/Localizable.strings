@@ -43,6 +43,9 @@
 // English localization for "Dismiss"
 "DismissKey" = "Dismiss";
 
+// English localization for "Loading..."
+"LoadingKey" = "Loading...";
+
 // Enlish localization for "Update failed"
 "UpdateFailedTitleKey" = "Update failed!";
 

@@ -45,6 +45,10 @@ NSString *const LiveDataLabelKey = @"LiveDataLabelKey";
 // key for finding the localized value for the word "dismiss"
 NSString *const DismissKey = @"DismissKey";
 
+// key for finding the localized value for the word "Loading..."
+NSString *const LoadingKey = @"LoadingKey";
+
+
 /*
  Keys for finding localized alert messages
  */

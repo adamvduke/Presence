@@ -43,6 +43,9 @@
 // Spanish localization for "Dismiss"
 "DismissKey" = "es_Dismiss";
 
+// Spanish localization for "Loading..."
+"LoadingKey" = "es_Loading...";
+
 // Spanish localization for "Update failed"
 "UpdateFailedTitleKey" = "es_Update failed!";
 
