@@ -32,6 +32,7 @@
 		566ADEE811B8BFBF00931CFD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* Person.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
 		56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D21611CEEC4400BF541D /* FavoritesHelper.m */; };
+		56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D2FB11CEFF4400BF541D /* CredentialHelper.m */; };
 		56B897BD10B34DB400C7C5FF /* StatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B897BC10B34DB400C7C5FF /* StatusViewController.m */; };
 		56C5613210B248120014D33C /* TwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C5613110B248120014D33C /* TwitterHelper.m */; };
 		56C5613B10B2481E0014D33C /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C5613610B2481E0014D33C /* NSObject+SBJSON.m */; };
@@ -77,6 +78,8 @@
 		566ADEE711B8BFBF00931CFD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		56A8D21511CEEC4400BF541D /* FavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesHelper.h; sourceTree = "<group>"; };
 		56A8D21611CEEC4400BF541D /* FavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesHelper.m; sourceTree = "<group>"; };
+		56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialHelper.h; sourceTree = "<group>"; };
+		56A8D2FB11CEFF4400BF541D /* CredentialHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CredentialHelper.m; sourceTree = "<group>"; };
 		56B897BB10B34DB400C7C5FF /* StatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusViewController.h; sourceTree = "<group>"; };
 		56B897BC10B34DB400C7C5FF /* StatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusViewController.m; sourceTree = "<group>"; };
 		56C5613010B248120014D33C /* TwitterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterHelper.h; sourceTree = "<group>"; };
@@ -214,6 +217,8 @@
 				5623066A11CC5C5D006F4713 /* ValidationHelper.m */,
 				56A8D21511CEEC4400BF541D /* FavoritesHelper.h */,
 				56A8D21611CEEC4400BF541D /* FavoritesHelper.m */,
+				56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */,
+				56A8D2FB11CEFF4400BF541D /* CredentialHelper.m */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 				562BCB0611CA7CD7001E4BA2 /* IconDownloader.m in Sources */,
 				5623066B11CC5C5D006F4713 /* ValidationHelper.m in Sources */,
 				56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */,
+				56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

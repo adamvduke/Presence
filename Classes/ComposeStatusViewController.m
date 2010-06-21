@@ -7,6 +7,7 @@
 //
 
 #import "ComposeStatusViewController.h"
+#import "CredentialHelper.h"
 #import "PresenceContants.h"
 #import "TwitterHelper.h"
 
@@ -90,18 +91,19 @@
 {
 	[super viewWillAppear:animated];
 	
-	self.username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
-	self.password = [[NSUserDefaults standardUserDefaults] objectForKey:PasswordKey];
+	self.username = [CredentialHelper retrieveUsername];
+	self.password = [CredentialHelper retrievePassword];
 	
 	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
 	if ([self.username length] == 0 || [self.password length] == 0) 
 	{
+		self.aNavigationItem.rightBarButtonItem.enabled = NO;
+		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
 														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
 													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
 		[alert show];
 		[alert release];
-		return;
 	}
 	
 	// set the navigation item's title to the localized value

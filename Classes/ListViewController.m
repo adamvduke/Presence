@@ -6,6 +6,7 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import "CredentialHelper.h"
 #import "FavoritesHelper.h"
 #import "IconDownloader.h"
 #import "ListViewController.h"
@@ -63,6 +64,26 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	
+	self.navigationItem.rightBarButtonItem.enabled = YES;
+	
+	NSString *username = [CredentialHelper retrieveUsername];
+	
+	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
+	if ( [username length] == 0 ) 
+	{
+		self.navigationItem.rightBarButtonItem.enabled = NO;
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
+														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
+													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
+		[alert show];
+		[alert release];
+	}
+	
+	if([username length] > 0 && [self.usernameArray count] == 0)
+	{
+		self.usernameArray = [TwitterHelper fetchFollowingIdsForUsername:username];
+	}
 	
 	// if the array of people is empty, start the activity indicators and begin loading data
 	if ([people count] == 0) 
@@ -284,8 +305,9 @@
 	
 	// add a placeholder cell while waiting on table data
     int nodeCount = [self.people count];
+	int nameCount = [self.usernameArray count];
 	
-	if (nodeCount == 0 && indexPath.row == 0)
+	if (nodeCount == 0 && indexPath.row == 0 && nameCount > 0)
 	{
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PlaceHolderIdentifier];
         if (cell == nil)
@@ -307,29 +329,29 @@
 	// Leave cells empty if there's no data yet
 	if (nodeCount > 0)
 	{
-			// Set up the cell...
-			Person *person = [self.people objectAtIndex:indexPath.row];
-			
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-			cell.textLabel.text = person.userName;
-			
-			// TODO: add field to person for the detail text label
-			//cell.detailTextLabel.text = appRecord.artist;
-			
-			// Only load cached images; defer new downloads until scrolling ends
-			if (!person.image)
+		// Set up the cell...
+		Person *person = [self.people objectAtIndex:indexPath.row];
+		
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		cell.textLabel.text = person.userName;
+		
+		// TODO: add field to person for the detail text label
+		//cell.detailTextLabel.text = appRecord.artist;
+		
+		// Only load cached images; defer new downloads until scrolling ends
+		if (!person.image)
+		{
+			if (self.tableView.dragging == NO && self.tableView.decelerating == NO)
 			{
-				if (self.tableView.dragging == NO && self.tableView.decelerating == NO)
-				{
-					[self startIconDownload:person forIndexPath:indexPath];
-				}
-				// if a download is deferred or in progress, return a placeholder image
-				cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];                
+				[self startIconDownload:person forIndexPath:indexPath];
 			}
-			else
-			{
-				cell.imageView.image = person.image;
-			}
+			// if a download is deferred or in progress, return a placeholder image
+			cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];                
+		}
+		else
+		{
+			cell.imageView.image = person.image;
+		}
 	}
 	return cell;
 }
@@ -341,14 +363,14 @@
 	// get the correct person out of the people array and initialize the status view controller for that person
 	
 	if ([self.people count] > 0) {
-			
-			Person *person = [people objectAtIndex:indexPath.row];
-			StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
-			
-			// push the new view controller onto the navigation stack
-			[self.navigationController pushViewController:statusViewController animated:YES];
-			[statusViewController release];
-		}
+		
+		Person *person = [people objectAtIndex:indexPath.row];
+		StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
+		
+		// push the new view controller onto the navigation stack
+		[self.navigationController pushViewController:statusViewController animated:YES];
+		[statusViewController release];
+	}
 }
 #pragma mark -
 #pragma mark Table cell image support
@@ -376,12 +398,12 @@
         NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
         for (NSIndexPath *indexPath in visiblePaths)
         {
-				Person *person = [self.people objectAtIndex:indexPath.row];
-				
-				if (!person.image) // avoid the app icon download if the app already has an icon
-				{
-					[self startIconDownload:person forIndexPath:indexPath];
-				}
+			Person *person = [self.people objectAtIndex:indexPath.row];
+			
+			if (!person.image) // avoid the app icon download if the app already has an icon
+			{
+				[self startIconDownload:person forIndexPath:indexPath];
+			}
         }
     }
 }

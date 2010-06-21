@@ -6,6 +6,7 @@
 //  Copyright __MyCompanyName__ 2009. All rights reserved.
 //
 
+#import "CredentialHelper.h"
 #import "FavoritesHelper.h"
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
@@ -108,7 +109,7 @@
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	followingNavigationController.tabBarItem.image = [UIImage imageNamed:@"PeopleIcon.png"];
 	
-	NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
+	NSString *username = [CredentialHelper retrieveUsername];
 
 	// ex.[NSThread detachNewThreadSelector:@selector(dowork:) withTarget:self object:someData]; 
 	[NSThread detachNewThreadSelector:@selector(initFollowingIdsArrayForUsername:) toTarget:self withObject:username];

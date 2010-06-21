@@ -59,7 +59,7 @@
     return [self fetchJSONValueForURL:url];
 }
 
-+(NSArray *)fetchFollowingIdsForUsername:(NSString *)username
++(NSMutableArray *)fetchFollowingIdsForUsername:(NSString *)username
 {
 	NSString *urlString = [NSString stringWithFormat:@"http://%@/friends/ids/%@.json", [self twitterHostname], username];
     NSURL *url = [NSURL URLWithString:urlString];
