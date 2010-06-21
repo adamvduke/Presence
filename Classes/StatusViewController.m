@@ -6,6 +6,7 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import "Person.h"
 #import "PresenceContants.h"
 #import "StatusViewController.h"
 #import "TwitterHelper.h"
