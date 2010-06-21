@@ -92,10 +92,9 @@
 	self.charactersLabel.text = charactersLabelText;
 }
 
-// override viewWillAppear to do some initialization
--(void)viewWillAppear:(BOOL)animated
+-(void)viewDidAppear:(BOOL)animated
 {
-	[super viewWillAppear:animated];
+	[super viewDidAppear:animated];
 	
 	self.username = [CredentialHelper retrieveUsername];
 	self.password = [CredentialHelper retrievePassword];
@@ -110,7 +109,13 @@
 													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
 		[alert show];
 		[alert release];
-	}
+	}	
+}
+
+// override viewWillAppear to do some initialization
+-(void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
 	
 	// set the navigation item's title to the localized value
 	self.aNavigationItem.title = NSLocalizedString(ComposeViewTitleKey, @"");
@@ -137,6 +142,8 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
+	[super viewDidLoad];
+	
 	self.textView.text = @"";
 	
 	// set the cornerRadius property to 8, this creates rounded corners for the UITextView
