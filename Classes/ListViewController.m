@@ -218,6 +218,7 @@
     if (editing) {
         self.navigationItem.rightBarButtonItem.enabled = NO;
     } else {
+		[FavoritesHelper saveFavorites:self.usernameArray];
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }
 }
@@ -231,6 +232,25 @@
     }
 }
 
+-(BOOL)tableview:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return YES;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    
+	NSUInteger sourceRow = sourceIndexPath.row;
+	NSUInteger destinationRow = destinationIndexPath.row;
+	Person *person = [[self.people objectAtIndex:sourceRow] retain];
+	NSString *username = [[self.usernameArray objectAtIndex:sourceRow]retain];
+    [self.people removeObjectAtIndex:sourceRow];
+	[self.usernameArray removeObjectAtIndex:sourceRow];
+    [self.people insertObject:person atIndex:destinationRow];
+	[self.usernameArray insertObject:username atIndex:destinationRow];
+    [person release];
+	[username release];
+}
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	// If row is deleted, remove it from the list.
@@ -238,7 +258,6 @@
         [people removeObjectAtIndex:indexPath.row];
 		[usernameArray removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-		[FavoritesHelper saveFavorites:usernameArray];
 	}
 }
 
