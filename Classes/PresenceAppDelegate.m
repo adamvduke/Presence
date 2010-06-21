@@ -6,6 +6,7 @@
 //  Copyright __MyCompanyName__ 2009. All rights reserved.
 //
 
+#import "FavoritesHelper.h"
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
@@ -29,14 +30,16 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
+	[FavoritesHelper moveFavoritesToDocumentsDir];
+	
 	tabBarController = [[UITabBarController alloc]init];
 	
 	self.viewControllerArray = [self initViewControllerArray];
 	
-	tabBarController.viewControllers = viewControllerArray;
+	tabBarController.viewControllers = self.viewControllerArray;
 	tabBarController.selectedIndex = 1;
 	
-	[viewControllerArray release];
+	[self.viewControllerArray release];
 	
 	// add the navigation controller's view to the window's subviews
 	[window addSubview:tabBarController.view];
@@ -86,10 +89,9 @@
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	favoritesNavigationController.tabBarItem.image = [UIImage imageNamed:@"FavoritesIcon.png"];	
 
-	NSString *path = [[NSBundle mainBundle]pathForResource:@"FavoriteUsers" ofType:@"plist"];
-	NSArray *favoriteUsersArray = [NSArray arrayWithContentsOfFile:path];
+	NSMutableArray *favoriteUsersArray = [FavoritesHelper retrieveFavorites];
 
-	ListViewController *favoritesListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:favoriteUsersArray];
+	ListViewController *favoritesListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain editable:YES usernameArray:favoriteUsersArray];
 	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	
 	// push the followingListViewController onto the following navigation stack and release it
@@ -134,7 +136,7 @@
 	[idArray retain];
 	
 	// create the list view controller to push on the followingNavigationController
-	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain usernameArray:idArray];
+	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain editable:NO usernameArray:idArray];
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	
 	UINavigationController *followingController = [self.viewControllerArray objectAtIndex:2];

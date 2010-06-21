@@ -6,9 +6,11 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
+#import "FavoritesHelper.h"
 #import "IconDownloader.h"
 #import "ListViewController.h"
 #import "Person.h"
+#import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
 #import "StatusViewController.h"
 #import "TwitterHelper.h"
@@ -177,10 +179,14 @@
 
 #pragma mark -
 #pragma mark custom init method
--(id)initWithStyle:(UITableViewStyle)style usernameArray:(NSArray *)usernames
+-(id)initWithStyle:(UITableViewStyle)style editable:(BOOL)isEditable usernameArray:(NSMutableArray *)usernames
 {
 	
 	if (self == [super initWithStyle:style]) {
+		
+		if (isEditable) {
+			self.navigationItem.leftBarButtonItem = self.editButtonItem;
+		}
 		
 		// set the list of users to load
 		self.usernameArray = usernames;
@@ -204,6 +210,37 @@
 
 #pragma mark -
 #pragma mark Table view methods
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated 
+{
+    [super setEditing:editing animated:animated];
+    [self.tableView setEditing:editing animated:YES];
+    if (editing) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    } else {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+	if (indexPath.row == [self.people count]) {
+        return UITableViewCellEditingStyleInsert;
+    } else {
+        return UITableViewCellEditingStyleDelete;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+	// If row is deleted, remove it from the list.
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [people removeObjectAtIndex:indexPath.row];
+		[usernameArray removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+		[FavoritesHelper saveFavorites:usernameArray];
+	}
+}
 
 // Customize the number of rows per section
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
@@ -251,29 +288,29 @@
 	// Leave cells empty if there's no data yet
 	if (nodeCount > 0)
 	{
-		// Set up the cell...
-		Person *person = [self.people objectAtIndex:indexPath.row];
-		
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.textLabel.text = person.userName;
-		
-		// TODO: add field to person for the detail text label
-		//cell.detailTextLabel.text = appRecord.artist;
-		
-		// Only load cached images; defer new downloads until scrolling ends
-		if (!person.image)
-		{
-			if (self.tableView.dragging == NO && self.tableView.decelerating == NO)
+			// Set up the cell...
+			Person *person = [self.people objectAtIndex:indexPath.row];
+			
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			cell.textLabel.text = person.userName;
+			
+			// TODO: add field to person for the detail text label
+			//cell.detailTextLabel.text = appRecord.artist;
+			
+			// Only load cached images; defer new downloads until scrolling ends
+			if (!person.image)
 			{
-				[self startIconDownload:person forIndexPath:indexPath];
+				if (self.tableView.dragging == NO && self.tableView.decelerating == NO)
+				{
+					[self startIconDownload:person forIndexPath:indexPath];
+				}
+				// if a download is deferred or in progress, return a placeholder image
+				cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];                
 			}
-			// if a download is deferred or in progress, return a placeholder image
-			cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];                
-		}
-		else
-		{
-			cell.imageView.image = person.image;
-		}
+			else
+			{
+				cell.imageView.image = person.image;
+			}
 	}
 	return cell;
 }
@@ -283,14 +320,16 @@
 {    
 	// Create and push another view controller.
 	// get the correct person out of the people array and initialize the status view controller for that person
+	
 	if ([self.people count] > 0) {
-		Person *person = [people objectAtIndex:indexPath.row];
-		StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
-		
-		// push the new view controller onto the navigation stack
-		[self.navigationController pushViewController:statusViewController animated:YES];
-		[statusViewController release];
-	}
+			
+			Person *person = [people objectAtIndex:indexPath.row];
+			StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
+			
+			// push the new view controller onto the navigation stack
+			[self.navigationController pushViewController:statusViewController animated:YES];
+			[statusViewController release];
+		}
 }
 #pragma mark -
 #pragma mark Table cell image support
@@ -318,12 +357,12 @@
         NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
         for (NSIndexPath *indexPath in visiblePaths)
         {
-            Person *person = [self.people objectAtIndex:indexPath.row];
-            
-            if (!person.image) // avoid the app icon download if the app already has an icon
-            {
-                [self startIconDownload:person forIndexPath:indexPath];
-            }
+				Person *person = [self.people objectAtIndex:indexPath.row];
+				
+				if (!person.image) // avoid the app icon download if the app already has an icon
+				{
+					[self startIconDownload:person forIndexPath:indexPath];
+				}
         }
     }
 }

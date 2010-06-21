@@ -15,7 +15,7 @@
 @interface ListViewController : UITableViewController < ComposeStatusViewControllerDelegate, UIScrollViewDelegate, IconDownloaderDelegate>
 {
 	// the list of users to display
-	NSArray *usernameArray;
+	NSMutableArray *usernameArray;
 	
 	// mutable array of people
 	NSMutableArray *people;
@@ -27,12 +27,12 @@
 	NSOperationQueue *queue;
 }
 
-@property (nonatomic, retain) NSArray *usernameArray;
+@property (nonatomic, retain) NSMutableArray *usernameArray;
 @property (nonatomic, retain) NSMutableArray *people;
 @property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
 @property (nonatomic, retain) NSOperationQueue *queue;
 
-- (id)initWithStyle:(UITableViewStyle)style usernameArray:(NSArray *)usernames;
+- (id)initWithStyle:(UITableViewStyle)style editable:(BOOL)isEditable usernameArray:(NSArray *)usernames;
 - (void)imageDidLoad:(NSIndexPath *)indexPath;
 
 @end
