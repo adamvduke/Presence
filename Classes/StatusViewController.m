@@ -174,7 +174,7 @@
 		}
 		
 		// set only the text and image properties on the cell
-		cell.textLabel.text = self.person.userName;
+		cell.textLabel.text = self.person.displayName;
 		cell.imageView.image = self.person.image;
 	}
 	
