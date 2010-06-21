@@ -11,7 +11,6 @@
 #import "IconDownloader.h"
 #import "ListViewController.h"
 #import "Person.h"
-#import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
 #import "StatusViewController.h"
 #import "TwitterHelper.h"
