@@ -13,8 +13,11 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ListViewController : UITableViewController < ComposeStatusViewControllerDelegate, UIScrollViewDelegate, IconDownloaderDelegate>
+@interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate, UIScrollViewDelegate, IconDownloaderDelegate, UITextFieldDelegate>
 {
+	UIBarButtonItem *addBarButton;
+	UIBarButtonItem *composeBarButton;
+
 	// the list of users to display
 	NSMutableArray *usernameArray;
 	
@@ -28,6 +31,8 @@
 	NSOperationQueue *queue;
 }
 
+@property (nonatomic, retain) UIBarButtonItem *addBarButton;
+@property (nonatomic, retain) UIBarButtonItem *composeBarButton;
 @property (nonatomic, retain) NSMutableArray *usernameArray;
 @property (nonatomic, retain) NSMutableArray *people;
 @property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;

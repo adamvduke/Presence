@@ -15,7 +15,6 @@
 #import "TwitterHelper.h"
 
 #define kCustomRowCount 7
-
 @interface ListViewController ()
 
 - (void) startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
@@ -29,6 +28,8 @@
 
 @implementation ListViewController
 
+@synthesize addBarButton;
+@synthesize composeBarButton;
 @synthesize usernameArray;
 @synthesize people;
 @synthesize imageDownloadsInProgress;
@@ -37,6 +38,9 @@
 - (void)dealloc 
 {	
 	// make sure to deallocate the people array and the operation queue
+	[addBarButton release];
+	[composeBarButton release];
+	[usernameArray release];
 	[people release];
 	[queue release];
 	[imageDownloadsInProgress release];
@@ -196,6 +200,58 @@
 	[self dismissModalViewControllerAnimated:YES];
 }
 
+-(void)presentAddToFavoritesController
+{
+	// TODO: localize the alert message labels
+	// TODO: Decide if the alertview with a text field is appropriate
+	// or if a modal view should be used, or if the favorites should be 
+	// added to from the status views with a "Favorite" button
+	// open a alert with text field,  OK and cancel button
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add to Favorites" message:@"Enter a username."
+												   delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+	UITextField *alertTextField = nil;
+	CGRect frame = CGRectMake(14, 45, 255, 23);
+	if(!alertTextField) {
+		alertTextField = [[UITextField alloc] initWithFrame:frame];
+		
+		alertTextField.borderStyle = UITextBorderStyleBezel;
+		alertTextField.textColor = [UIColor blackColor];
+		alertTextField.textAlignment = UITextAlignmentCenter;
+		alertTextField.font = [UIFont systemFontOfSize:14.0];
+		alertTextField.placeholder = @"<username>";
+		
+		alertTextField.backgroundColor = [UIColor whiteColor];
+		alertTextField.autocorrectionType = UITextAutocorrectionTypeNo;	// no auto correction support
+		
+		alertTextField.delegate = self;
+		alertTextField.clearButtonMode = UITextFieldViewModeWhileEditing;	// has a clear 'x' button to the right
+	}
+	
+	CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 130.0);
+	[alert setTransform:myTransform];
+	[alert addSubview:alertTextField];
+	
+	[alert show];
+	[alert release];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	if(buttonIndex == 1)
+	{
+		for(UIView *subview in alertView.subviews)
+		{
+			if ([subview isKindOfClass:[UITextField class]]) {
+				UITextField *textField = (UITextField *)subview;
+				NSString *username = textField.text;
+				[self.usernameArray addObject:username];
+				[FavoritesHelper saveFavorites:usernameArray];
+				[self beginLoadPerson:username];
+			}
+		}
+	}
+}
+
 #pragma mark -
 #pragma mark custom init method
 -(id)initWithStyle:(UITableViewStyle)style editable:(BOOL)isEditable usernameArray:(NSMutableArray *)usernames
@@ -235,10 +291,16 @@
     [super setEditing:editing animated:animated];
     [self.tableView setEditing:editing animated:YES];
     if (editing) {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
+		if (!self.addBarButton) {
+			UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(presentAddToFavoritesController)];
+			self.addBarButton = addButton;
+			[addButton release];
+		}
+		self.composeBarButton = self.navigationItem.rightBarButtonItem;
+		self.navigationItem.rightBarButtonItem = self.addBarButton;
     } else {
+		self.navigationItem.rightBarButtonItem = self.composeBarButton;
 		[FavoritesHelper saveFavorites:self.usernameArray];
-        self.navigationItem.rightBarButtonItem.enabled = YES;
     }
 }
 
