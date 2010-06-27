@@ -459,7 +459,6 @@
         for (NSIndexPath *indexPath in visiblePaths)
         {
 			Person *person = [self.people objectAtIndex:indexPath.row];
-			
 			if (!person.image) // avoid the app icon download if the app already has an icon
 			{
 				[self startIconDownload:person forIndexPath:indexPath];
