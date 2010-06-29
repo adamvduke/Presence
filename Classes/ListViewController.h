@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate, UIScrollViewDelegate, IconDownloaderDelegate, UITextFieldDelegate>
+@interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate, UIScrollViewDelegate, IconDownloaderDelegate, UITextViewDelegate>
 {
 	UIBarButtonItem *addBarButton;
 	UIBarButtonItem *composeBarButton;

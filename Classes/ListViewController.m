@@ -211,22 +211,17 @@
 	// open a alert with text field,  OK and cancel button
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add to Favorites" message:@"Enter a username."
 												   delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-	UITextField *alertTextField = nil;
+	UITextView *alertTextField = nil;
 	CGRect frame = CGRectMake(14, 45, 255, 23);
 	if(!alertTextField) {
 		alertTextField = [[UITextField alloc] initWithFrame:frame];
-		
-		alertTextField.borderStyle = UITextBorderStyleBezel;
+		alertTextField.layer.cornerRadius = 8;
 		alertTextField.textColor = [UIColor blackColor];
 		alertTextField.textAlignment = UITextAlignmentCenter;
-		alertTextField.font = [UIFont systemFontOfSize:14.0];
-		alertTextField.placeholder = @"<username>";
-		
+		alertTextField.font = [UIFont systemFontOfSize:14.0];		
 		alertTextField.backgroundColor = [UIColor whiteColor];
 		alertTextField.autocorrectionType = UITextAutocorrectionTypeNo;	// no auto correction support
-		
 		alertTextField.delegate = self;
-		alertTextField.clearButtonMode = UITextFieldViewModeWhileEditing;	// has a clear 'x' button to the right
 	}
 	
 	CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 130.0);
