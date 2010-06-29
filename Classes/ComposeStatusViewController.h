@@ -37,10 +37,10 @@
 @property (nonatomic, retain) id<ComposeStatusViewControllerDelegate> delegate;
 
 // action to call to dismiss this view controller when displayed modally
--(IBAction)dismiss;
+- (IBAction)dismiss;
 
 // action to call to post a status update to twitter
--(IBAction)tweetAction;
+- (IBAction)tweetAction;
 
 // UITextViewDelegate method to notify the UITextView if it should update the current text with the requested text
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
@@ -52,6 +52,6 @@
 
 @protocol ComposeStatusViewControllerDelegate<NSObject>
 
--(void)didFinishComposing:(ComposeStatusViewController *)viewController;
+- (void)didFinishComposing:(ComposeStatusViewController *)viewController;
 
 @end
