@@ -12,16 +12,16 @@
 
 @implementation CredentialHelper
 
-
-+(NSString *)retrieveUsername
+// Returns the value saved in the standard UserDefaults for the key "UsernameKey"
++ (NSString *)retrieveUsername
 {
 	NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
 	return username;
 }
 
-+(NSString *)retrievePassword
+// Returns the value saved in the standard UserDefaults for the key "PasswordKey"
++ (NSString *)retrievePassword
 {
-	
 	NSString *password = [[NSUserDefaults standardUserDefaults] objectForKey:PasswordKey];
 	return password;
 }

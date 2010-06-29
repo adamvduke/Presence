@@ -13,8 +13,10 @@
 
 }
 
-+(NSString *)retrieveUsername;
+// Returns the value saved in the standard UserDefaults for the key "UsernameKey"
++ (NSString *)retrieveUsername;
 
-+(NSString *)retrievePassword;
+// Returns the value saved in the standard UserDefaults for the key "PasswordKey"
++ (NSString *)retrievePassword;
 
 @end
