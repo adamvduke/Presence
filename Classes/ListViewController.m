@@ -16,6 +16,7 @@
 
 #define kCustomRowCount 7
 #define kCustomRowHeight 48
+#define kThreadBatchCount 10
 
 @interface ListViewController ()
 
@@ -36,6 +37,7 @@
 @synthesize people;
 @synthesize imageDownloadsInProgress;
 @synthesize queue;
+@synthesize finishedThreads;
 
 - (void)dealloc 
 {	
@@ -69,8 +71,6 @@
 {
 	[super viewWillAppear:animated];
 	
-	self.navigationItem.rightBarButtonItem.enabled = YES;
-	
 	NSString *username = [CredentialHelper retrieveUsername];
 	
 	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
@@ -83,13 +83,16 @@
 		[alert show];
 		[alert release];
 	}
-	
+	else {
+		self.navigationItem.rightBarButtonItem.enabled = YES;
+	}
+
 	if([username length] > 0 && [self.usernameArray count] == 0)
 	{
 		self.usernameArray = [TwitterHelper fetchFollowingIdsForUsername:username];
 	}
 	
-	// if the array of people is empty, start the activity indicators and begin loading data
+	// if the array of Person objects is empty, start loading data
 	if ([people count] == 0) 
 	{
 		//begin loading data from twitter
@@ -170,18 +173,24 @@
 // called by synchronousLoadPerson when the load has finished
 -(void) didFinishLoadingPerson
 {
-	// after each person has finished loading, reload the table's data
-	[self.tableView reloadData];
+	self.finishedThreads++;
 	
-	// if this is the last operation in the queue
-	NSArray *operations = [queue operations];
-	if ([operations count] <= 1) 
-	{		
-		// stop the network indicator
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO; 
+	if (self.finishedThreads == kThreadBatchCount || [[queue operations] count] <= 1) {
+		self.finishedThreads = 0;
 		
-		// flash the scroll indicators to show give the user an idea of how long the list is
-		[self.tableView flashScrollIndicators];
+		// reload the table's data
+		[self.tableView reloadData];
+		
+		// if this is the last operation in the queue
+		NSArray *operations = [queue operations];
+		if ([operations count] <= 1) 
+		{		
+			// stop the network indicator
+			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO; 
+			
+			// flash the scroll indicators to show give the user an idea of how long the list is
+			[self.tableView flashScrollIndicators];
+		}
 	}
 }
 

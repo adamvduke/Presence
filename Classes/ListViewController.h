@@ -29,6 +29,9 @@
 	
 	// operation queue for UI threading
 	NSOperationQueue *queue;
+	
+	// count of the number of threads that are finished loading data
+	int finishedThreads;
 }
 
 @property (nonatomic, retain) UIBarButtonItem *addBarButton;
@@ -37,6 +40,7 @@
 @property (nonatomic, retain) NSMutableArray *people;
 @property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
 @property (nonatomic, retain) NSOperationQueue *queue;
+@property int finishedThreads;
 
 - (id)initWithStyle:(UITableViewStyle)style editable:(BOOL)isEditable usernameArray:(NSArray *)usernames;
 - (void)imageDidLoad:(NSIndexPath *)indexPath;
