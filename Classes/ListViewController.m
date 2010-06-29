@@ -16,7 +16,7 @@
 
 #define kCustomRowCount 7
 #define kCustomRowHeight 48
-#define kThreadBatchCount 10
+#define kThreadBatchCount 15
 
 @interface ListViewController ()
 
