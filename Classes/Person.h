@@ -11,10 +11,19 @@
 
 @interface Person : NSObject 
 {
+	// Twitter user name or user id
 	NSString *userName;
+	
+	// Twitter display name
 	NSString *displayName;
+	
+	// URL for the user's avatar
 	NSString *imageUrlString;
+	
+	// List of the user's status updates
 	NSArray *statusUpdates;
+	
+	// Instance of the image created from imageUrlString
 	UIImage *image;
 }
 
@@ -24,6 +33,8 @@
 @property (nonatomic, retain) NSArray *statusUpdates;
 @property (nonatomic, retain) UIImage *image;
 
--(Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName;
+// Returns a Person object initialized with an NSDictionary of information retrieved 
+// using the TwitterHelper, for a particular user name
+- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName;
 
 @end

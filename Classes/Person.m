@@ -15,7 +15,8 @@
 @synthesize statusUpdates;
 @synthesize image;
 
-//Create a Person object from the NSDictionary of userInfo and a userName
+// Returns a Person object initialized with an NSDictionary of information retrieved 
+// using the TwitterHelper, for a particular user name
 - (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)theUserName 
 {	
 	if (self == [super init]) 
@@ -35,7 +36,7 @@
 	return self;
 }
 
--(void)dealloc
+- (void)dealloc
 {
 	[userName release];
 	[displayName release];
