@@ -13,7 +13,7 @@
 
 @interface ComposeStatusViewController ()
 
--(void)keyboardWillShow:(NSNotification *)note;
+- (void)keyboardWillShow:(NSNotification *)note;
 
 @end
 
@@ -26,14 +26,14 @@
 @synthesize textView;
 @synthesize delegate;
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	// return YES for all interface orientations
 	return YES;
 }
 
 // save the current content of the text view to NSUserDefaults
--(void)saveText
+- (void)saveText
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:self.textView.text forKey:TweetContentKey];
@@ -41,14 +41,14 @@
 
 // action to call to dismiss this view controller when displayed modally, should be called from a successful status update because
 // the value for the TweetContentKey in NSUserDefaults is over written with nil
--(IBAction)dismiss
+- (IBAction)dismiss
 {
 	[self saveText];
 	[self.delegate didFinishComposing:self];
 }
 
 // action to call to post a status update to twitter
--(IBAction)tweetAction
+- (IBAction)tweetAction
 {	
 	// call the TwitterHelper to update the status
 	BOOL success = [TwitterHelper updateStatus:textView.text forUsername:self.username withPassword:self.password];
@@ -92,7 +92,7 @@
 	self.charactersLabel.text = charactersLabelText;
 }
 
--(void)viewDidAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
 	
@@ -113,7 +113,7 @@
 }
 
 // override viewWillAppear to do some initialization
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
@@ -131,7 +131,7 @@
 	[self.textView becomeFirstResponder];
 }
 
--(void)viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
 	if (self.textView.text != nil) 
 	{
@@ -152,8 +152,11 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
--(void)keyboardWillShow:(NSNotification *)note
+- (void)keyboardWillShow:(NSNotification *)note
 {
+	// TODO: find workaround for UIKeyboardBoundsUserInfoKey and UIKeyboardCenterEndUserInfoKey
+	// those properties are deprecated as of iPhone OS 3.2
+	// TODO: enable the warning for using deprecated api's in the project settings
 	CGRect bounds = [[[note userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];	
 	CGPoint center = [[[note userInfo] objectForKey:UIKeyboardCenterEndUserInfoKey] CGPointValue];
 	CGRect keyboardFrame = CGRectMake(round(center.x - bounds.size.width/2.0), round(center.y - bounds.size.height/2.0), bounds.size.width, bounds.size.height);
