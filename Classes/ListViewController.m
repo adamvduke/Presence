@@ -15,6 +15,8 @@
 #import "TwitterHelper.h"
 
 #define kCustomRowCount 7
+#define kCustomRowHeight 48
+
 @interface ListViewController ()
 
 - (void) startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
@@ -355,6 +357,11 @@
     return count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return kCustomRowHeight;
+}
+
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
@@ -478,6 +485,7 @@
         // Display the newly loaded image
         cell.imageView.image = iconDownloader.person.image;
     }
+	[imageDownloadsInProgress removeObjectForKey:indexPath];
 }
 
 #pragma mark -
