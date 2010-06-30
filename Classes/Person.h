@@ -37,4 +37,7 @@
 // using the TwitterHelper, for a particular user name
 - (Person *) initPersonWithInfo:(NSDictionary *)userInfo userName:(NSString *)userName;
 
+// Returns a boolean value indicating that the a person object has all of the necessary data
++ (BOOL)isValid:(Person *)person;
+
 @end
