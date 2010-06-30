@@ -16,13 +16,14 @@
 @synthesize queue;
 @synthesize spinner;
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+// override shouldAutorotateToInterfaceOrientation to return YES for all interface orientations
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	return YES;
 }
 
 // reload the table data and flash the scroll indicators when all of the data has been loaded
--(void) didFinishLoadingUpdates
+- (void) didFinishLoadingUpdates
 {
 	// if the spinner is active stop it
 	if ([self.spinner isAnimating]) 
@@ -39,7 +40,7 @@
 }
 
 // synchronous method to fetch a list of updates
--(void) synchronousLoadUpdates
+- (void) synchronousLoadUpdates
 {	
 	// attempt to limit the auto release footprint by creating an autorelease pool around the data load
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -76,7 +77,7 @@
 }
 
 // initialize with a UITableViewStyle and Person object
--(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson
+- (id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson
 {
 	if (self = [super initWithStyle:style]) 
 	{				
@@ -107,12 +108,12 @@
 }
 
 // override viewWillAppear to load the data if it hasn't been already
--(void) viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {	
 	[super viewWillAppear:animated];
 	
 	//if the person's status updates have not been loaded, load them
-	if (self.person.statusUpdates == nil) 
+	if (self.person && !self.person.statusUpdates) 
 	{
 		[self beginLoadUpdates];
 	}

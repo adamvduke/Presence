@@ -26,7 +26,7 @@
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
 
 // initialize an instance with a UITableViewStyle and Person object
--(id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson;
+- (id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson;
 
 @end
 
