@@ -89,7 +89,9 @@
 		self.person = aPerson;
 		
 		//Create the NSOperationQueue for threading data loading
-		self.queue = [[NSOperationQueue alloc]init];
+		NSOperationQueue *aQueue = [[NSOperationQueue alloc]init];
+		self.queue = aQueue;
+		[aQueue release];
 		
 		//set the maxConcurrent operations to 1
 		[self.queue setMaxConcurrentOperationCount:1];
