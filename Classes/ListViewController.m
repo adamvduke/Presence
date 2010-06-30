@@ -168,13 +168,13 @@
 {
 	// get the user's information from Twitter
 	NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
-	if (userInfo != nil) 
+	if (userInfo != nil && [userName length] > 0) 
 	{
 		Person *person = [[Person alloc]initPersonWithInfo:userInfo userName:userName];
-		if (person != nil) {
+		if ([Person isValid:person]) {
 			[self.people addObject:person];
-			[person release];
 		}
+		[person release];
 	}
 	
 	// call the main thread to notify that the person has finished loading
@@ -247,6 +247,7 @@
 	CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 130.0);
 	[alert setTransform:myTransform];
 	[alert addSubview:alertTextField];
+	[alertTextField release];
 	
 	[alert show];
 	[alert release];
