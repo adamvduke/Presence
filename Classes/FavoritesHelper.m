@@ -26,7 +26,7 @@
 
 // Copies the Favorites.plist file to the Documents directory
 // if the file hasn't already been copied there
-+(void)moveFavoritesToDocumentsDir
++ (void)moveFavoritesToDocumentsDir
 {
 	// get the path to save the favorites
 	NSString *favoritesPath = [self favoritesPath];
@@ -43,14 +43,14 @@
 }
 
 // Saves the values from the favorites array to Favorites.plist
-+(BOOL)saveFavorites:(NSArray *)favorites
++ (BOOL)saveFavorites:(NSArray *)favorites
 {
 	return [favorites writeToFile:[self favoritesPath] atomically:YES];
 }
 
 // Returns an NSMutableArray of strings where each string
 // is the username of a favorite user
-+(NSMutableArray *)retrieveFavorites
++ (NSMutableArray *)retrieveFavorites
 {
 	NSString *path = [self favoritesPath];
 	NSMutableArray *favoriteUsersArray = [NSArray arrayWithContentsOfFile:path];
