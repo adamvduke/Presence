@@ -20,21 +20,23 @@
 @synthesize liveDataSwitch;
 @synthesize delegate;
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	// return YES for all interface orientations
 	return YES;
 }
 
 // dismiss the modal view controller
--(IBAction)dismiss
+// convenience method for dismissing this view, if presented as a modal view controller
+- (IBAction)dismiss
 {
 	if (self.delegate != nil) {
 		[self.delegate didFinishPresentingViewController:self];
 	}
 }
 
--(void)hideKeyBoardForTextField:(UITextField *)textField
+// convenience method to hide the keyboard
+- (void)hideKeyBoardForTextField:(UITextField *)textField
 {
 	if ([textField isFirstResponder]) {
 		[textField resignFirstResponder];

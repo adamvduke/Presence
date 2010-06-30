@@ -47,14 +47,16 @@
 @property (assign) id<SettingsViewControllerDelegate> delegate;
 
 // Provide an implementation to dismiss this view contoller when presented modally
--(IBAction)dismiss;
+- (IBAction)dismiss;
 
 // Provide an implementation to save the user's settings
--(IBAction)save;
+- (IBAction)save;
 @end
 
+// Define the protocol for the SettingsViewControllerDelegate
 @protocol SettingsViewControllerDelegate<NSObject>
 
--(void)didFinishPresentingViewController:(SettingsViewController *)viewController;
+// method to invoke when the SettingsViewController is finished
+- (void)didFinishPresentingViewController:(SettingsViewController *)viewController;
 
 @end
