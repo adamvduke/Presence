@@ -12,7 +12,6 @@
 
 #define kAppIconHeight 48
 
-
 @implementation IconDownloader
 
 @synthesize person;
@@ -27,12 +26,9 @@
 {
     [person release];
     [indexPathInTableView release];
-    
     [activeDownload release];
-    
     [imageConnection cancel];
     [imageConnection release];
-    
     [super dealloc];
 }
 
