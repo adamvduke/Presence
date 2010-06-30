@@ -64,6 +64,22 @@
 - (void)viewDidLoad
 {
 	self.imageDownloadsInProgress = [NSMutableDictionary dictionary];
+	
+	NSString *username = [CredentialHelper retrieveUsername];
+	
+	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
+	if ( [username length] == 0 ) 
+	{
+		self.navigationItem.rightBarButtonItem.enabled = NO;
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
+														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
+													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
+		[alert show];
+		[alert release];
+	}
+	else {
+		self.navigationItem.rightBarButtonItem.enabled = YES;
+	}
 }
 
 // override viewWillAppear to begin the data load
@@ -77,11 +93,6 @@
 	if ( [username length] == 0 ) 
 	{
 		self.navigationItem.rightBarButtonItem.enabled = NO;
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
-														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
-													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
-		[alert show];
-		[alert release];
 	}
 	else {
 		self.navigationItem.rightBarButtonItem.enabled = YES;
