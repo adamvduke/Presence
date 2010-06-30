@@ -21,19 +21,20 @@
 {	
 	if (self == [super init]) 
 	{
-		//Keys in the dictionary for the url string and display name
+		//get the values out of the userInfo dictionary for the url string and display name
 		NSString *theImageUrlString = [userInfo valueForKey:@"profile_image_url"];
 		NSString *theDisplayName = [userInfo valueForKey:@"screen_name"];
-		
-		if (theImageUrlString == nil || theDisplayName == nil) {
-			return nil;
-		}
 		
 		self.userName = theUserName;
 		self.displayName = theDisplayName;
 		self.imageUrlString = theImageUrlString;
 	}
 	return self;
+}
+
++ (BOOL)isValid:(Person *)person
+{
+	return (person.imageUrlString != nil && [person.imageUrlString length] > 0) && (person.displayName != nil && [person.displayName length] > 0);
 }
 
 - (void)dealloc
