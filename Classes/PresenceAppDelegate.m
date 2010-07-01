@@ -84,8 +84,16 @@
 // initialize the settings view controller from the SettingsViewController.xib
 - (SettingsViewController *)initSettingsViewController
 {
-	SettingsViewController *settingsViewController = [[SettingsViewController alloc]initWithNibName:SettingsViewControllerNibName bundle:[NSBundle mainBundle]];
-	settingsViewController.tabBarItem.image = [UIImage imageNamed:@"SettingsIcon.png"];
+	NSBundle *mainBundle = [NSBundle mainBundle];
+	SettingsViewController *settingsViewController = [[SettingsViewController alloc]initWithNibName:SettingsViewControllerNibName bundle:mainBundle];
+	
+	// icon image loading
+	NSString *iconPath = [mainBundle pathForResource:@"SettingsIcon" ofType:@"png"];
+	UIImage *image = [[UIImage alloc]initWithContentsOfFile:iconPath];
+	settingsViewController.tabBarItem.image = image;
+	[image release];
+
+	NSLog(@"retain count is %d", [image retainCount]);
 	settingsViewController.title = NSLocalizedString(SettingsViewTitleKey, @"");
 	return settingsViewController;
 }
@@ -95,9 +103,15 @@
 {
 	// create a navigation controller and set it's title and tabBar icon
 	UINavigationController *favoritesNavigationController = [[UINavigationController alloc]init];
+	
+	// icon image loading
+	NSString *iconPath = [[NSBundle mainBundle] pathForResource:@"FavoritesIcon" ofType:@"png"];
+	UIImage *image = [[UIImage alloc]initWithContentsOfFile:iconPath];
+	favoritesNavigationController.tabBarItem.image = image;
+	[image release];
+	
 	favoritesNavigationController.title =  NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-	favoritesNavigationController.tabBarItem.image = [UIImage imageNamed:@"FavoritesIcon.png"];	
 
 	// get the list of favorites
 	NSMutableArray *favoriteUsersArray = [FavoritesHelper retrieveFavorites];
@@ -118,9 +132,15 @@
 {
 	// create a navigation controller and set it's title and tabBar icon
 	UINavigationController *followingNavigationController = [[UINavigationController alloc]init];
+	
+	// icon image loading
+	NSString *iconPath = [[NSBundle mainBundle] pathForResource:@"PeopleIcon" ofType:@"png"];
+	UIImage *image = [[UIImage alloc]initWithContentsOfFile:iconPath];
+	followingNavigationController.tabBarItem.image = image;
+	[image release];
+	
 	followingNavigationController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-	followingNavigationController.tabBarItem.image = [UIImage imageNamed:@"PeopleIcon.png"];
 	
 	// get the username
 	NSString *username = [CredentialHelper retrieveUsername];
@@ -165,9 +185,15 @@
 - (UINavigationController *)initSearchController
 {
 	UINavigationController *searchNavigationController = [[UINavigationController alloc]init];
+	
+	// icon image loading
+	NSString *iconPath = [[NSBundle mainBundle] pathForResource:@"SearchIcon" ofType:@"png"];
+	UIImage *image = [[UIImage alloc]initWithContentsOfFile:iconPath];
+	searchNavigationController.tabBarItem.image = image;
+	[image release];
+	
 	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	searchNavigationController.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
-	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"SearchIcon.png"];
 
 	return searchNavigationController;
 }
