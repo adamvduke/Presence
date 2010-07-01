@@ -27,7 +27,6 @@
 @implementation PresenceAppDelegate
 
 @synthesize window;
-@synthesize viewControllerArray;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
@@ -38,15 +37,14 @@
 	tabBarController = [[UITabBarController alloc]init];
 	
 	// initialize the viewControllerArray
-	self.viewControllerArray = [self initViewControllerArray];
-	
+	NSMutableArray *aViewControllerArray = [self initViewControllerArray];
+
 	// set the viewControllerArray on the tabBarController
 	// and the selected index
-	tabBarController.viewControllers = self.viewControllerArray;
-	tabBarController.selectedIndex = 1;
+	tabBarController.viewControllers = aViewControllerArray;
+	[aViewControllerArray release];
 	
-	// release the viewControllerArray
-	[self.viewControllerArray release];
+	tabBarController.selectedIndex = 1;
 	
 	// add the navigation controller's view to the window's subviews
 	[window addSubview:tabBarController.view];
@@ -156,7 +154,7 @@
 	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain editable:NO usernameArray:idArray];
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	
-	UINavigationController *followingController = [self.viewControllerArray objectAtIndex:2];
+	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];
 	[followingController pushViewController:followingListViewController animated:YES];
 	[followingListViewController release];
 	

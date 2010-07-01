@@ -11,12 +11,10 @@
 @interface PresenceAppDelegate : NSObject <UIApplicationDelegate> 
 {
     UIWindow *window;
-	NSMutableArray *viewControllerArray;
 	IBOutlet UITabBarController *tabBarController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) NSMutableArray *viewControllerArray;
 
 @end
 
