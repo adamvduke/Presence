@@ -79,8 +79,14 @@
 	NSMutableArray *returnArray = [[[NSMutableArray alloc]init]autorelease];
 	for (NSDictionary *timelineEntry in userTimeline) 
 	{
-		NSString *formatString = [NSString stringWithString:[timelineEntry objectForKey:@"text"]];
-		[returnArray addObject:formatString];
+		if ([timelineEntry isKindOfClass:[NSDictionary class]]) {
+			NSString *value = [timelineEntry objectForKey:@"text"];
+			if (value) {
+				NSString *formatString = [[NSString alloc]initWithString:[timelineEntry objectForKey:@"text"]];
+				[returnArray addObject:formatString];
+				[formatString release];
+			}
+		}
 	}
 	return returnArray;
 }
