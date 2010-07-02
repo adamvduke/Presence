@@ -14,7 +14,6 @@
 		560315A810ABA79A005F649A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* ListViewController.m */; };
 		5616967411C5634300C07DEF /* FavoriteUsers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5616967211C5634300C07DEF /* FavoriteUsers.plist */; };
 		561E9B6211BAE59F005A6BC8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 561E9B6011BAE59F005A6BC8 /* Localizable.strings */; };
-		5623066B11CC5C5D006F4713 /* ValidationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623066A11CC5C5D006F4713 /* ValidationHelper.m */; };
 		562BCB0611CA7CD7001E4BA2 /* IconDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */; };
 		563329FA11B761BF00BF4184 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563329F911B761BF00BF4184 /* QuartzCore.framework */; };
 		5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */; };
@@ -55,7 +54,6 @@
 		561E9B6111BAE59F005A6BC8 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		561E9B6311BAE5AC005A6BC8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5623066911CC5C5D006F4713 /* ValidationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValidationHelper.h; sourceTree = "<group>"; };
-		5623066A11CC5C5D006F4713 /* ValidationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValidationHelper.m; sourceTree = "<group>"; };
 		562BCB0411CA7CD7001E4BA2 /* IconDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconDownloader.h; sourceTree = "<group>"; };
 		562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IconDownloader.m; sourceTree = "<group>"; };
 		563329F911B761BF00BF4184 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -209,7 +207,6 @@
 				56C5613010B248120014D33C /* TwitterHelper.h */,
 				56C5613110B248120014D33C /* TwitterHelper.m */,
 				5623066911CC5C5D006F4713 /* ValidationHelper.h */,
-				5623066A11CC5C5D006F4713 /* ValidationHelper.m */,
 				56A8D21511CEEC4400BF541D /* FavoritesHelper.h */,
 				56A8D21611CEEC4400BF541D /* FavoritesHelper.m */,
 				56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */,
@@ -353,7 +350,6 @@
 				566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */,
 				5640027311B8C13100355A74 /* main.m in Sources */,
 				562BCB0611CA7CD7001E4BA2 /* IconDownloader.m in Sources */,
-				5623066B11CC5C5D006F4713 /* ValidationHelper.m in Sources */,
 				56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */,
 				56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */,
 			);
@@ -409,8 +405,11 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.2;
+				SDKROOT = iphonesimulator4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -423,8 +422,11 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.2;
+				SDKROOT = iphonesimulator4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
