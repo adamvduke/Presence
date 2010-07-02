@@ -184,23 +184,21 @@
 
 - (void)keyboardWillShow:(NSNotification *)note
 {
-	// TODO: find workaround for UIKeyboardBoundsUserInfoKey those properties are deprecated as of iPhone OS 3.2
-	// TODO: enable the warning for using deprecated api's in the project settings
-	CGRect keyboardBounds = [[[note userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
+	CGRect keyboardFrame = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	CGRect windowFrame = self.view.frame;
 	CGRect textViewFrame = self.textView.frame;
 	CGPoint textViewOrigin = textViewFrame.origin;
 	CGFloat textViewHeight;
-	
 	if(UIDeviceOrientationIsLandscape(self.interfaceOrientation))
 	{
-		// the window's frame doesn't change when the orientation does, so if it's in landscape mode
-		// subtract from the width and not the height
-		textViewHeight = windowFrame.size.width - keyboardBounds.size.height - textViewOrigin.y;
+		// the concept of width and height don't change with respect to portrait orientation
+		// when the phone is rotated, in order to calculate what a user views as height in 
+		// landscape the calculations should be done on the widths
+		textViewHeight = windowFrame.size.width - keyboardFrame.size.width - textViewOrigin.y;
 	}
 	else 
-	{		
-		textViewHeight = windowFrame.size.height - keyboardBounds.size.height - textViewOrigin.y;
+	{
+		textViewHeight = windowFrame.size.height - keyboardFrame.size.height - textViewOrigin.y;
 	}
 	CGRect newTextViewFrame = CGRectMake(textViewFrame.origin.x, textViewFrame.origin.y, textViewFrame.size.width, textViewHeight);
 	[self.textView setFrame:newTextViewFrame];
