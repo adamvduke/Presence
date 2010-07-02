@@ -16,6 +16,9 @@
 	NSString *password;
 	NSString *username;
 	
+	// activity indicator for animation during data access
+	UIActivityIndicatorView	*spinner;
+	
 	// IBOutlet for the navigationItem
 	IBOutlet UINavigationItem *aNavigationItem;
 	
@@ -31,6 +34,7 @@
 
 @property (nonatomic, retain) NSString *password;
 @property (nonatomic, retain) NSString *username;
+@property (nonatomic, retain) UIActivityIndicatorView *spinner;
 @property (nonatomic, retain) UINavigationItem *aNavigationItem;
 @property (nonatomic, retain) UILabel *charactersLabel;
 @property (nonatomic, retain) UITextView *textView;

@@ -21,6 +21,7 @@
 
 @synthesize password;
 @synthesize username;
+@synthesize spinner;
 @synthesize aNavigationItem;
 @synthesize charactersLabel;
 @synthesize textView;
@@ -47,13 +48,14 @@
 	[self.delegate didFinishComposing:self];
 }
 
-// action to call to post a status update to twitter
-- (IBAction)tweetAction
-{	
-	// call the TwitterHelper to update the status
-	BOOL success = [TwitterHelper updateStatus:textView.text forUsername:self.username withPassword:self.password];
+-(void)finishedTweet:(BOOL)success
+{
+	// start the device's network activity indicator
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 	
-	// if the update was not a sucess, display an error message and save the text
+	// start animating the spinner
+	[self.spinner stopAnimating];
+	
 	if (!success) 
 	{
 		UIAlertView *alert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"") 
@@ -69,6 +71,32 @@
 		self.textView.text = nil;
 		[self dismiss];
 	}
+	
+}
+
+-(void)beginTweetWithText:(NSString *)text
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+	
+	// call the TwitterHelper to update the status
+	BOOL success = [TwitterHelper updateStatus:text forUsername:self.username withPassword:self.password];
+		
+	[self performSelectorOnMainThread:@selector(finishedTweet:) withObject:success ? @"YES" : @"NO" waitUntilDone:NO];
+
+	[pool release];
+}
+
+// action to call to post a status update to twitter
+- (IBAction)tweetAction
+{	
+	// start the device's network activity indicator
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+	
+	// start animating the spinner
+	[self.spinner startAnimating];
+	
+	NSString *text = textView.text;
+	[NSThread detachNewThreadSelector:@selector(beginTweetWithText:) toTarget:self withObject:text];
 }
 
 // UITextViewDelegate method
@@ -144,6 +172,8 @@
 {
 	[super viewDidLoad];
 	
+	self.spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		
 	self.textView.text = @"";
 	
 	// set the cornerRadius property to 8, this creates rounded corners for the UITextView
@@ -154,27 +184,33 @@
 
 - (void)keyboardWillShow:(NSNotification *)note
 {
-	// TODO: find workaround for UIKeyboardBoundsUserInfoKey and UIKeyboardCenterEndUserInfoKey
-	// those properties are deprecated as of iPhone OS 3.2
+	// TODO: find workaround for UIKeyboardBoundsUserInfoKey those properties are deprecated as of iPhone OS 3.2
 	// TODO: enable the warning for using deprecated api's in the project settings
-	CGRect bounds = [[[note userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];	
-	CGPoint center = [[[note userInfo] objectForKey:UIKeyboardCenterEndUserInfoKey] CGPointValue];
-	CGRect keyboardFrame = CGRectMake(round(center.x - bounds.size.width/2.0), round(center.y - bounds.size.height/2.0), bounds.size.width, bounds.size.height);
-	CGRect windowFrame = self.textView.window.frame;
+	CGRect keyboardBounds = [[[note userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
+	CGRect windowFrame = self.view.frame;
 	CGRect textViewFrame = self.textView.frame;
-	CGFloat newHeight;
+	CGPoint textViewOrigin = textViewFrame.origin;
+	CGFloat textViewHeight;
 	
-	if((self.interfaceOrientation == UIDeviceOrientationLandscapeLeft) || (self.interfaceOrientation == UIDeviceOrientationLandscapeRight))
+	if(UIDeviceOrientationIsLandscape(self.interfaceOrientation))
 	{
 		// the window's frame doesn't change when the orientation does, so if it's in landscape mode
 		// subtract from the width and not the height
-		newHeight = windowFrame.size.width - keyboardFrame.size.height - textViewFrame.origin.y - 25.0;
+		textViewHeight = windowFrame.size.width - keyboardBounds.size.height - textViewOrigin.y;
 	}
 	else 
 	{		
-		newHeight = windowFrame.size.height - keyboardFrame.size.height - textViewFrame.origin.y - 25.0;
+		textViewHeight = windowFrame.size.height - keyboardBounds.size.height - textViewOrigin.y;
 	}
-	[self.textView setFrame:CGRectMake(textViewFrame.origin.x, textViewFrame.origin.y, textViewFrame.size.width, newHeight)];
+	CGRect newTextViewFrame = CGRectMake(textViewFrame.origin.x, textViewFrame.origin.y, textViewFrame.size.width, textViewHeight);
+	[self.textView setFrame:newTextViewFrame];
+	CGRect originalSpinnerFrame = self.spinner.frame;
+	CGRect spinnerFrame = CGRectMake(newTextViewFrame.size.width/2 - originalSpinnerFrame.size.width/2, 
+									 newTextViewFrame.size.height/2 - originalSpinnerFrame.size.height/2, 
+									 originalSpinnerFrame.size.width, 
+									 originalSpinnerFrame.size.width);
+	[self.spinner setFrame:spinnerFrame];
+	[self.textView addSubview:spinner];
 }
 
 - (void)didReceiveMemoryWarning 
