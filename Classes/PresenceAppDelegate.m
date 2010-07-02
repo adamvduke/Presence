@@ -12,6 +12,7 @@
 #import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
 #import "TwitterHelper.h"
+#import "ValidationHelper.h"
 
 @interface PresenceAppDelegate ()
 
@@ -38,7 +39,7 @@
 	
 	// initialize the viewControllerArray
 	NSMutableArray *aViewControllerArray = [self initViewControllerArray];
-
+	
 	// set the viewControllerArray on the tabBarController
 	// and the selected index
 	tabBarController.viewControllers = aViewControllerArray;
@@ -92,8 +93,6 @@
 	UIImage *image = [[UIImage alloc]initWithContentsOfFile:iconPath];
 	settingsViewController.tabBarItem.image = image;
 	[image release];
-
-	NSLog(@"retain count is %d", [image retainCount]);
 	settingsViewController.title = NSLocalizedString(SettingsViewTitleKey, @"");
 	return settingsViewController;
 }
@@ -109,7 +108,6 @@
 	UIImage *image = [[UIImage alloc]initWithContentsOfFile:iconPath];
 	favoritesNavigationController.tabBarItem.image = image;
 	[image release];
-	
 	favoritesNavigationController.title =  NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 
@@ -138,7 +136,6 @@
 	UIImage *image = [[UIImage alloc]initWithContentsOfFile:iconPath];
 	followingNavigationController.tabBarItem.image = image;
 	[image release];
-	
 	followingNavigationController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
@@ -191,7 +188,6 @@
 	UIImage *image = [[UIImage alloc]initWithContentsOfFile:iconPath];
 	searchNavigationController.tabBarItem.image = image;
 	[image release];
-	
 	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	searchNavigationController.title = NSLocalizedString(SearchViewControllerTitleKey, @"");
 
