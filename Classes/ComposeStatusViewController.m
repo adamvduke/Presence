@@ -25,6 +25,7 @@
 @synthesize aNavigationItem;
 @synthesize charactersLabel;
 @synthesize textView;
+@synthesize isEditable;
 @synthesize delegate;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -89,6 +90,9 @@
 // action to call to post a status update to twitter
 - (IBAction)tweetAction
 {	
+	// disable the text view
+	self.isEditable = NO;
+	
 	// start the device's network activity indicator
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	
@@ -102,6 +106,11 @@
 // UITextViewDelegate method
 - (BOOL)textView:(UITextView *)theTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+	if(!self.isEditable)
+	{
+		return NO;
+	}
+	
 	// if the length of the current text plus the length of the requested text is less than 140 characters, return YES
 	// else NO
 	if ([theTextView.text length] + [text length] <= 140) 
@@ -144,6 +153,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	
+	// make the view editable if it is appearing
+	self.isEditable = YES;
 	
 	// set the navigation item's title to the localized value
 	self.aNavigationItem.title = NSLocalizedString(ComposeViewTitleKey, @"");
