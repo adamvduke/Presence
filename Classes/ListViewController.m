@@ -244,12 +244,13 @@
 		alertTextField.delegate = self;
 	}
 	
-	CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 130.0);
+	CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 45.0);
 	[alert setTransform:myTransform];
 	[alert addSubview:alertTextField];
+	[alert show];
+	[alertTextField becomeFirstResponder];
 	[alertTextField release];
 	
-	[alert show];
 	[alert release];
 }
 
