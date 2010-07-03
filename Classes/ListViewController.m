@@ -121,6 +121,30 @@
 	for (IconDownloader *downloader in allDownloads) {
 		[downloader cancelDownload];
 	}
+	
+	NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
+	
+	// for each person, determine if the person is visible
+	// if not, set the person's statusUpdate and image properties to nil
+	for (int i = 0; i < [people count]; i++) {
+		
+		BOOL visible = NO;
+		for (NSIndexPath *path in visiblePaths)
+		{
+			if (path.row == i ) {
+				visible = YES;
+				break;
+			}
+		}
+		
+		if (!visible) {			
+			Person *person = [people objectAtIndex:i];
+			if (person) {
+				person.statusUpdates = nil;
+				person.image = nil;
+			}
+		}
+	}
 }
 
 - (void)viewDidUnload 
@@ -417,7 +441,6 @@
 	{
 		// Set up the cell...
 		Person *person = [self.people objectAtIndex:indexPath.row];
-		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.textLabel.text = person.displayName;
 		
