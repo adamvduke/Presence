@@ -118,7 +118,9 @@
 	
 	// terminate all pending download connections
     NSArray *allDownloads = [self.imageDownloadsInProgress allValues];
-    [allDownloads performSelector:@selector(cancelDownload)];
+	for (IconDownloader *downloader in allDownloads) {
+		[downloader cancelDownload];
+	}
 }
 
 - (void)viewDidUnload 
