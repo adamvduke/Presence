@@ -118,9 +118,7 @@
 	
 	// terminate all pending download connections
     NSArray *allDownloads = [self.imageDownloadsInProgress allValues];
-	for (IconDownloader *downloader in allDownloads) {
-		[downloader cancelDownload];
-	}
+	[allDownloads makeObjectsPerformSelector:@selector(cancelDownload)];
 	
 	NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
 	

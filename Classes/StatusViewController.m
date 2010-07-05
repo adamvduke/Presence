@@ -179,7 +179,14 @@
 		
 		// set only the text and image properties on the cell
 		cell.textLabel.text = self.person.displayName;
-		cell.imageView.image = self.person.image;
+		if (self.person.image) 
+		{
+			cell.imageView.image = self.person.image;
+		}
+		else 
+		{
+			cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];                
+		}
 	}
 	
 	// because there are only two sections, the else block will always create cells styled for statuses
@@ -207,8 +214,10 @@
 {	
 	//if the index path represents the "Title cell" return the height of the user's image plus 15
 	NSUInteger section = indexPath.section;
-	if (section == 0) {
-		CGSize imageSize = self.person.image.size;
+	if (section == 0) 
+	{
+		UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+		CGSize imageSize = cell.imageView.image.size;
 		return imageSize.height + 15;
 	}
 	
