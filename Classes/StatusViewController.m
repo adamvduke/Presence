@@ -11,6 +11,12 @@
 #import "StatusViewController.h"
 #import "TwitterHelper.h"
 
+@interface StatusViewController ()
+
+-(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline;
+
+@end
+
 @implementation StatusViewController
 @synthesize person;
 @synthesize queue;
@@ -49,7 +55,7 @@
 	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:self.person.userName];
 	
 	// parse the individual statuses out of the timeline
-	NSArray *statusArray = [TwitterHelper parseStatusUpdatesFromTimeline:userTimeline];
+	NSArray *statusArray = [self parseStatusUpdatesFromTimeline:userTimeline];
 	
 	// set the statusUpdates array on the person object so that they don't need to be fetched again
 	self.person.statusUpdates = statusArray;
@@ -59,6 +65,23 @@
 	
 	// release the NSAutoReleasePool
 	[pool release];
+}
+
+-(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline
+{		
+	NSMutableArray *returnArray = [[[NSMutableArray alloc]init]autorelease];
+	for (NSDictionary *timelineEntry in userTimeline) 
+	{
+		if ([timelineEntry isKindOfClass:[NSDictionary class]]) {
+			NSString *value = [timelineEntry objectForKey:@"text"];
+			if (value) {
+				NSString *formatString = [[NSString alloc]initWithString:[timelineEntry objectForKey:@"text"]];
+				[returnArray addObject:formatString];
+				[formatString release];
+			}
+		}
+	}
+	return returnArray;
 }
 
 // begin loading the updates asynchronously

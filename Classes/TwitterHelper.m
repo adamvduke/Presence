@@ -74,23 +74,6 @@
     return stringIdsArray;
 }
 
-+ (NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline{
-	
-	NSMutableArray *returnArray = [[[NSMutableArray alloc]init]autorelease];
-	for (NSDictionary *timelineEntry in userTimeline) 
-	{
-		if ([timelineEntry isKindOfClass:[NSDictionary class]]) {
-			NSString *value = [timelineEntry objectForKey:@"text"];
-			if (value) {
-				NSString *formatString = [[NSString alloc]initWithString:[timelineEntry objectForKey:@"text"]];
-				[returnArray addObject:formatString];
-				[formatString release];
-			}
-		}
-	}
-	return returnArray;
-}
-
 + (NSDictionary *)fetchSearchResultsForQuery:(NSString *)query
 {
     // Sanitize the query string.
