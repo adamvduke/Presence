@@ -1,0 +1,21 @@
+//
+//  DataAccessHelper.h
+//  Presence
+//
+//  Created by Adam Duke on 8/1/10.
+//  Copyright 2010 Adam Duke. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "Person.h"
+#import "Status.h"
+
+
+@interface DataAccessHelper : NSObject {
+
+}
+
++ (BOOL) savePerson:(Person *)person;
+
++ (BOOL) saveStatus:(Status *)status;
+@end
