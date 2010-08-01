@@ -18,6 +18,7 @@
 		563329FA11B761BF00BF4184 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563329F911B761BF00BF4184 /* QuartzCore.framework */; };
 		5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */; };
 		563C65EF11B89639001430C9 /* PresenceContants.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C65EE11B89639001430C9 /* PresenceContants.m */; };
+		563C7BFC1206138A002A9F1E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563C7BFB1206138A002A9F1E /* libsqlite3.dylib */; };
 		5640027311B8C13100355A74 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5640027211B8C13100355A74 /* main.m */; };
 		566ADEE811B8BFBF00931CFD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* Person.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
@@ -61,6 +62,7 @@
 		5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeStatusViewController.m; sourceTree = "<group>"; };
 		563C65ED11B89639001430C9 /* PresenceContants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresenceContants.h; sourceTree = "<group>"; };
 		563C65EE11B89639001430C9 /* PresenceContants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresenceContants.m; sourceTree = "<group>"; };
+		563C7BFB1206138A002A9F1E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		5640027211B8C13100355A74 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/main.m; sourceTree = "<group>"; };
 		566ADEE411B8BFBF00931CFD /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		566ADEE511B8BFBF00931CFD /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				563329FA11B761BF00BF4184 /* QuartzCore.framework in Frameworks */,
+				563C7BFC1206138A002A9F1E /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,6 +176,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
+				563C7BFB1206138A002A9F1E /* libsqlite3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
