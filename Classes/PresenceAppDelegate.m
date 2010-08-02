@@ -7,6 +7,7 @@
 //
 
 #import "CredentialHelper.h"
+#import "DataAccessHelper.h"
 #import "FavoritesHelper.h"
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
@@ -28,11 +29,18 @@
 @implementation PresenceAppDelegate
 
 @synthesize window;
+@synthesize dataAccessHelper;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
 	// copy the favorites plist to the documents directory
 	[FavoritesHelper moveFavoritesToDocumentsDir];
+	
+	dataAccessHelper = [[DataAccessHelper alloc]init];
+	BOOL databaseExists = [dataAccessHelper createAndValidateDatabase];
+	if (!databaseExists) {
+		NSLog(@"Error creating database");
+	}
 	
 	// initialize the tab bar
 	tabBarController = [[UITabBarController alloc]init];
@@ -115,7 +123,7 @@
 	NSMutableArray *favoriteUsersArray = [FavoritesHelper retrieveFavorites];
 
 	// initialize a ListViewController with the favoriteUsersArray
-	ListViewController *favoritesListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain editable:YES usernameArray:favoriteUsersArray];
+	ListViewController *favoritesListViewController = [[ListViewController alloc]initAsEditable:YES usernameArray:favoriteUsersArray dataAccessHelper:dataAccessHelper];
 	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	
 	// push the followingListViewController onto the following navigation stack and release it
@@ -168,7 +176,7 @@
 	[idArray retain];
 	
 	// create the list view controller to push on the followingNavigationController
-	ListViewController *followingListViewController = [[ListViewController alloc]initWithStyle:UITableViewStylePlain editable:NO usernameArray:idArray];
+	ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO usernameArray:idArray dataAccessHelper:dataAccessHelper];
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	
 	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];
@@ -198,6 +206,7 @@
 {	
 	[tabBarController release];
     [window release];
+	[dataAccessHelper release];
     [super dealloc];
 }
 @end

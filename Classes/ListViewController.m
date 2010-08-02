@@ -38,6 +38,7 @@
 @synthesize imageDownloadsInProgress;
 @synthesize queue;
 @synthesize finishedThreads;
+@synthesize dataAccessHelper;
 
 - (void)dealloc 
 {	
@@ -190,14 +191,23 @@
 // call the main thread when finished
 -(void) synchronousLoadPerson:(NSString *)userName
 {
-	// get the user's information from Twitter
-	NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
-	if (userInfo != nil && [userName length] > 0) 
-	{
-		Person *person = [[Person alloc]initPersonWithInfo:userInfo userName:userName];
-		if ([Person isValid:person]) {
-			[self.people addObject:person];
+	Person *person = [dataAccessHelper initPersonByUsername:userName];
+	if (!person) {
+		
+		// get the user's information from Twitter
+		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
+		if (userInfo != nil && [userName length] > 0) 
+		{
+			person = [[Person alloc]initPersonWithInfo:userInfo userName:userName];
 		}
+	}
+	if ([Person isValid:person]) 
+	{
+		[self.people addObject:person];
+		[dataAccessHelper savePerson:person];
+	}
+
+	if (person) {
 		[person release];
 	}
 	
@@ -297,14 +307,17 @@
 
 #pragma mark -
 #pragma mark custom init method
--(id)initWithStyle:(UITableViewStyle)style editable:(BOOL)isEditable usernameArray:(NSMutableArray *)usernames
+-(id)initAsEditable:(BOOL)isEditable usernameArray:(NSMutableArray *)usernames dataAccessHelper:(DataAccessHelper *)accessHelper
 {
 	
-	if (self == [super initWithStyle:style]) {
+	if (self == [super initWithStyle:UITableViewStylePlain]) {
 		
 		if (isEditable) {
 			self.navigationItem.leftBarButtonItem = self.editButtonItem;
 		}
+		
+		// set the DataAccessHelper
+		self.dataAccessHelper = accessHelper;
 		
 		// set the list of users to load
 		self.usernameArray = usernames;
@@ -523,7 +536,9 @@
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:iconDownloader.indexPathInTableView];
         
         // Display the newly loaded image
-        cell.imageView.image = iconDownloader.person.image;
+		Person *person = iconDownloader.person;
+		[dataAccessHelper savePerson:person];
+        cell.imageView.image = person.image;
     }
 	[imageDownloadsInProgress removeObjectForKey:indexPath];
 }

@@ -9,6 +9,7 @@
 #import "ComposeStatusViewController.h"
 #import "IconDownloader.h"
 #import "SettingsViewController.h"
+#import "DataAccessHelper.h"
 
 #import <UIKit/UIKit.h>
 
@@ -32,6 +33,8 @@
 	
 	// count of the number of threads that are finished loading data
 	int finishedThreads;
+	
+	DataAccessHelper *dataAccessHelper;
 }
 
 @property (nonatomic, retain) UIBarButtonItem *addBarButton;
@@ -40,9 +43,10 @@
 @property (nonatomic, retain) NSMutableArray *people;
 @property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
 @property (nonatomic, retain) NSOperationQueue *queue;
+@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
 @property int finishedThreads;
 
-- (id)initWithStyle:(UITableViewStyle)style editable:(BOOL)isEditable usernameArray:(NSArray *)usernames;
+- (id)initAsEditable:(BOOL)isEditable usernameArray:(NSArray *)usernames dataAccessHelper:(DataAccessHelper *)accessHelper;
 - (void)imageDidLoad:(NSIndexPath *)indexPath;
 
 @end

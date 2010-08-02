@@ -138,8 +138,6 @@
 				562BCB6811CAA26A001E4BA2 /* Helper */,
 				562BCB6711CAA25A001E4BA2 /* Model */,
 				562BCB6611CAA223001E4BA2 /* ViewController */,
-				562BCB0411CA7CD7001E4BA2 /* IconDownloader.h */,
-				562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */,
 				1D3623240D0F684500981E51 /* PresenceAppDelegate.h */,
 				1D3623250D0F684500981E51 /* PresenceAppDelegate.m */,
 			);
@@ -231,6 +229,8 @@
 		562BCB6811CAA26A001E4BA2 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				562BCB0411CA7CD7001E4BA2 /* IconDownloader.h */,
+				562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */,
 				56C5613010B248120014D33C /* TwitterHelper.h */,
 				56C5613110B248120014D33C /* TwitterHelper.m */,
 				5623066911CC5C5D006F4713 /* ValidationHelper.h */,

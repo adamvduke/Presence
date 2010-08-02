@@ -22,9 +22,16 @@
 @property (nonatomic, retain) NSString *databaseName;
 @property (nonatomic, retain) NSString *documentsDatabasePath;
 
+// copy the default database to the file system
 - (BOOL) createAndValidateDatabase;
 
-+ (BOOL) savePerson:(Person *)person;
+// save a person record in the database
+- (BOOL) savePerson:(Person *)person;
 
+// retrieve a Person's details from the database and 
+// construct a person object from the results
+- (Person *)initPersonByUsername:(NSString *)userName;
+
+// save a status record to the database
 + (BOOL) saveStatus:(Status *)status;
 @end
