@@ -13,7 +13,16 @@
 
 @interface DataAccessHelper : NSObject {
 
+	NSFileManager *fileManager;
+	NSString *databaseName;
+	NSString *documentsDatabasePath;
 }
+
+@property (nonatomic, retain) NSFileManager *fileManager;
+@property (nonatomic, retain) NSString *databaseName;
+@property (nonatomic, retain) NSString *documentsDatabasePath;
+
+- (BOOL) createAndValidateDatabase;
 
 + (BOOL) savePerson:(Person *)person;
 
