@@ -25,8 +25,8 @@
 		563C7CE7120632C3002A9F1E /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C7CE2120632C3002A9F1E /* FMDatabaseAdditions.m */; };
 		563C7CE8120632C3002A9F1E /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C7CE4120632C3002A9F1E /* FMResultSet.m */; };
 		563C7CE9120632C3002A9F1E /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 563C7CE5120632C3002A9F1E /* LICENSE.txt */; };
-		563C7CEB120632E2002A9F1E /* Presence.db in Resources */ = {isa = PBXBuildFile; fileRef = 563C7CEA120632E2002A9F1E /* Presence.db */; };
 		5640027311B8C13100355A74 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5640027211B8C13100355A74 /* main.m */; };
+		564EF07112076FAD00ED4523 /* Schema_Version_1.plist in Resources */ = {isa = PBXBuildFile; fileRef = 564EF07012076FAD00ED4523 /* Schema_Version_1.plist */; };
 		566ADEE811B8BFBF00931CFD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* Person.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
 		56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D21611CEEC4400BF541D /* FavoritesHelper.m */; };
@@ -81,8 +81,8 @@
 		563C7CE3120632C3002A9F1E /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = FMDB/FMResultSet.h; sourceTree = "<group>"; };
 		563C7CE4120632C3002A9F1E /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = FMDB/FMResultSet.m; sourceTree = "<group>"; };
 		563C7CE5120632C3002A9F1E /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE.txt; path = FMDB/LICENSE.txt; sourceTree = "<group>"; };
-		563C7CEA120632E2002A9F1E /* Presence.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Presence.db; path = Resources/Database/Presence.db; sourceTree = "<group>"; };
 		5640027211B8C13100355A74 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/main.m; sourceTree = "<group>"; };
+		564EF07012076FAD00ED4523 /* Schema_Version_1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Schema_Version_1.plist; path = Resources/Database/Schema_Version_1.plist; sourceTree = "<group>"; };
 		566ADEE411B8BFBF00931CFD /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		566ADEE511B8BFBF00931CFD /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		566ADEE611B8BFBF00931CFD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -256,7 +256,7 @@
 		563C7C3112061E70002A9F1E /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				563C7CEA120632E2002A9F1E /* Presence.db */,
+				564EF07012076FAD00ED4523 /* Schema_Version_1.plist */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -379,7 +379,7 @@
 				56C8E7C611D023A600B21D38 /* MainWindow.xib in Resources */,
 				56C8E7C711D023A600B21D38 /* SettingsViewController.xib in Resources */,
 				563C7CE9120632C3002A9F1E /* LICENSE.txt in Resources */,
-				563C7CEB120632E2002A9F1E /* Presence.db in Resources */,
+				564EF07112076FAD00ED4523 /* Schema_Version_1.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

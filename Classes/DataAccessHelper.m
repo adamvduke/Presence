@@ -9,13 +9,6 @@
 #import "DataAccessHelper.h"
 #import "FMDatabase.h"
 
-@interface DataAccessHelper ()
-
-- (void)initializeFileManager;
-- (void)copyDatabaseToPath:(NSString *)toPath;
-
-@end
-
 @implementation DataAccessHelper
 
 @synthesize fileManager;
@@ -30,55 +23,46 @@
 	[documentsDatabasePath release];
 }
 
-// initialize the NSFileManager object
-- (void) initializeFileManager
+-(DataAccessHelper *)init
 {
-	// if the NSFileManager is nil, initialize it
-	if (self.fileManager == nil) {
+	if (self == [super init]) {
+		
+		// initialize the fileManager
 		self.fileManager = [NSFileManager defaultManager];
+		
+		// Get the path to the documents directory and append the databaseName
+		NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentsPath = [documentPaths objectAtIndex:0];
+		self.documentsDatabasePath = [documentsPath stringByAppendingPathComponent:@"Presence.db"];
 	}
+	return self;
 }
 
-// copy the default database from the app bundle to the Document's directory
+// create the default database and save it in the Documents directory
 - (BOOL) createAndValidateDatabase
-{		
-	// ensure the NSFileManager object has been initialized
-	[self initializeFileManager];
-	
-	// Get the path to the documents directory and append the databaseName
-	NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsPath = [documentPaths objectAtIndex:0];
-	self.documentsDatabasePath = [documentsPath stringByAppendingPathComponent:@"Presence.db"];
-	
-	// check to see if the database exists
-	// if so, return YES
-	if([self.fileManager fileExistsAtPath:self.documentsDatabasePath])
-	{
-		return YES;
-	}
-	
-	// if not, copy the default database to the documents directory
-	[self copyDatabaseToPath:self.documentsDatabasePath];
-	
-	// return the value of fileExistsAtPath after copying
-	return [self.fileManager fileExistsAtPath:self.documentsDatabasePath];
-}
-
-// copy the database from the application bundle to the Documents directory
-- (void) copyDatabaseToPath:(NSString *)toPath
 {
-	// ensure the NSFileManager object is initialized
-	[self initializeFileManager];
+	// open the database
+	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
+	if (![database open]) {
+        NSLog(@"Could not open db.");
+    }
 	
-	// get the default database from the app bundle and copy it to the documents directory
-	NSString *path = [[NSBundle mainBundle]pathForResource:@"Presence" ofType:@"db"];
-	NSError *error = nil;
-	[self.fileManager copyItemAtPath:path toPath:self.documentsDatabasePath error:&error];
+	// get the list of statements to create the schema
+	NSString *path = [[NSBundle mainBundle]pathForResource:@"Schema_Version_1" ofType:@"plist"];
+	NSArray *sqlStatements = [NSArray arrayWithContentsOfFile:path];
 	
-	// log any error that may have been created during the file copy
-	if (error != nil) {
-		NSLog(@"Error copying database, %@", [error description]);
+	// execute the statements
+	for(NSString *statement in sqlStatements)
+	{
+		[database executeUpdate:statement];
+		if ([database hadError]) {
+			NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
+		}
 	}
+	
+	// close the database
+	[database close];
+	return YES;
 }
 
 // save a Person object's details to the database
