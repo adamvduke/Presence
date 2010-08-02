@@ -15,4 +15,12 @@
 @synthesize createdDate;
 @synthesize createrId;
 
+
+- (void)dealloc
+{
+	[super dealloc];
+	[text release];
+	[createdDate release];
+	[createrId release];
+}
 @end

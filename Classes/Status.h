@@ -13,11 +13,11 @@
 
 	NSString *text;
 	NSDate *createdDate;
-	NSInteger createrId;
+	NSString *createrId;
 }
 
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) NSDate *createdDate;
-@property NSInteger createrId;
+@property (nonatomic, retain) NSString *createrId;
 
 @end
