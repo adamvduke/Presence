@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataAccessHelper.h"
 @class Person;
 
 @interface StatusViewController : UITableViewController 
@@ -19,14 +20,18 @@
 	
 	// activity indicator for animation during data access
 	UIActivityIndicatorView	*spinner;
+	
+	// DataAccessHelper to save status updates
+	DataAccessHelper *dataAccessHelper;
 }
 
 @property (nonatomic, retain) Person *person;
 @property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
+@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
 
 // initialize an instance with a UITableViewStyle and Person object
-- (id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson;
+- (id)initWithPerson:(Person *)aPerson dataAccessHelper:(DataAccessHelper *)accessHelper;
 
 @end
 

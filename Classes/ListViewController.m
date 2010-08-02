@@ -485,7 +485,7 @@
 	if ([self.people count] > 0) {
 		
 		Person *person = [people objectAtIndex:indexPath.row];
-		StatusViewController *statusViewController = [[StatusViewController alloc] initWithStyle:UITableViewStyleGrouped person:person];
+		StatusViewController *statusViewController = [[StatusViewController alloc] initWithPerson:person dataAccessHelper:dataAccessHelper];
 		
 		// push the new view controller onto the navigation stack
 		[self.navigationController pushViewController:statusViewController animated:YES];

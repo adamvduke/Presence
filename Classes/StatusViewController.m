@@ -21,6 +21,7 @@
 @synthesize person;
 @synthesize queue;
 @synthesize spinner;
+@synthesize dataAccessHelper;
 
 // override shouldAutorotateToInterfaceOrientation to return YES for all interface orientations
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -100,9 +101,9 @@
 }
 
 // initialize with a UITableViewStyle and Person object
-- (id)initWithStyle:(UITableViewStyle)style person:(Person *)aPerson
+- (id)initWithPerson:(Person *)aPerson dataAccessHelper:(DataAccessHelper *)accessHelper
 {
-	if (self = [super initWithStyle:style]) 
+	if (self = [super initWithStyle:UITableViewStyleGrouped]) 
 	{				
 		//this is the text displayed at the top
 		NSString *statusViewTitle = NSLocalizedString(StatusViewTitleKey, @"");
@@ -110,6 +111,8 @@
 		
 		//set the person reference on the view
 		self.person = aPerson;
+		
+		self.dataAccessHelper = accessHelper;
 		
 		//Create the NSOperationQueue for threading data loading
 		NSOperationQueue *aQueue = [[NSOperationQueue alloc]init];
