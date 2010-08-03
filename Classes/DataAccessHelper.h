@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Person.h"
 #import "Status.h"
+#import "FMDatabase.h"
 
 
 @interface DataAccessHelper : NSObject {
@@ -18,6 +19,8 @@
 	NSString *documentsDatabasePath;
 	NSString *documentsDirectoryPath;
 	NSString *schemaVersionsPath;
+	FMDatabase *database;
+	
 }
 
 @property (nonatomic, retain) NSFileManager *fileManager;
@@ -25,6 +28,7 @@
 @property (nonatomic, retain) NSString *documentsDatabasePath;
 @property (nonatomic, retain) NSString *documentsDirectoryPath;
 @property (nonatomic, retain) NSString *schemaVersionsPath;
+@property (nonatomic, retain) FMDatabase *database;
 
 // copy the default database to the file system
 - (BOOL) createAndValidateDatabase;

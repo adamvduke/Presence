@@ -7,7 +7,6 @@
 //
 
 #import "DataAccessHelper.h"
-#import "FMDatabase.h"
 
 @implementation DataAccessHelper
 
@@ -16,6 +15,7 @@
 @synthesize documentsDatabasePath;
 @synthesize documentsDirectoryPath;
 @synthesize schemaVersionsPath;
+@synthesize database;
 
 - (void) dealloc
 {
@@ -47,16 +47,17 @@
 	return self;
 }
 
-- (FMDatabase *) openApplicationDatabase
+- (void) openApplicationDatabase
 {
-	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
-	if (![database open]) {
+	if (!database) {
+		self.database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
+	}
+	if (![self.database open]) {
 		NSLog(@"Error opening database.");
-		if ([database hadError]) {
-			NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
+		if ([self.database hadError]) {
+			NSLog(@"Err %d: %@", [self.database lastErrorCode], [self.database lastErrorMessage]);
 		}
 	}
-	return database;
 }
 
 - (void) updateSchema
@@ -77,14 +78,14 @@
 		NSArray *sqlStatements = [NSArray arrayWithContentsOfFile:path];
 		
 		// open the database
-		FMDatabase *database = [self openApplicationDatabase];
+		[self openApplicationDatabase];
 		
 		// execute the statements
 		for(NSString *statement in sqlStatements)
 		{
-			[database executeUpdate:statement];
-			if ([database hadError]) {
-				NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
+			[self.database executeUpdate:statement];
+			if ([self.database hadError]) {
+				NSLog(@"Err %d: %@", [self.database lastErrorCode], [self.database lastErrorMessage]);
 			}
 		}
 		[database close];
@@ -104,12 +105,12 @@
 - (BOOL) createAndValidateDatabase
 {
 	// open the database
-	FMDatabase *database = [self openApplicationDatabase];
+	[self openApplicationDatabase];
 	
 	[self updateSchema];
 	
 	// close the database
-	[database close];
+	[self.database close];
 	return YES;
 }
 
@@ -117,40 +118,40 @@
 - (BOOL) savePerson:(Person *)person
 {
 	// open the database
-	FMDatabase *database = [self openApplicationDatabase];
+	[self openApplicationDatabase];
 	
 	// attempt to select a record based on the username
-	FMResultSet *resultSet = [database executeQuery:@"select id from Person where userId = ?", person.userId];
+	FMResultSet *resultSet = [self.database executeQuery:@"select id from Person where userId = ?", person.userId];
 	
 	// if the resultset contains a record this is an update
 	if ([resultSet next]) 
 	{
 		//execute update
-		[database beginTransaction];
-		[database executeUpdate:@"update person set screenName = ?, imageUrlString = ?, image = ? where userId = ?", 
+		[self.database beginTransaction];
+		[self.database executeUpdate:@"update person set screenName = ?, imageUrlString = ?, image = ? where userId = ?", 
 		 person.screenName,
 		 person.imageUrlString, 
 		 UIImagePNGRepresentation(person.image),
 		 person.userId];
-		[database commit];
+		[self.database commit];
 	}
 	
 	// if the resultset does not contain an update this is an insert
 	else 
 	{
 		//execute insert
-		[database beginTransaction];
-		[database executeUpdate:@"insert into Person (userId, screenName, imageUrlString, image) values (?, ?, ?, ?)", 
+		[self.database beginTransaction];
+		[self.database executeUpdate:@"insert into Person (userId, screenName, imageUrlString, image) values (?, ?, ?, ?)", 
 		 person.userId, 
 		 person.screenName, 
 		 person.imageUrlString, 
 		 UIImagePNGRepresentation(person.image)];
-		[database commit];		
+		[self.database commit];		
 	}
 	
 	// close the resultset and database
 	[resultSet close];
-	[database close];
+	[self.database close];
 	
 	return YES;
 }
@@ -158,12 +159,12 @@
 - (Person *) initPersonByUserId:(NSString *)userId
 {
 	// open the database
-	FMDatabase *database = [self openApplicationDatabase];
+	[self openApplicationDatabase];
 	
 	Person *person = [[Person alloc]init];
 	
 	// query the database for the Person's details
-	FMResultSet *resultSet = [database executeQuery:@"select * from Person where userId = ?", userId];
+	FMResultSet *resultSet = [self.database executeQuery:@"select * from Person where userId = ?", userId];
 	
 	// if the resultset contains data, construct a Person object from it
 	while ([resultSet next]) {
@@ -175,7 +176,7 @@
 	
 	//close the resultset and database
 	[resultSet close];
-	[database close];
+	[self.database close];
 	
 	// return the Person
 	return person;
