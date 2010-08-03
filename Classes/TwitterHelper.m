@@ -59,9 +59,9 @@
     return [self fetchJSONValueForURL:url];
 }
 
-+ (NSMutableArray *)fetchFollowingIdsForUsername:(NSString *)username
++ (NSMutableArray *)fetchFollowingIdsForScreenName:(NSString *)screenName
 {
-	NSString *urlString = [NSString stringWithFormat:@"http://%@/friends/ids/%@.json", [self twitterHostname], username];
+	NSString *urlString = [NSString stringWithFormat:@"http://%@/friends/ids/%@.json", [self twitterHostname], screenName];
     NSURL *url = [NSURL URLWithString:urlString];
 	NSArray *idsArray = [self fetchJSONValueForURL:url];
 	NSMutableArray *stringIdsArray = [[[NSMutableArray alloc] init]autorelease];

@@ -20,7 +20,7 @@
 @implementation ComposeStatusViewController
 
 @synthesize password;
-@synthesize username;
+@synthesize screenName;
 @synthesize spinner;
 @synthesize aNavigationItem;
 @synthesize charactersLabel;
@@ -80,7 +80,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
 	
 	// call the TwitterHelper to update the status
-	BOOL success = [TwitterHelper updateStatus:text forUsername:self.username withPassword:self.password];
+	BOOL success = [TwitterHelper updateStatus:text forUsername:self.screenName withPassword:self.password];
 		
 	[self performSelectorOnMainThread:@selector(finishedTweet:) withObject:success ? @"YES" : @"NO" waitUntilDone:NO];
 
@@ -133,11 +133,11 @@
 {
 	[super viewDidAppear:animated];
 	
-	self.username = [CredentialHelper retrieveUsername];
+	self.screenName = [CredentialHelper retrieveScreenName];
 	self.password = [CredentialHelper retrievePassword];
 	
 	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
-	if ([self.username length] == 0 || [self.password length] == 0) 
+	if ([self.screenName length] == 0 || [self.password length] == 0) 
 	{
 		self.aNavigationItem.rightBarButtonItem.enabled = NO;
 		

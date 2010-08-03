@@ -14,7 +14,7 @@
 }
 
 // Returns the value saved in the standard UserDefaults for the key "UsernameKey"
-+ (NSString *)retrieveUsername;
++ (NSString *)retrieveScreenName;
 
 // Returns the value saved in the standard UserDefaults for the key "PasswordKey"
 + (NSString *)retrievePassword;

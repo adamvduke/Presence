@@ -13,7 +13,7 @@
 @implementation CredentialHelper
 
 // Returns the value saved in the standard UserDefaults for the key "UsernameKey"
-+ (NSString *)retrieveUsername
++ (NSString *)retrieveScreenName
 {
 	NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
 	return username;

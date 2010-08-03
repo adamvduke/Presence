@@ -123,7 +123,7 @@
 	NSMutableArray *favoriteUsersArray = [FavoritesHelper retrieveFavorites];
 
 	// initialize a ListViewController with the favoriteUsersArray
-	ListViewController *favoritesListViewController = [[ListViewController alloc]initAsEditable:YES usernameArray:favoriteUsersArray dataAccessHelper:dataAccessHelper];
+	ListViewController *favoritesListViewController = [[ListViewController alloc]initAsEditable:YES userIdArray:favoriteUsersArray dataAccessHelper:dataAccessHelper];
 	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	
 	// push the followingListViewController onto the following navigation stack and release it
@@ -148,21 +148,21 @@
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
 	// get the username
-	NSString *username = [CredentialHelper retrieveUsername];
+	NSString *screenName = [CredentialHelper retrieveScreenName];
 		
 	// ex.[NSThread detachNewThreadSelector:@selector(dowork:) withTarget:self object:someData]; 
-	[NSThread detachNewThreadSelector:@selector(initFollowingIdsArrayForUsername:) toTarget:self withObject:username];
+	[NSThread detachNewThreadSelector:@selector(initFollowingIdsArrayForScreenName:) toTarget:self withObject:screenName];
 
 	return followingNavigationController;
 }
 
-- (void)initFollowingIdsArrayForUsername:(NSString *)username
+- (void)initFollowingIdsArrayForScreenName:(NSString *)screenName
 {
 	// init an autorelease pool for a detached thread
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
 	
 	// fetch the names from the data source
-	NSArray *idsArray = [TwitterHelper fetchFollowingIdsForUsername:username];
+	NSArray *idsArray = [TwitterHelper fetchFollowingIdsForScreenName:screenName];
 	
 	// perform the did finish selector on the main thread because UIKit classes
 	// can't act on a detached thread
@@ -176,7 +176,7 @@
 	[idArray retain];
 	
 	// create the list view controller to push on the followingNavigationController
-	ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO usernameArray:idArray dataAccessHelper:dataAccessHelper];
+	ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO userIdArray:idArray dataAccessHelper:dataAccessHelper];
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	
 	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];

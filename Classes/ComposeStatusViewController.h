@@ -14,7 +14,7 @@
 @interface ComposeStatusViewController : UIViewController <UITextViewDelegate>
 {
 	NSString *password;
-	NSString *username;
+	NSString *screenName;
 	
 	// activity indicator for animation during data access
 	UIActivityIndicatorView	*spinner;
@@ -36,7 +36,7 @@
 }
 
 @property (nonatomic, retain) NSString *password;
-@property (nonatomic, retain) NSString *username;
+@property (nonatomic, retain) NSString *screenName;
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
 @property (nonatomic, retain) UINavigationItem *aNavigationItem;
 @property (nonatomic, retain) UILabel *charactersLabel;

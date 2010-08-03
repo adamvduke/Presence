@@ -66,8 +66,10 @@
 	NSInteger currentVersion = [[schemaVersions objectForKey:@"CurrentVersion"] integerValue];
 	NSInteger targetVersion = [[schemaVersions objectForKey:@"TargetVersion"] integerValue];
 	
+	BOOL writeSchemaVersions = NO;
 	while (currentVersion < targetVersion) {
 		
+		writeSchemaVersions = YES;
 		NSString *fileName = [NSString stringWithFormat:@"Schema_Version_%d", currentVersion + 1];
 		
 		// get the list of statements to create the schema
@@ -92,7 +94,9 @@
 		NSNumber *updatedToVersion = [NSNumber numberWithInt:currentVersion];
 		[schemaVersions setValue:updatedToVersion forKey:@"CurrentVersion"];
 	}
-	[schemaVersions writeToFile:self.schemaVersionsPath atomically:YES];
+	if (writeSchemaVersions) {
+		[schemaVersions writeToFile:self.schemaVersionsPath atomically:YES];
+	}
 	[schemaVersions release];
 }
 
@@ -116,18 +120,18 @@
 	FMDatabase *database = [self openApplicationDatabase];
 	
 	// attempt to select a record based on the username
-	FMResultSet *resultSet = [database executeQuery:@"select id from Person where userName = ?", person.userName];
+	FMResultSet *resultSet = [database executeQuery:@"select id from Person where userId = ?", person.userId];
 	
 	// if the resultset contains a record this is an update
 	if ([resultSet next]) 
 	{
 		//execute update
 		[database beginTransaction];
-		[database executeUpdate:@"update person set displayName = ?, imageUrlString = ?, image = ? where userName = ?", 
-		 person.displayName,
+		[database executeUpdate:@"update person set screenName = ?, imageUrlString = ?, image = ? where userId = ?", 
+		 person.screenName,
 		 person.imageUrlString, 
 		 UIImagePNGRepresentation(person.image),
-		 person.userName];
+		 person.userId];
 		[database commit];
 	}
 	
@@ -136,9 +140,9 @@
 	{
 		//execute insert
 		[database beginTransaction];
-		[database executeUpdate:@"insert into Person (userName, displayName, imageUrlString, image) values (?, ?, ?, ?)", 
-		 person.userName, 
-		 person.displayName, 
+		[database executeUpdate:@"insert into Person (userId, screenName, imageUrlString, image) values (?, ?, ?, ?)", 
+		 person.userId, 
+		 person.screenName, 
 		 person.imageUrlString, 
 		 UIImagePNGRepresentation(person.image)];
 		[database commit];		
@@ -151,7 +155,7 @@
 	return YES;
 }
 
-- (Person *) initPersonByUsername:(NSString *)userName
+- (Person *) initPersonByUserId:(NSString *)userId
 {
 	// open the database
 	FMDatabase *database = [self openApplicationDatabase];
@@ -159,12 +163,12 @@
 	Person *person = [[Person alloc]init];
 	
 	// query the database for the Person's details
-	FMResultSet *resultSet = [database executeQuery:@"select * from Person where userName = ?", userName];
+	FMResultSet *resultSet = [database executeQuery:@"select * from Person where userId = ?", userId];
 	
 	// if the resultset contains data, construct a Person object from it
 	while ([resultSet next]) {
-		person.userName = userName;
-		person.displayName = [resultSet stringForColumn:@"displayName"];
+		person.userId = userId;
+		person.screenName = [resultSet stringForColumn:@"screenName"];
 		person.imageUrlString = [resultSet stringForColumn:@"imageUrlString"];
 		person.image = [UIImage imageWithData:[resultSet dataForColumn:@"image"]];
 	}

@@ -23,8 +23,8 @@
 - (void) startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
 - (void) beginLoadingTwitterData;
 - (void) synchronousLoadTwitterData;
-- (void) beginLoadPerson:(NSString *)userName;
-- (void) synchronousLoadPerson:(NSString *)userName;
+- (void) beginLoadPerson:(NSString *)userId;
+- (void) synchronousLoadPerson:(NSString *)userId;
 - (void) didFinishLoadingPerson;
 
 @end
@@ -33,7 +33,7 @@
 
 @synthesize addBarButton;
 @synthesize composeBarButton;
-@synthesize usernameArray;
+@synthesize userIdArray;
 @synthesize people;
 @synthesize imageDownloadsInProgress;
 @synthesize queue;
@@ -45,7 +45,7 @@
 	// make sure to deallocate the people array and the operation queue
 	[addBarButton release];
 	[composeBarButton release];
-	[usernameArray release];
+	[userIdArray release];
 	[people release];
 	[queue release];
 	[imageDownloadsInProgress release];
@@ -66,10 +66,10 @@
 {
 	self.imageDownloadsInProgress = [NSMutableDictionary dictionary];
 	
-	NSString *username = [CredentialHelper retrieveUsername];
+	NSString *screenName = [CredentialHelper retrieveScreenName];
 	
 	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
-	if ( [username length] == 0 ) 
+	if ( [screenName length] == 0 ) 
 	{
 		self.navigationItem.rightBarButtonItem.enabled = NO;
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
@@ -88,10 +88,10 @@
 {
 	[super viewWillAppear:animated];
 	
-	NSString *username = [CredentialHelper retrieveUsername];
+	NSString *screenName = [CredentialHelper retrieveScreenName];
 	
 	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
-	if ( [username length] == 0 ) 
+	if ( [screenName length] == 0 ) 
 	{
 		self.navigationItem.rightBarButtonItem.enabled = NO;
 	}
@@ -99,9 +99,9 @@
 		self.navigationItem.rightBarButtonItem.enabled = YES;
 	}
 
-	if([username length] > 0 && [self.usernameArray count] == 0)
+	if([screenName length] > 0 && [self.userIdArray count] == 0)
 	{
-		self.usernameArray = [TwitterHelper fetchFollowingIdsForUsername:username];
+		self.userIdArray = [TwitterHelper fetchFollowingIdsForScreenName:screenName];
 	}
 	
 	// if the array of Person objects is empty, start loading data
@@ -166,39 +166,41 @@
 // synchronously get the usernames and call beginLoadPerson for each username
 - (void)synchronousLoadTwitterData
 {
-	if (self.usernameArray != nil && [self.usernameArray count] > 0 ) {
+	if (self.userIdArray != nil && [self.userIdArray count] > 0 ) {
 		
 		// start the device's network activity indicator
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	}
 	
-	for (NSString *username in usernameArray) 
+	for (NSString *userId in userIdArray) 
 	{
-		[self beginLoadPerson:username];
+		[self beginLoadPerson:userId];
 	}
 }
 
 // start to load a person object asynchronously
-- (void) beginLoadPerson:(NSString *)userName
+- (void) beginLoadPerson:(NSString *)userId
 {
 	//create an NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userName];
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userId];
 	[self.queue addOperation:operation];
 	[operation release];
 }
 
 // synchronously fetch data, initialize a person object, and add it to the list of people
 // call the main thread when finished
--(void) synchronousLoadPerson:(NSString *)userName
+-(void) synchronousLoadPerson:(NSString *)userId
 {
-	Person *person = [dataAccessHelper initPersonByUsername:userName];
+	Person *person = [dataAccessHelper initPersonByUserId:userId];
 	if (![Person isValid:person]) {
 		
+		// TODO: what happens with the initially allocated Person object
+		// when it's reallocated below?
 		// get the user's information from Twitter
-		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
-		if (userInfo != nil && [userName length] > 0) 
+		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userId];
+		if (userInfo != nil && [userId length] > 0) 
 		{
-			person = [[Person alloc]initPersonWithInfo:userInfo userName:userName];
+			person = [[Person alloc]initPersonWithInfo:userInfo userId:userId];
 		}
 	}
 	if ([Person isValid:person]) 
@@ -295,8 +297,8 @@
 			if ([subview isKindOfClass:[UITextField class]]) {
 				UITextField *textField = (UITextField *)subview;
 				NSString *username = textField.text;
-				[self.usernameArray addObject:username];
-				[FavoritesHelper saveFavorites:usernameArray];
+				[self.userIdArray addObject:username];
+				[FavoritesHelper saveFavorites:userIdArray];
 				[self beginLoadPerson:username];
 			}
 		}
@@ -305,7 +307,7 @@
 
 #pragma mark -
 #pragma mark custom init method
--(id)initAsEditable:(BOOL)isEditable usernameArray:(NSMutableArray *)usernames dataAccessHelper:(DataAccessHelper *)accessHelper
+-(id)initAsEditable:(BOOL)isEditable userIdArray:(NSMutableArray *)userIds dataAccessHelper:(DataAccessHelper *)accessHelper
 {
 	
 	if (self == [super initWithStyle:UITableViewStylePlain]) {
@@ -318,7 +320,7 @@
 		self.dataAccessHelper = accessHelper;
 		
 		// set the list of users to load
-		self.usernameArray = usernames;
+		self.userIdArray = userIds;
 		
 		//Create the NSOperationQueue for threading data loading
 		self.queue = [[NSOperationQueue alloc]init];
@@ -354,7 +356,7 @@
 		self.navigationItem.rightBarButtonItem = self.addBarButton;
     } else {
 		self.navigationItem.rightBarButtonItem = self.composeBarButton;
-		[FavoritesHelper saveFavorites:self.usernameArray];
+		[FavoritesHelper saveFavorites:self.userIdArray];
     }
 }
 
@@ -377,13 +379,13 @@
 	NSUInteger sourceRow = sourceIndexPath.row;
 	NSUInteger destinationRow = destinationIndexPath.row;
 	Person *person = [[self.people objectAtIndex:sourceRow] retain];
-	NSString *username = [[self.usernameArray objectAtIndex:sourceRow]retain];
+	NSString *userId = [[self.userIdArray objectAtIndex:sourceRow]retain];
     [self.people removeObjectAtIndex:sourceRow];
-	[self.usernameArray removeObjectAtIndex:sourceRow];
+	[self.userIdArray removeObjectAtIndex:sourceRow];
     [self.people insertObject:person atIndex:destinationRow];
-	[self.usernameArray insertObject:username atIndex:destinationRow];
+	[self.userIdArray insertObject:userId atIndex:destinationRow];
     [person release];
-	[username release];
+	[userId release];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -391,7 +393,7 @@
 	// If row is deleted, remove it from the list.
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [people removeObjectAtIndex:indexPath.row];
-		[usernameArray removeObjectAtIndex:indexPath.row];
+		[userIdArray removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	}
 }
@@ -424,9 +426,9 @@
 	
 	// add a placeholder cell while waiting on table data
     int nodeCount = [self.people count];
-	int nameCount = [self.usernameArray count];
+	int idCount = [self.userIdArray count];
 	
-	if (nodeCount == 0 && indexPath.row == 0 && nameCount > 0)
+	if (nodeCount == 0 && indexPath.row == 0 && idCount > 0)
 	{
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PlaceHolderIdentifier];
         if (cell == nil)
@@ -451,7 +453,7 @@
 		// Set up the cell...
 		Person *person = [self.people objectAtIndex:indexPath.row];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.textLabel.text = person.displayName;
+		cell.textLabel.text = person.screenName;
 		
 		// TODO: add field to person for the detail text label
 		//cell.detailTextLabel.text = appRecord.artist;
@@ -511,7 +513,7 @@
 // this method is used in case the user scrolled into a set of cells that don't have their app icons yet
 - (void)loadImagesForOnscreenRows
 {
-    if ([self.usernameArray count] > 0)
+    if ([self.userIdArray count] > 0)
     {
         NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
         for (NSIndexPath *indexPath in visiblePaths)

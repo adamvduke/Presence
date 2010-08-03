@@ -33,8 +33,14 @@
 - (BOOL) savePerson:(Person *)person;
 
 // retrieve a Person's details from the database and 
-// construct a person object from the results
-- (Person *)initPersonByUsername:(NSString *)userName;
+// construct a person object from the results by their
+// numeric userId
+- (Person *)initPersonByUserId:(NSString *)userId;
+
+// retrieve a Person's details from the database and 
+// construct a person object from the results by their
+// numeric userId
+//- (Person *)initPersonByUsername:(NSString *)userName;
 
 // save a status record to the database
 + (BOOL) saveStatus:(Status *)status;

@@ -53,7 +53,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
 	
 	// get the user's timeline
-	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:self.person.userName];
+	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:self.person.userId];
 	
 	// parse the individual statuses out of the timeline
 	NSArray *statusArray = [self parseStatusUpdatesFromTimeline:userTimeline];
@@ -204,7 +204,7 @@
 		}
 		
 		// set only the text and image properties on the cell
-		cell.textLabel.text = self.person.displayName;
+		cell.textLabel.text = self.person.screenName;
 		if (self.person.image) 
 		{
 			cell.imageView.image = self.person.image;
