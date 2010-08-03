@@ -50,6 +50,7 @@
 	[defaults setObject:usernameField.text forKey:UsernameKey];
 	[defaults setObject:passwordField.text forKey:PasswordKey];
 	[defaults setBool:liveDataSwitch.isOn forKey:LiveDataKey];
+	[defaults synchronize];
 	
 	// display an alert indicating the values were saved
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(SuccessTitleKey, @"") 
