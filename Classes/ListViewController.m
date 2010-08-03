@@ -192,7 +192,7 @@
 -(void) synchronousLoadPerson:(NSString *)userName
 {
 	Person *person = [dataAccessHelper initPersonByUsername:userName];
-	if (!person) {
+	if (![Person isValid:person]) {
 		
 		// get the user's information from Twitter
 		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userName];
@@ -207,9 +207,7 @@
 		[dataAccessHelper savePerson:person];
 	}
 
-	if (person) {
-		[person release];
-	}
+	[person release];
 	
 	// call the main thread to notify that the person has finished loading
 	[self performSelectorOnMainThread:@selector(didFinishLoadingPerson) withObject:nil waitUntilDone:NO];

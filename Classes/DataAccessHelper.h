@@ -16,11 +16,15 @@
 	NSFileManager *fileManager;
 	NSString *databaseName;
 	NSString *documentsDatabasePath;
+	NSString *documentsDirectoryPath;
+	NSString *schemaVersionsPath;
 }
 
 @property (nonatomic, retain) NSFileManager *fileManager;
 @property (nonatomic, retain) NSString *databaseName;
 @property (nonatomic, retain) NSString *documentsDatabasePath;
+@property (nonatomic, retain) NSString *documentsDirectoryPath;
+@property (nonatomic, retain) NSString *schemaVersionsPath;
 
 // copy the default database to the file system
 - (BOOL) createAndValidateDatabase;
