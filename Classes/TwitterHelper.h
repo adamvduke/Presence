@@ -8,7 +8,6 @@
 // Read about Twitter's API at http://apiwiki.twitter.com/
 // Read about json-framework at http://code.google.com/p/json-framework
 // Read more about Rate Limiting at http://apiwiki.twitter.com/Rate-limiting
-#define USE_TEST_SERVER 0
 
 @interface TwitterHelper : NSObject 
 {
