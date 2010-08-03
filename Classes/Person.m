@@ -25,6 +25,11 @@
 		NSString *theImageUrlString = [userInfo valueForKey:@"profile_image_url"];
 		NSString *theScreenName = [userInfo valueForKey:@"screen_name"];
 		
+		// if this is the case where the userId is nil
+		// get the id out of the userInfo dictionary
+		if (!aUserId) {
+			aUserId = [userInfo valueForKey:@"id"];
+		}
 		self.userId = aUserId;
 		self.screenName = theScreenName;
 		self.imageUrlString = theImageUrlString;
