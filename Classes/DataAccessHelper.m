@@ -182,6 +182,21 @@
 	return person;
 }
 
+- (NSString *)fetchUserIdByScreenName:(NSString *)screenName
+{
+	// open the database
+	[self openApplicationDatabase];
+	FMResultSet *resultSet = [self.database executeQuery:@"select userId from Person where screenName = ?", screenName];
+	NSString *userId = nil;
+	while ([resultSet next]) {
+		userId = [resultSet stringForColumn:@"userId"];
+	}
+	[resultSet close];
+	[self.database close];
+	
+	return userId;
+}
+
 + (BOOL) saveStatus:(Status *)status
 {
 	return YES;

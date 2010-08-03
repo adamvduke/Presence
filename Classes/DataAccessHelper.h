@@ -41,6 +41,9 @@
 // numeric userId
 - (Person *)initPersonByUserId:(NSString *)userId;
 
+// retrieve a UserId from the database based on the user's screenName
+- (NSString *)fetchUserIdByScreenName:(NSString *)screenName;
+
 // retrieve a Person's details from the database and 
 // construct a person object from the results by their
 // numeric userId
