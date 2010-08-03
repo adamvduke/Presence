@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Person.h"
 #import "Status.h"
-#import "FMDatabase.h"
 
 
 @interface DataAccessHelper : NSObject {
@@ -19,8 +18,6 @@
 	NSString *documentsDatabasePath;
 	NSString *documentsDirectoryPath;
 	NSString *schemaVersionsPath;
-	FMDatabase *database;
-	
 }
 
 @property (nonatomic, retain) NSFileManager *fileManager;
@@ -28,7 +25,6 @@
 @property (nonatomic, retain) NSString *documentsDatabasePath;
 @property (nonatomic, retain) NSString *documentsDirectoryPath;
 @property (nonatomic, retain) NSString *schemaVersionsPath;
-@property (nonatomic, retain) FMDatabase *database;
 
 // copy the default database to the file system
 - (BOOL) createAndValidateDatabase;
@@ -40,9 +36,6 @@
 // construct a person object from the results by their
 // numeric userId
 - (Person *)initPersonByUserId:(NSString *)userId;
-
-// retrieve a UserId from the database based on the user's screenName
-- (NSString *)fetchUserIdByScreenName:(NSString *)screenName;
 
 // retrieve a Person's details from the database and 
 // construct a person object from the results by their
