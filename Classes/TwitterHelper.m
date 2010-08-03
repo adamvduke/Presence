@@ -68,7 +68,7 @@
 	
 	// turn the id's into strings
 	for (NSDecimalNumber *decimalID in idsArray){
-		NSString *anID = [NSString stringWithFormat:@"%@", decimalID];
+		NSString *anID = [decimalID stringValue];
 		[stringIdsArray addObject:anID];
 	}
     return stringIdsArray;
