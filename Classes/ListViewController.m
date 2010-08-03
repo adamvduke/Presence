@@ -13,6 +13,7 @@
 #import "PresenceContants.h"
 #import "StatusViewController.h"
 #import "TwitterHelper.h"
+#import "ValidationHelper.h"
 
 #define kCustomRowCount 7
 #define kCustomRowHeight 48
@@ -198,7 +199,7 @@
 		// when it's reallocated below?
 		// get the user's information from Twitter
 		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userId];
-		if (userInfo != nil && [userId length] > 0) 
+		if (!IsEmpty(userInfo) && !IsEmpty(userId)) 
 		{
 			person = [[Person alloc]initPersonWithInfo:userInfo userId:userId];
 		}
@@ -356,7 +357,6 @@
 		self.navigationItem.rightBarButtonItem = self.addBarButton;
     } else {
 		self.navigationItem.rightBarButtonItem = self.composeBarButton;
-		[FavoritesHelper saveFavorites:self.userIdArray];
     }
 }
 
@@ -392,8 +392,9 @@
     
 	// If row is deleted, remove it from the list.
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [people removeObjectAtIndex:indexPath.row];
-		[userIdArray removeObjectAtIndex:indexPath.row];
+        [self.people removeObjectAtIndex:indexPath.row];
+		[self.userIdArray removeObjectAtIndex:indexPath.row];
+		[FavoritesHelper saveFavorites:self.userIdArray];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	}
 }
