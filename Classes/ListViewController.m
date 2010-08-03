@@ -201,7 +201,7 @@
 		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userId];
 		if (!IsEmpty(userInfo) && !IsEmpty(userId)) 
 		{
-			person = [[Person alloc]initPersonWithInfo:userInfo userId:userId];
+			person = [[Person alloc]initPersonWithInfo:userInfo];
 		}
 	}
 	if ([Person isValid:person]) 

@@ -34,8 +34,8 @@
 @property (nonatomic, retain) UIImage *image;
 
 // Returns a Person object initialized with an NSDictionary of information retrieved 
-// using the TwitterHelper, for a particular user name
-- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userId:(NSString *)aUserId;
+// using the TwitterHelper
+- (Person *) initPersonWithInfo:(NSDictionary *)userInfo;
 
 // Returns a boolean value indicating that the a person object has all of the necessary data
 + (BOOL)isValid:(Person *)person;

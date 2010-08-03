@@ -17,22 +17,15 @@
 
 // Returns a Person object initialized with an NSDictionary of information retrieved 
 // using the TwitterHelper, for a particular user name
-- (Person *) initPersonWithInfo:(NSDictionary *)userInfo userId:(NSString *)aUserId 
+- (Person *) initPersonWithInfo:(NSDictionary *)userInfo 
 {	
 	if (self == [super init]) 
 	{
-		//get the values out of the userInfo dictionary for the url string and display name
-		NSString *theImageUrlString = [userInfo valueForKey:@"profile_image_url"];
-		NSString *theScreenName = [userInfo valueForKey:@"screen_name"];
-		
-		// if this is the case where the userId is nil
-		// get the id out of the userInfo dictionary
-		if (!aUserId) {
-			aUserId = [userInfo valueForKey:@"id"];
-		}
-		self.userId = aUserId;
-		self.screenName = theScreenName;
-		self.imageUrlString = theImageUrlString;
+		//get the values out of the userInfo dictionary
+		NSNumber *rawId = [userInfo valueForKey:@"id"];
+		self.userId = [NSString stringWithFormat:@"%d",[rawId integerValue]];
+		self.imageUrlString = [userInfo valueForKey:@"profile_image_url"];
+		self.screenName = [userInfo valueForKey:@"screen_name"];		
 	}
 	return self;
 }
