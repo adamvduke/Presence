@@ -38,14 +38,23 @@
 	return self;
 }
 
+- (FMDatabase *) openApplicationDatabase
+{
+	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
+	if (![database open]) {
+		NSLog(@"Error opening database.");
+		if ([database hadError]) {
+			NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
+		}
+	}
+	return database;
+}
+
 // create the default database and save it in the Documents directory
 - (BOOL) createAndValidateDatabase
 {
 	// open the database
-	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
-	if (![database open]) {
-        NSLog(@"Could not open db.");
-    }
+	FMDatabase *database = [self openApplicationDatabase];
 	
 	// get the list of statements to create the schema
 	NSString *path = [[NSBundle mainBundle]pathForResource:@"Schema_Version_1" ofType:@"plist"];
@@ -69,14 +78,7 @@
 - (BOOL) savePerson:(Person *)person
 {
 	// open the database
-	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
-	
-	// ensure the database opened successfully
-	// if not, log the error and return NO
-	if (![database open]) {
-		NSLog(@"Error opening database.");
-		return NO;
-	}
+	FMDatabase *database = [self openApplicationDatabase];
 	
 	// attempt to select a record based on the username
 	FMResultSet *resultSet = [database executeQuery:@"select id from Person where userName = ?", person.userName];
@@ -117,14 +119,7 @@
 - (Person *) initPersonByUsername:(NSString *)userName
 {
 	// open the database
-	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
-	
-	// ensure the database opened successfully
-	// if not, log the error and return nil
-	if (![database open]) {
-		NSLog(@"Error opening database.");
-		return nil;
-	}
+	FMDatabase *database = [self openApplicationDatabase];
 	
 	Person *person = nil;
 	
