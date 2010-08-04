@@ -181,6 +181,18 @@
 	return person;
 }
 
+- (UIImage *)initImageForUserId:(NSString *)userId
+{
+	FMDatabase *database = [self openApplicationDatabase];
+	
+	FMResultSet *resultSet = [database executeQuery:@"select image from Person where userId = ?", userId];
+	
+	UIImage *returnImage = nil;
+	while ([resultSet next]) {
+		returnImage = [[UIImage alloc]initWithData:[resultSet dataForColumn:@"image"]];
+	}
+	return returnImage;
+}
 - (NSString *)fetchUserIdByScreenName:(NSString *)screenName
 {
 	// open the database

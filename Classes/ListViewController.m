@@ -456,18 +456,30 @@
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.textLabel.text = person.screenName;
 		
-		// TODO: add field to person for the detail text label
-		//cell.detailTextLabel.text = appRecord.artist;
-		
 		// Only load cached images; defer new downloads until scrolling ends
 		if (!person.image)
 		{
-			if (self.tableView.dragging == NO && self.tableView.decelerating == NO)
+			// first check the database
+			UIImage *anImage = [dataAccessHelper initImageForUserId:person.userId];
+			if (!anImage) 
 			{
-				[self startIconDownload:person forIndexPath:indexPath];
+				if (self.tableView.dragging == NO && self.tableView.decelerating == NO)
+				{
+					// if there was no image in the database
+					// and the tableview is not dragging or decelerating
+					// start to download the image
+					[self startIconDownload:person forIndexPath:indexPath];
+				}
+				
+				// if a download is deferred or in progress, return a placeholder image
+				cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];  
 			}
-			// if a download is deferred or in progress, return a placeholder image
-			cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];                
+			else 
+			{
+				person.image = anImage;
+				[anImage release];
+				cell.imageView.image = person.image;
+			}
 		}
 		else
 		{

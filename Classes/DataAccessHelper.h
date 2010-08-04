@@ -37,6 +37,9 @@
 // numeric userId
 - (Person *)initPersonByUserId:(NSString *)userId;
 
+// retrieve a Person's image from the database
+- (UIImage *)initImageForUserId:(NSString *)userId;
+
 // save a status record to the database
 + (BOOL) saveStatus:(Status *)status;
 @end
