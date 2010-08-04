@@ -12,12 +12,14 @@
 @interface Status : NSObject {
 
 	NSString *text;
-	NSDate *createdDate;
+	NSString *createdDate;
 	NSString *createrId;
 }
 
 @property (nonatomic, retain) NSString *text;
-@property (nonatomic, retain) NSDate *createdDate;
+@property (nonatomic, retain) NSString *createdDate;
 @property (nonatomic, retain) NSString *createrId;
+
+- (Status *)initWithTimelineEntry:(NSDictionary *)timelineEntry;
 
 @end

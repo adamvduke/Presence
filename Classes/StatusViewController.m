@@ -70,19 +70,16 @@
 
 -(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline
 {		
-	NSMutableArray *returnArray = [[[NSMutableArray alloc]init]autorelease];
+	NSMutableArray *statusUpdates = [[[NSMutableArray alloc]init]autorelease];
 	for (NSDictionary *timelineEntry in userTimeline) 
 	{
 		if ([timelineEntry isKindOfClass:[NSDictionary class]]) {
-			NSString *value = [timelineEntry objectForKey:@"text"];
-			if (value) {
-				NSString *formatString = [[NSString alloc]initWithString:[timelineEntry objectForKey:@"text"]];
-				[returnArray addObject:formatString];
-				[formatString release];
-			}
+			
+			Status *status = [[Status alloc] initWithTimelineEntry:timelineEntry];
+			[statusUpdates addObject:status];
 		}
 	}
-	return returnArray;
+	return statusUpdates;
 }
 
 // begin loading the updates asynchronously
@@ -221,13 +218,15 @@
 		// attempt to deque a reuseable cel with the TitleCellReuseIdentifier, if not available create one
 		cell = [tableView dequeueReusableCellWithIdentifier:StatusCellReuseIdentifier];
 		if (cell == nil) {
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:StatusCellReuseIdentifier] autorelease];
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:StatusCellReuseIdentifier] autorelease];
 		}
 		
 		// set the numberOfLines, font, and text properties on the cell's text label
 		cell.textLabel.numberOfLines = 0;
 		cell.textLabel.font = [UIFont systemFontOfSize:14];
-		cell.textLabel.text = [self.person.statusUpdates objectAtIndex:indexPath.row];
+		Status *status = [self.person.statusUpdates objectAtIndex:indexPath.row];
+		cell.textLabel.text = status.text;
+		//cell.detailTextLabel.text = status.createdDate;
 	}
 	
 	// set the selection style to None, these cells are not selectable
@@ -248,7 +247,8 @@
 	}
 	
 	// if the index path represents a "Status cell" calculate the height based on the text
-	NSString *someText = [person.statusUpdates objectAtIndex:indexPath.row];
+	Status *status = [person.statusUpdates objectAtIndex:indexPath.row];
+	NSString *someText = status.text;
 	UIFont *font = [UIFont systemFontOfSize: 14 ]; 
 	CGSize withinSize = CGSizeMake( 350, 150);
 	CGSize size = [someText sizeWithFont:font constrainedToSize:withinSize lineBreakMode:UILineBreakModeWordWrap];
