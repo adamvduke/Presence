@@ -194,9 +194,9 @@
 {
 	Person *person = [dataAccessHelper initPersonByUserId:userId];
 	if (![Person isValid:person]) {
+		[person release];
+		person = nil;
 		
-		// TODO: what happens with the initially allocated Person object
-		// when it's reallocated below?
 		// get the user's information from Twitter
 		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userId];
 		if (!IsEmpty(userInfo) && !IsEmpty(userId)) 
