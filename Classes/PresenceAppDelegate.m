@@ -160,9 +160,9 @@
 {
 	// init an autorelease pool for a detached thread
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-	
-	// fetch the names from the data source
-	NSArray *idsArray = [TwitterHelper fetchFollowingIdsForScreenName:screenName];
+		
+	// fetch the names from twitter
+	NSMutableArray *idsArray = [TwitterHelper fetchFollowingIdsForScreenName:screenName];
 	
 	// perform the did finish selector on the main thread because UIKit classes
 	// can't act on a detached thread
