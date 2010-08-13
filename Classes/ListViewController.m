@@ -449,7 +449,7 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
 	// Leave cells empty if there's no data yet
-	if (nodeCount > 0)
+	if (nodeCount > 0 && indexPath.row < nodeCount)
 	{
 		// Set up the cell...
 		Person *person = [self.people objectAtIndex:indexPath.row];
