@@ -193,6 +193,7 @@
 	}
 	return returnImage;
 }
+
 - (NSString *)fetchUserIdByScreenName:(NSString *)screenName
 {
 	// open the database
