@@ -35,6 +35,11 @@
 	return (person.imageUrlString != nil && [person.imageUrlString length] > 0) && (person.screenName != nil && [person.screenName length] > 0);
 }
 
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"UserID : %@, ScreenName : %@", userId, screenName];
+}
+
 - (void)dealloc
 {
 	[userId release];
