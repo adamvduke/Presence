@@ -77,6 +77,7 @@
 			
 			Status *status = [[Status alloc] initWithTimelineEntry:timelineEntry];
 			[statusUpdates addObject:status];
+			[status release];
 		}
 	}
 	return statusUpdates;

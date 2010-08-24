@@ -188,7 +188,7 @@
 	FMResultSet *resultSet = [database executeQuery:@"select image from Person where userId = ?", userId];
 	
 	UIImage *returnImage = nil;
-	while ([resultSet next]) {
+	if([resultSet next]) {
 		returnImage = [[UIImage alloc]initWithData:[resultSet dataForColumn:@"image"]];
 	}
 	return returnImage;
