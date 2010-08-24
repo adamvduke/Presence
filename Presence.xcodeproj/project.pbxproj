@@ -21,14 +21,11 @@
 		563C7BFC1206138A002A9F1E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563C7BFB1206138A002A9F1E /* libsqlite3.dylib */; };
 		563C7C51120624BE002A9F1E /* DataAccessHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C7C50120624BE002A9F1E /* DataAccessHelper.m */; };
 		563C7C54120625E3002A9F1E /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C7C53120625E3002A9F1E /* Status.m */; };
-		563C7CE6120632C3002A9F1E /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C7CE0120632C3002A9F1E /* FMDatabase.m */; };
-		563C7CE7120632C3002A9F1E /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C7CE2120632C3002A9F1E /* FMDatabaseAdditions.m */; };
-		563C7CE8120632C3002A9F1E /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C7CE4120632C3002A9F1E /* FMResultSet.m */; };
-		563C7CE9120632C3002A9F1E /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 563C7CE5120632C3002A9F1E /* LICENSE.txt */; };
 		5640027311B8C13100355A74 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5640027211B8C13100355A74 /* main.m */; };
 		564EF07112076FAD00ED4523 /* Schema_Version_1.plist in Resources */ = {isa = PBXBuildFile; fileRef = 564EF07012076FAD00ED4523 /* Schema_Version_1.plist */; };
 		566ADEE811B8BFBF00931CFD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* Person.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
+		5670FACE122373AC004E2BC2 /* libiOSfmdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5670FACD122373A2004E2BC2 /* libiOSfmdb.a */; };
 		56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D21611CEEC4400BF541D /* FavoritesHelper.m */; };
 		56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D2FB11CEFF4400BF541D /* CredentialHelper.m */; };
 		56AA6D911207D0D3001A31E9 /* SchemaVersions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56AA6D901207D0D3001A31E9 /* SchemaVersions.plist */; };
@@ -49,6 +46,30 @@
 		56C8E7C611D023A600B21D38 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56C8E7C311D023A600B21D38 /* MainWindow.xib */; };
 		56C8E7C711D023A600B21D38 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56C8E7C411D023A600B21D38 /* SettingsViewController.xib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5670FACA122373A2004E2BC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76FA10486AA7600D96B5E;
+			remoteInfo = fmdb;
+		};
+		5670FACC122373A2004E2BC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5670FA98122371D1004E2BC2;
+			remoteInfo = iOSfmdb;
+		};
+		5670FADA122373FF004E2BC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5670FA97122371D1004E2BC2;
+			remoteInfo = iOSfmdb;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -76,19 +97,13 @@
 		563C7C50120624BE002A9F1E /* DataAccessHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAccessHelper.m; sourceTree = "<group>"; };
 		563C7C52120625E3002A9F1E /* Status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Status.h; sourceTree = "<group>"; };
 		563C7C53120625E3002A9F1E /* Status.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Status.m; sourceTree = "<group>"; };
-		563C7CDF120632C3002A9F1E /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = FMDB/FMDatabase.h; sourceTree = "<group>"; };
-		563C7CE0120632C3002A9F1E /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = FMDB/FMDatabase.m; sourceTree = "<group>"; };
-		563C7CE1120632C3002A9F1E /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = FMDB/FMDatabaseAdditions.h; sourceTree = "<group>"; };
-		563C7CE2120632C3002A9F1E /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = FMDB/FMDatabaseAdditions.m; sourceTree = "<group>"; };
-		563C7CE3120632C3002A9F1E /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = FMDB/FMResultSet.h; sourceTree = "<group>"; };
-		563C7CE4120632C3002A9F1E /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = FMDB/FMResultSet.m; sourceTree = "<group>"; };
-		563C7CE5120632C3002A9F1E /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE.txt; path = FMDB/LICENSE.txt; sourceTree = "<group>"; };
 		5640027211B8C13100355A74 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/main.m; sourceTree = "<group>"; };
 		564EF07012076FAD00ED4523 /* Schema_Version_1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Schema_Version_1.plist; path = Resources/Database/Schema_Version_1.plist; sourceTree = "<group>"; };
 		566ADEE411B8BFBF00931CFD /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		566ADEE511B8BFBF00931CFD /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		566ADEE611B8BFBF00931CFD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		566ADEE711B8BFBF00931CFD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = ../../fmdb/fmdb.xcodeproj; sourceTree = SOURCE_ROOT; };
 		56A8D21511CEEC4400BF541D /* FavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesHelper.h; sourceTree = "<group>"; };
 		56A8D21611CEEC4400BF541D /* FavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesHelper.m; sourceTree = "<group>"; };
 		56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialHelper.h; sourceTree = "<group>"; };
@@ -124,6 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5670FACE122373AC004E2BC2 /* libiOSfmdb.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -159,7 +175,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				563C7C411206238F002A9F1E /* FMDB */,
+				5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */,
 				56C5613310B2481E0014D33C /* JSON */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -267,18 +283,13 @@
 			name = Database;
 			sourceTree = "<group>";
 		};
-		563C7C411206238F002A9F1E /* FMDB */ = {
+		5670FAC6122373A2004E2BC2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				563C7CDF120632C3002A9F1E /* FMDatabase.h */,
-				563C7CE0120632C3002A9F1E /* FMDatabase.m */,
-				563C7CE1120632C3002A9F1E /* FMDatabaseAdditions.h */,
-				563C7CE2120632C3002A9F1E /* FMDatabaseAdditions.m */,
-				563C7CE3120632C3002A9F1E /* FMResultSet.h */,
-				563C7CE4120632C3002A9F1E /* FMResultSet.m */,
-				563C7CE5120632C3002A9F1E /* LICENSE.txt */,
+				5670FACB122373A2004E2BC2 /* fmdb */,
+				5670FACD122373A2004E2BC2 /* libiOSfmdb.a */,
 			);
-			name = FMDB;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		56C5613310B2481E0014D33C /* JSON */ = {
@@ -333,6 +344,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				5670FADB122373FF004E2BC2 /* PBXTargetDependency */,
 			);
 			name = Presence;
 			productName = Presence;
@@ -360,12 +372,35 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5670FAC6122373A2004E2BC2 /* Products */;
+					ProjectRef = 5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* Presence */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5670FACB122373A2004E2BC2 /* fmdb */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = fmdb;
+			remoteRef = 5670FACA122373A2004E2BC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5670FACD122373A2004E2BC2 /* libiOSfmdb.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libiOSfmdb.a;
+			remoteRef = 5670FACC122373A2004E2BC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1D60588D0D05DD3D006BFB54 /* Resources */ = {
@@ -384,7 +419,6 @@
 				56C8E7C511D023A600B21D38 /* ComposeStatusViewController.xib in Resources */,
 				56C8E7C611D023A600B21D38 /* MainWindow.xib in Resources */,
 				56C8E7C711D023A600B21D38 /* SettingsViewController.xib in Resources */,
-				563C7CE9120632C3002A9F1E /* LICENSE.txt in Resources */,
 				564EF07112076FAD00ED4523 /* Schema_Version_1.plist in Resources */,
 				56AA6D911207D0D3001A31E9 /* SchemaVersions.plist in Resources */,
 				56AA6D931207D18C001A31E9 /* Schema_Version_2.plist in Resources */,
@@ -415,13 +449,18 @@
 				56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */,
 				563C7C51120624BE002A9F1E /* DataAccessHelper.m in Sources */,
 				563C7C54120625E3002A9F1E /* Status.m in Sources */,
-				563C7CE6120632C3002A9F1E /* FMDatabase.m in Sources */,
-				563C7CE7120632C3002A9F1E /* FMDatabaseAdditions.m in Sources */,
-				563C7CE8120632C3002A9F1E /* FMResultSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5670FADB122373FF004E2BC2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = iOSfmdb;
+			targetProxy = 5670FADA122373FF004E2BC2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		561E9B6011BAE59F005A6BC8 /* Localizable.strings */ = {
@@ -445,6 +484,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Presence_Prefix.pch;
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../../fmdb/build/${BUILD_STYLE}-${PLATFORM_NAME}/usr/local/include";
 				INFOPLIST_FILE = "Presence-Info.plist";
 				PRODUCT_NAME = Presence;
 			};
@@ -457,6 +497,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Presence_Prefix.pch;
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../../fmdb/build/${BUILD_STYLE}-${PLATFORM_NAME}/usr/local/include";
 				INFOPLIST_FILE = "Presence-Info.plist";
 				PRODUCT_NAME = Presence;
 			};
