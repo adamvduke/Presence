@@ -3,7 +3,7 @@
 //  Presence
 //
 //  Created by Adam Duke on 5/31/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 Adam Duke. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
