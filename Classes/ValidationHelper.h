@@ -8,7 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-
+/* A static inline method to check if an id type contains any content
+   This is valid for objects that respond to the selectors length and count
+   The inline allows the compiler to actually put the method call in place
+   in the code where it is called from during compile. This should make for some
+   performance improvement, but can lead to binaries that 
+   are larger than they need to be
+ */
 static inline BOOL IsEmpty(id thing)
 {
 	return thing == nil

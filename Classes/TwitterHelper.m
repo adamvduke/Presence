@@ -8,6 +8,10 @@
 
 @implementation TwitterHelper
 
+/* Convenience method to determine if the application should be going after
+   live data, or if it should use demo data. The value for the "LiveDataKey"
+   is a boolean value set in NSUserDefaults from the settings screen
+ */
 + (NSString *)twitterHostname
 {
 	BOOL useLiveData = [[NSUserDefaults standardUserDefaults] boolForKey:LiveDataKey];
@@ -21,6 +25,9 @@
 	}
 }
 
+/* Downloads the actual JSON string from the give URL and uses the JSON framework's additions to NSString
+   to convert the string to the appropriate type
+ */
 + (id)fetchJSONValueForURL:(NSURL *)url
 {
     NSString *jsonString = [[NSString alloc] initWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
@@ -31,6 +38,9 @@
     return jsonValue;
 }
 
+/* Constructs the appropriate NSURL object for the correct hostname before calling fetchJSONValueForURL
+   The object returned is an NSDictionary of user information for the given user
+ */
 + (NSDictionary *)fetchInfoForUsername:(NSString *)username
 {
     NSString *urlString = [NSString stringWithFormat:@"http://%@/users/show/%@.json", [self twitterHostname], username];
@@ -38,6 +48,10 @@
     return [self fetchJSONValueForURL:url];
 }
 
+/* Constructs the appropriate NSURL object for the correct hostname before calling fetchJSONValueForURL
+   The object returned is an NSArray of NSDictionary objects where each dictionary is a collection of key/value
+   pairs relating to a particular status update for the give user
+ */
 + (NSArray *)fetchTimelineForUsername:(NSString *)username
 {
     NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/user_timeline/%@.json", [self twitterHostname], username];
@@ -45,6 +59,11 @@
     return [self fetchJSONValueForURL:url];
 }
 
+/* Constructs the appropriate NSURL object for the correct hostname before calling fetchJSONValueForURL
+   The object returned is an NSArray of NSDictionaries where each dictionary is a collection of key/value
+   pairs of information about another user that the give user "follows" on Twitter. The dictionaries are 
+   of the same format as in the fetchInfoForUsername method
+ */
 + (NSArray *)fetchFriendsForUsername:(NSString *)username
 {
     NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/friends/%@.json", [self twitterHostname], username];
@@ -52,6 +71,11 @@
     return [self fetchJSONValueForURL:url];
 }
 
+/* Constructs the appropriate NSURL object for the correct hostname before calling fetchJSONValueForURL
+   The object returned is an NSArray of NSDictionary objects where each dictionary is a collection of key/value
+   pairs relating to a particular status update. The updates are from the public timeline, so whatever is happening
+   on Twitter at the moment.
+ */
 + (NSArray *)fetchPublicTimeline
 {
     NSString *urlString = [NSString stringWithFormat:@"http://%@/statuses/public_timeline.json", [self twitterHostname]];
@@ -59,6 +83,10 @@
     return [self fetchJSONValueForURL:url];
 }
 
+/* Constructs the appropriate NSURL object for the correct hostname before calling fetchJSONValueForURL
+   The object returned is an NSArray of user id's that the give user "follows" on Twitter. The id's are parsed
+   by the JSON framework into NSDecimalNumber objects so they are converted to NSString objects before being returned
+ */
 + (NSMutableArray *)fetchFollowingIdsForScreenName:(NSString *)screenName
 {
 	NSString *urlString = [NSString stringWithFormat:@"http://%@/friends/ids/%@.json", [self twitterHostname], screenName];
@@ -74,6 +102,10 @@
     return stringIdsArray;
 }
 
+/* Constructs the appropriate NSURL object for the correct hostname before calling fetchJSONValueForURL
+   The object returned is an NSArray of NSDictionary objects where each dictionary is a collection of key/value
+   pairs relating to a particular status update and the text of the updates contains the text in the given query
+ */
 + (NSDictionary *)fetchSearchResultsForQuery:(NSString *)query
 {
     // Sanitize the query string.
@@ -84,6 +116,10 @@
     return [self fetchJSONValueForURL:url];
 }
 
+/* Posts a status update to twitter using the given name and password. The return value indicates wether the
+   update was successful or not. This will not work after twitter migrates to using OAUTH exclusively and discontinues
+   support for basic authorization
+ */
 + (BOOL)updateStatus:(NSString *)status forUsername:(NSString *)username withPassword:(NSString *)password
 {
     if (!username || !password) 
@@ -106,7 +142,8 @@
     
     NSURLResponse *response;
     NSError *error;
-	// We should probably be parsing the data returned by this call, for now just check the error.
+	
+	// This should probably be parsing the data returned by this call, for now just check the error.
     [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     return (error == nil);
 }

@@ -17,6 +17,8 @@
 @synthesize documentsDirectoryPath;
 @synthesize schemaVersionsPath;
 
+/* Release memory that is being held in any instance variables during deconstruction
+ */
 - (void) dealloc
 {
 	[super dealloc];
@@ -26,6 +28,8 @@
 	[documentsDirectoryPath release];
 }
 
+/* Override the default initalizer to set up the instance variables needed for database operations
+ */
 -(DataAccessHelper *)init
 {
 	if (self == [super init]) {
@@ -47,6 +51,8 @@
 	return self;
 }
 
+/* Convenience method to get a reference to an open FMDatabase object and log any associated erros
+ */
 - (FMDatabase *) openApplicationDatabase
 {
 	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
@@ -59,6 +65,9 @@
 	return database;
 }
 
+/* Determines the current state of the database schema and applies the neccesary updates 
+   to match the currently expected version by the application
+ */
 - (void) updateSchema
 {
 	NSMutableDictionary *schemaVersions = [NSMutableDictionary dictionaryWithContentsOfFile:self.schemaVersionsPath];
@@ -155,6 +164,10 @@
 	return YES;
 }
 
+/*
+ Attempt to initialize and populate a Person object using data in the database for the given 
+ userId
+ */
 - (Person *) initPersonByUserId:(NSString *)userId
 {
 	// open the database
@@ -181,6 +194,8 @@
 	return person;
 }
 
+/* Attempt to retrieve an image from the database for the given userId. The image data is stored in a blob type
+ */
 - (UIImage *)initImageForUserId:(NSString *)userId
 {
 	FMDatabase *database = [self openApplicationDatabase];
@@ -194,6 +209,8 @@
 	return returnImage;
 }
 
+/* Attempt to retrieve the userId for a user given that user's screenName
+ */
 - (NSString *)fetchUserIdByScreenName:(NSString *)screenName
 {
 	// open the database

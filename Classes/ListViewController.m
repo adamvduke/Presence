@@ -193,7 +193,7 @@
 -(void) synchronousLoadPerson:(NSString *)userId
 {
 	Person *person = [dataAccessHelper initPersonByUserId:userId];
-	if (![Person isValid:person]) {
+	if (![person isValid]) {
 		[person release];
 		person = nil;
 		
@@ -204,7 +204,7 @@
 			person = [[Person alloc]initPersonWithInfo:userInfo];
 		}
 	}
-	if ([Person isValid:person]) 
+	if ([person isValid]) 
 	{
 		[self.people addObject:person];
 		[dataAccessHelper savePerson:person];

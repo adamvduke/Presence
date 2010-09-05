@@ -1,10 +1,11 @@
 /*
-     File: IconDownloader.m 
- Abstract: Helper object for managing the downloading of a particular app's icon.
- As a delegate "NSURLConnectionDelegate" is downloads the app icon in the background if it does not
- yet exist and works in conjunction with the RootViewController to manage which apps need their icon.
+ File: IconDownloader.h 
+ Abstract: Helper object for managing the downloading of a particular user's avatar.
+ As a delegate "NSURLConnectionDelegate" is downloads the avatar in the background if it does not
+ yet exist and works in conjunction with the ListViewController to manage which user needs their avatar.
  
  A simple BOOL tracks whether or not a download is already in progress to avoid redundant requests.
+ 
  */
 
 #import "IconDownloader.h"
