@@ -38,6 +38,6 @@
 - (Person *) initPersonWithInfo:(NSDictionary *)userInfo;
 
 // Returns a boolean value indicating that the a person object has all of the necessary data
-+ (BOOL)isValid:(Person *)person;
+- (BOOL)isValid;
 
 @end

@@ -6,6 +6,7 @@
 //  Copyright 2009 Adam Duke. All rights reserved.
 
 #import "Person.h"
+#import "ValidationHelper.h"
 
 @implementation Person
 
@@ -30,9 +31,9 @@
 	return self;
 }
 
-+ (BOOL)isValid:(Person *)person
+- (BOOL)isValid
 {
-	return (person.imageUrlString != nil && [person.imageUrlString length] > 0) && (person.screenName != nil && [person.screenName length] > 0);
+	return !IsEmpty(self.imageUrlString) && !IsEmpty(self.screenName);
 }
 
 - (NSString *)description
