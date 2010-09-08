@@ -11,7 +11,7 @@
 #import "PresenceContants.h"
 #import "TwitterHelper.h"
 
-@interface ComposeStatusViewController ()
+@interface ComposeStatusViewController (Private)
 
 - (void)keyboardWillShow:(NSNotification *)note;
 
@@ -191,9 +191,11 @@
 	// set the cornerRadius property to 8, this creates rounded corners for the UITextView
 	self.textView.layer.cornerRadius = 8;
 	
+	// subscribe to the UIKeyboardWillShowNotification
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
+// When the keyboard becomes visible, do some math to redraw things to the appropriate size
 - (void)keyboardWillShow:(NSNotification *)note
 {
 	CGRect keyboardFrame = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -214,6 +216,8 @@
 	}
 	CGRect newTextViewFrame = CGRectMake(textViewFrame.origin.x, textViewFrame.origin.y, textViewFrame.size.width, textViewHeight);
 	[self.textView setFrame:newTextViewFrame];
+	
+	// re-center the spinner in the new text view frame
 	CGRect originalSpinnerFrame = self.spinner.frame;
 	CGRect spinnerFrame = CGRectMake(newTextViewFrame.size.width/2 - originalSpinnerFrame.size.width/2, 
 									 newTextViewFrame.size.height/2 - originalSpinnerFrame.size.height/2, 

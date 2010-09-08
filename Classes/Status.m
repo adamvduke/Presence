@@ -8,7 +8,7 @@
 
 #import "Status.h"
 
-@interface Status ()
+@interface Status (Private)
 
 -(NSString *)retrieveCreaterIdFromDictionary:(NSDictionary *)dictionary;
 
