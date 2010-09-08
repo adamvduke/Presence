@@ -13,7 +13,7 @@
 
 @interface StatusViewController ()
 
--(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline;
+-(NSArray *)initStatusUpdatesFromTimeline:(NSArray *)userTimeline;
 
 @end
 
@@ -56,7 +56,7 @@
 	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:self.person.userId];
 	
 	// parse the individual statuses out of the timeline
-	NSArray *statusArray = [self parseStatusUpdatesFromTimeline:userTimeline];
+	NSArray *statusArray = [self initStatusUpdatesFromTimeline:userTimeline];
 	
 	// set the statusUpdates array on the person object so that they don't need to be fetched again
 	self.person.statusUpdates = statusArray;
@@ -68,9 +68,9 @@
 	[pool release];
 }
 
--(NSArray *)parseStatusUpdatesFromTimeline:(NSArray *)userTimeline
+-(NSArray *)initStatusUpdatesFromTimeline:(NSArray *)userTimeline
 {		
-	NSMutableArray *statusUpdates = [[[NSMutableArray alloc]init]autorelease];
+	NSMutableArray *statusUpdates = [[NSMutableArray alloc]init];
 	for (NSDictionary *timelineEntry in userTimeline) 
 	{
 		if ([timelineEntry isKindOfClass:[NSDictionary class]]) {
@@ -93,7 +93,8 @@
 	[self.spinner startAnimating];
 	
 	// create the NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadUpdates) object:nil];
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] 
+										initWithTarget:self selector:@selector(synchronousLoadUpdates) object:nil];
 	[self.queue addOperation:operation];
 	[operation release];
 }
@@ -104,8 +105,7 @@
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) 
 	{				
 		//this is the text displayed at the top
-		NSString *statusViewTitle = NSLocalizedString(StatusViewTitleKey, @"");
-		self.title = statusViewTitle;
+		self.title = NSLocalizedString(StatusViewTitleKey, @"");
 		
 		//set the person reference on the view
 		self.person = aPerson;
@@ -113,20 +113,20 @@
 		self.dataAccessHelper = accessHelper;
 		
 		//Create the NSOperationQueue for threading data loading
-		NSOperationQueue *aQueue = [[NSOperationQueue alloc]init];
-		self.queue = aQueue;
-		[aQueue release];
+		self.queue = [[[NSOperationQueue alloc]init] autorelease];
 		
 		//set the maxConcurrent operations to 1
 		[self.queue setMaxConcurrentOperationCount:1];
 		
 		// initialize the UIActivityIndicatorView for this view controller
-		self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
 		[self.spinner setCenter:self.view.center]; 
 		[self.view addSubview:spinner];
 		
 		// set the right bar button for reloading the data with the Refresh style
-		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(beginLoadUpdates)];
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] 
+										   initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh 
+										   target:self action:@selector(beginLoadUpdates)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
 	}

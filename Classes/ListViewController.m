@@ -15,11 +15,11 @@
 #import "TwitterHelper.h"
 #import "ValidationHelper.h"
 
-#define kCustomRowCount 7
-#define kCustomRowHeight 48
-#define kThreadBatchCount 15
+#define kCustomRowCount 7  // enough rows to fill the table if there is no data 
+#define kCustomRowHeight 48  // height of each row 
+#define kThreadBatchCount 15 // number of rows to create before re-drawing the table view 
 
-@interface ListViewController ()
+@interface ListViewController (Private)
 
 - (void) startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
 - (void) beginLoadingTwitterData;
@@ -43,7 +43,6 @@
 
 - (void)dealloc 
 {	
-	// make sure to deallocate the people array and the operation queue
 	[addBarButton release];
 	[composeBarButton release];
 	[userIdArray release];
@@ -70,7 +69,7 @@
 	NSString *screenName = [CredentialHelper retrieveScreenName];
 	
 	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
-	if ( [screenName length] == 0 ) 
+	if ( IsEmpty(screenName)) 
 	{
 		self.navigationItem.rightBarButtonItem.enabled = NO;
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
@@ -91,8 +90,8 @@
 	
 	NSString *screenName = [CredentialHelper retrieveScreenName];
 	
-	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
-	if ( [screenName length] == 0 ) 
+	// if the screenName is empty, the ability to compose a status is disabled
+	if ( IsEmpty(screenName) ) 
 	{
 		self.navigationItem.rightBarButtonItem.enabled = NO;
 	}
@@ -100,13 +99,13 @@
 		self.navigationItem.rightBarButtonItem.enabled = YES;
 	}
 
-	if([screenName length] > 0 && [self.userIdArray count] == 0)
+	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
 	{
 		self.userIdArray = [TwitterHelper fetchFollowingIdsForScreenName:screenName];
 	}
 	
 	// if the array of Person objects is empty, start loading data
-	if ([people count] == 0) 
+	if (IsEmpty(people)) 
 	{
 		//begin loading data from twitter
 		[self beginLoadingTwitterData];
@@ -159,7 +158,8 @@
 - (void)beginLoadingTwitterData
 {
 	//create the NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadTwitterData) object:nil];
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] 
+										initWithTarget:self selector:@selector(synchronousLoadTwitterData) object:nil];
 	[self.queue addOperation:operation];
 	[operation release];
 }
@@ -183,7 +183,8 @@
 - (void) beginLoadPerson:(NSString *)userId
 {
 	//create an NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userId];
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] 
+										initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userId];
 	[self.queue addOperation:operation];
 	[operation release];
 }
@@ -203,11 +204,16 @@
 		{
 			person = [[Person alloc]initPersonWithInfo:userInfo];
 		}
+		
+		// this person is not yet in the database
+		if ([person isValid]) {
+			[dataAccessHelper savePerson:person];
+			[self.people addObject:person];
+		}
 	}
-	if ([person isValid]) 
+	else
 	{
 		[self.people addObject:person];
-		[dataAccessHelper savePerson:person];
 	}
 
 	[person release];
@@ -219,6 +225,8 @@
 // called by synchronousLoadPerson when the load has finished
 -(void) didFinishLoadingPerson
 {
+	// in order to save redrawing the UI after every load, redraw after ever kThreadBatchCount loads
+	// or redraw in the case that the queue is on it's last operation
 	self.finishedThreads++;
 	
 	if (self.finishedThreads == kThreadBatchCount || [[queue operations] count] <= 1) {
@@ -245,7 +253,8 @@
 // show a modal view controller that will allow a user to compose a twitter status
 -(void)presentUpdateStatusController
 {
-	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] initWithNibName:ComposeStatusViewControllerNibName bundle:[NSBundle mainBundle]];
+	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] 
+														 initWithNibName:ComposeStatusViewControllerNibName bundle:[NSBundle mainBundle]];
 	statusViewController.delegate = self;
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
 	[statusViewController release];
@@ -333,7 +342,9 @@
 		self.people = [[NSMutableArray alloc]init];
 		
 		// create a UIBarButtonItem for the right side using the Compose style, this will present the ComposeStatusViewController modally
-		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentUpdateStatusController)];
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] 
+										   initWithBarButtonSystemItem:UIBarButtonSystemItemCompose 
+										   target:self action:@selector(presentUpdateStatusController)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
 	}
@@ -349,19 +360,31 @@
     [self.tableView setEditing:editing animated:YES];
     if (editing) {
 		if (!self.addBarButton) {
-			UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(presentAddToFavoritesController)];
+			UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
+										  initWithBarButtonSystemItem:UIBarButtonSystemItemAdd 
+										  target:self action:@selector(presentAddToFavoritesController)];
 			self.addBarButton = addButton;
 			[addButton release];
 		}
+		
+		// hold onto the current right bar button (compose) so it can
+		// be put back after editing
 		self.composeBarButton = self.navigationItem.rightBarButtonItem;
+		
+		// set the right bar button to the add bar button
 		self.navigationItem.rightBarButtonItem = self.addBarButton;
-    } else {
+    } 
+	else {
+		
+		// set the right bar button to the compose bar button
 		self.navigationItem.rightBarButtonItem = self.composeBarButton;
     }
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+	// if the indexPath.row is the first empty row, the editing style is insert
+	// else it's delete
 	if (indexPath.row == [self.people count]) {
         return UITableViewCellEditingStyleInsert;
     } else {
@@ -417,29 +440,33 @@
 	return kCustomRowHeight;
 }
 
+- (UITableViewCell *)placeHolderCellForTableView:(UITableView *)tableView
+{
+	static NSString *PlaceHolderIdentifier = @"PlaceHolder";
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PlaceHolderIdentifier];
+	if (cell == nil)
+	{
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PlaceHolderIdentifier] autorelease];   
+		cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	}
+	cell.detailTextLabel.text = NSLocalizedString(LoadingKey, @"");
+	return cell;
+}
+
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	//if there is already a cell with the identifier that can be reused, get it
-	//otherwise create a new cell
     static NSString *CellIdentifier = @"ListCell";
-	static NSString *PlaceHolderIdentifier = @"PlaceHolder";
 	
-	// add a placeholder cell while waiting on table data
-    int nodeCount = [self.people count];
+    int peopleCount = [self.people count];
 	int idCount = [self.userIdArray count];
 	
-	if (nodeCount == 0 && indexPath.row == 0 && idCount > 0)
+	// if this is the first row and there are no people to display yet
+	// but there should be, display a cell that indicates data is loading
+	if (peopleCount == 0 && indexPath.row == 0 && idCount > 0)
 	{
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PlaceHolderIdentifier];
-        if (cell == nil)
-		{
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PlaceHolderIdentifier] autorelease];   
-            cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-		cell.detailTextLabel.text = NSLocalizedString(LoadingKey, @"");
-		return cell;
+		return [self placeHolderCellForTableView:tableView];
 	}
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -448,8 +475,9 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
+	
 	// Leave cells empty if there's no data yet
-	if (nodeCount > 0 && indexPath.row < nodeCount)
+	if (peopleCount > 0 && indexPath.row < peopleCount)
 	{
 		// Set up the cell...
 		Person *person = [self.people objectAtIndex:indexPath.row];
@@ -510,6 +538,8 @@
 
 - (void)startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath
 {
+	// check for a download in progress for the indexPath
+	// if there isn't one, create one and start the download
     IconDownloader *iconDownloader = [imageDownloadsInProgress objectForKey:indexPath];
     if (iconDownloader == nil) 
     {
