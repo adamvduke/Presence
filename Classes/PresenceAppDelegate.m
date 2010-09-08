@@ -15,7 +15,7 @@
 #import "TwitterHelper.h"
 #import "ValidationHelper.h"
 
-@interface PresenceAppDelegate ()
+@interface PresenceAppDelegate (Private)
 
 - (SettingsViewController *)initSettingsViewController;
 - (UINavigationController *)initFavoritesController;

@@ -235,7 +235,7 @@
 	return cell;
 }
 
-// return the custom height of the cell based on the string that will be displayed
+// return the custom height of the cell based on the content that will be displayed
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {	
 	//if the index path represents the "Title cell" return the height of the user's image plus 15
