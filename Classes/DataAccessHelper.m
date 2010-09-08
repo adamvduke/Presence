@@ -21,11 +21,11 @@
  */
 - (void) dealloc
 {
-	[super dealloc];
 	[fileManager release];
 	[databaseName release];
 	[documentsDatabasePath release];
-	[documentsDirectoryPath release];
+	[documentsDirectoryPath release];	
+	[super dealloc];
 }
 
 /* Override the default initalizer to set up the instance variables needed for database operations
@@ -37,12 +37,15 @@
 		// initialize the fileManager
 		self.fileManager = [NSFileManager defaultManager];
 		
-		// Get the path to the documents directory and append the databaseName
+		// Get the path to the documents directory
 		NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-		NSString *documentsPath = [documentPaths objectAtIndex:0];
-		self.schemaVersionsPath = [documentsPath stringByAppendingPathComponent:@"SchemaVersions.plist"];
-		self.documentsDatabasePath = [documentsPath stringByAppendingPathComponent:@"Presence.db"];
-		self.documentsDirectoryPath = documentsPath;
+		self.documentsDirectoryPath = [documentPaths objectAtIndex:0];
+		
+		// Hold on to the paths for the SchemaVersions.plis and Presence.db files
+		self.schemaVersionsPath = [self.documentsDirectoryPath stringByAppendingPathComponent:@"SchemaVersions.plist"];
+		self.documentsDatabasePath = [self.documentsDirectoryPath stringByAppendingPathComponent:@"Presence.db"];
+		
+		// if the SchemaVersions.plist file hasn't been copied from the bundle to the Documents directory, copy it
 		if (![self.fileManager fileExistsAtPath:self.schemaVersionsPath]) {
 			NSString *bundleSchemaVersionsPath = [[NSBundle mainBundle]pathForResource:@"SchemaVersions" ofType:@"plist"];
 			[self.fileManager copyItemAtPath:bundleSchemaVersionsPath toPath:self.schemaVersionsPath error:nil];
@@ -70,12 +73,18 @@
  */
 - (void) updateSchema
 {
-	NSMutableDictionary *schemaVersions = [NSMutableDictionary dictionaryWithContentsOfFile:self.schemaVersionsPath];
-	[schemaVersions retain];
+	// get a dictionary representation of the SchemaVersions.plist file
+	NSMutableDictionary *schemaVersions = [[NSMutableDictionary alloc] initWithContentsOfFile:self.schemaVersionsPath];
+	
+	// get the current and target schema versions
 	NSInteger currentVersion = [[schemaVersions objectForKey:@"CurrentVersion"] integerValue];
 	NSInteger targetVersion = [[schemaVersions objectForKey:@"TargetVersion"] integerValue];
 	
+	// a boolean to indicate the schema has changed
 	BOOL writeSchemaVersions = NO;
+	
+	// while the current version is less than the target version
+	// get the next set of DDL statements and execute them
 	while (currentVersion < targetVersion) {
 		
 		writeSchemaVersions = YES;
@@ -144,7 +153,7 @@
 		[database commit];
 	}
 	
-	// if the resultset does not contain an update this is an insert
+	// if the resultset does not contain a record this is an insert
 	else 
 	{
 		//execute insert
@@ -161,6 +170,7 @@
 	[resultSet close];
 	[database close];
 	
+	// TODO: return a value based on wether the insert was successful or not
 	return YES;
 }
 
@@ -228,6 +238,7 @@
 
 + (BOOL) saveStatus:(Status *)status
 {
+	// TODO: implement saving status updates
 	return YES;
 }
 @end
