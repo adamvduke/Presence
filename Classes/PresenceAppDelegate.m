@@ -127,7 +127,9 @@
 	NSMutableArray *favoriteUsersArray = [FavoritesHelper retrieveFavorites];
 
 	// initialize a ListViewController with the favoriteUsersArray
-	ListViewController *favoritesListViewController = [[ListViewController alloc]initAsEditable:YES userIdArray:favoriteUsersArray dataAccessHelper:dataAccessHelper];
+	ListViewController *favoritesListViewController = [[ListViewController alloc]initAsEditable:YES 
+																					userIdArray:favoriteUsersArray 
+																			   dataAccessHelper:dataAccessHelper];
 	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	
 	// push the followingListViewController onto the following navigation stack and release it
@@ -187,9 +189,12 @@
 	[idArray retain];
 	
 	// create the list view controller to push on the followingNavigationController
-	ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO userIdArray:idArray dataAccessHelper:dataAccessHelper];
+	ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO 
+																					userIdArray:idArray 
+																			   dataAccessHelper:dataAccessHelper];
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	
+	// get the previously initialized navigation controller and push a view controller onto it's stack
 	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];
 	[followingController pushViewController:followingListViewController animated:YES];
 	[followingListViewController release];

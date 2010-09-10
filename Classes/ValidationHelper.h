@@ -14,6 +14,8 @@
    in the code where it is called from during compile. This should make for some
    performance improvement, but can lead to binaries that 
    are larger than they need to be
+ 
+   Credit to Will Shipley for this method http://www.wilshipley.com/blog/2005/10/pimp-my-code-interlude-free-code.html
  */
 static inline BOOL IsEmpty(id thing)
 {

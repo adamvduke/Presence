@@ -61,7 +61,8 @@
 	{
 		UIAlertView *alert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"") 
 													   message:NSLocalizedString(UpdateFailedMessageKey, @"") 
-													  delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
+													  delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") 
+											 otherButtonTitles:nil];
 		[alert show];
 		[alert release];
 		return;
@@ -81,9 +82,7 @@
 	
 	// call the TwitterHelper to update the status
 	BOOL success = [TwitterHelper updateStatus:text forUsername:self.screenName withPassword:self.password];
-		
 	[self performSelectorOnMainThread:@selector(finishedTweet:) withObject:success ? @"YES" : @"NO" waitUntilDone:NO];
-
 	[pool release];
 }
 
@@ -143,7 +142,8 @@
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
 														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
-													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
+													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") 
+											  otherButtonTitles:nil];
 		[alert show];
 		[alert release];
 	}	
@@ -192,7 +192,10 @@
 	self.textView.layer.cornerRadius = 8;
 	
 	// subscribe to the UIKeyboardWillShowNotification
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(keyboardWillShow:) 
+												 name:UIKeyboardWillShowNotification 
+											   object:nil];
 }
 
 // When the keyboard becomes visible, do some math to redraw things to the appropriate size

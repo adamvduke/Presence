@@ -74,7 +74,8 @@
 		self.navigationItem.rightBarButtonItem.enabled = NO;
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
 														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
-													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
+													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") 
+											  otherButtonTitles:nil];
 		[alert show];
 		[alert release];
 	}
@@ -167,12 +168,13 @@
 // synchronously get the usernames and call beginLoadPerson for each username
 - (void)synchronousLoadTwitterData
 {
-	if (self.userIdArray != nil && [self.userIdArray count] > 0 ) {
+	if (!IsEmpty(self.userIdArray)) {
 		
 		// start the device's network activity indicator
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	}
 	
+	// TODO: should this loop be inside the IsEmpty check?
 	for (NSString *userId in userIdArray) 
 	{
 		[self beginLoadPerson:userId];
@@ -183,8 +185,7 @@
 - (void) beginLoadPerson:(NSString *)userId
 {
 	//create an NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] 
-										initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userId];
+	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userId];
 	[self.queue addOperation:operation];
 	[operation release];
 }
@@ -520,11 +521,9 @@
 // override didSelectRowAtIndexPath to push a StatusViewController onto the navigation stack when a row is selected
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {    
-	// Create and push another view controller.
-	// get the correct person out of the people array and initialize the status view controller for that person
-	
-	if ([self.people count] > 0) {
+	if (!IsEmpty(self.people) > 0) {
 		
+		// get the correct person out of the people array and initialize the status view controller for that person
 		Person *person = [people objectAtIndex:indexPath.row];
 		StatusViewController *statusViewController = [[StatusViewController alloc] initWithPerson:person dataAccessHelper:dataAccessHelper];
 		
@@ -556,7 +555,7 @@
 // this method is used in case the user scrolled into a set of cells that don't have their app icons yet
 - (void)loadImagesForOnscreenRows
 {
-    if ([self.userIdArray count] > 0)
+    if (!IsEmpty(self.userIdArray) > 0)
     {
         NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
         for (NSIndexPath *indexPath in visiblePaths)
