@@ -11,6 +11,15 @@
 #import "PresenceContants.h"
 #import "TwitterHelper.h"
 
+/* OAuth stuff */
+#import "SA_OAuthTwitterEngine.h"
+
+
+#define kOAuthConsumerKey				@"wFCsd9r6aDCTTostr1QOnA"		//Consumer Key for AD_Presence
+#define kOAuthConsumerSecret			@"rDk2QXUQywdjsHjsqMhKWYP5tQc9hjJHznhaEI0BbLw"		// Consumer Secret for AD_Presence
+
+/* end OAuth stuff */
+
 @interface ComposeStatusViewController (Private)
 
 - (void)keyboardWillShow:(NSNotification *)note;
@@ -49,57 +58,12 @@
 	[self.delegate didFinishComposing:self];
 }
 
--(void)finishedTweet:(BOOL)success
-{
-	// start the device's network activity indicator
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	
-	// start animating the spinner
-	[self.spinner stopAnimating];
-	
-	if (!success) 
-	{
-		UIAlertView *alert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"") 
-													   message:NSLocalizedString(UpdateFailedMessageKey, @"") 
-													  delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") 
-											 otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-		return;
-	}
-	else 
-	{
-		// if the update was a success, set the text to nil and dismiss the view
-		self.textView.text = nil;
-		[self dismiss];
-	}
-	
-}
-
--(void)beginTweetWithText:(NSString *)text
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-	
-	// call the TwitterHelper to update the status
-	BOOL success = [TwitterHelper updateStatus:text forUsername:self.screenName withPassword:self.password];
-	[self performSelectorOnMainThread:@selector(finishedTweet:) withObject:success ? @"YES" : @"NO" waitUntilDone:NO];
-	[pool release];
-}
-
 // action to call to post a status update to twitter
 - (IBAction)tweetAction
 {	
-	// disable the text view
-	self.isEditable = NO;
-	
-	// start the device's network activity indicator
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	
-	// start animating the spinner
-	[self.spinner startAnimating];
-	
-	NSString *text = textView.text;
-	[NSThread detachNewThreadSelector:@selector(beginTweetWithText:) toTarget:self withObject:text];
+	self.isEditable = NO;
+	[_engine sendUpdate:textView.text];
 }
 
 // UITextViewDelegate method
@@ -126,27 +90,6 @@
 	NSString *localizedText = NSLocalizedString(CharactersLabelKey, @"");
 	NSString *charactersLabelText = [NSString stringWithFormat:@"%@:%d/140",localizedText, [theTextView.text length]];
 	self.charactersLabel.text = charactersLabelText;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-	[super viewDidAppear:animated];
-	
-	self.screenName = [CredentialHelper retrieveScreenName];
-	self.password = [CredentialHelper retrievePassword];
-	
-	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
-	if ([self.screenName length] == 0 || [self.password length] == 0) 
-	{
-		self.aNavigationItem.rightBarButtonItem.enabled = NO;
-		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
-														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
-													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") 
-											  otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-	}	
 }
 
 // override viewWillAppear to do some initialization
@@ -185,7 +128,7 @@
 	[super viewDidLoad];
 	
 	self.spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-		
+	
 	self.textView.text = @"";
 	
 	// set the cornerRadius property to 8, this creates rounded corners for the UITextView
@@ -250,7 +193,82 @@
 	[aNavigationItem release];
 	[charactersLabel release];
 	[textView release];
-    [super dealloc];
+	[_engine release];
+	[super dealloc];
 }
 
+/* ------------------------------------------------ */
+//
+//  OAuthTwitterDemoViewController.m
+//  OAuthTwitterDemo
+//
+//  Created by Ben Gottlieb on 7/24/09.
+//  Copyright Stand Alone, Inc. 2009. All rights reserved.
+//
+
+//=============================================================================================================================
+#pragma mark SA_OAuthTwitterEngineDelegate
+- (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username {
+	NSUserDefaults			*defaults = [NSUserDefaults standardUserDefaults];
+	
+	[defaults setObject: data forKey: @"authData"];
+	[defaults synchronize];
+}
+
+- (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username {
+	return [[NSUserDefaults standardUserDefaults] objectForKey: @"authData"];
+}
+
+//=============================================================================================================================
+#pragma mark SA_OAuthTwitterControllerDelegate
+- (void) OAuthTwitterController: (SA_OAuthTwitterController *) controller authenticatedWithUsername: (NSString *) username {
+	NSLog(@"Authenicated for %@", username);
+}
+
+- (void) OAuthTwitterControllerFailed: (SA_OAuthTwitterController *) controller {
+	NSLog(@"Authentication Failed!");
+}
+
+- (void) OAuthTwitterControllerCanceled: (SA_OAuthTwitterController *) controller {
+	NSLog(@"Authentication Canceled.");
+}
+
+//=============================================================================================================================
+#pragma mark TwitterEngineDelegate
+- (void) requestSucceeded: (NSString *) requestIdentifier {
+	
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	[self dismiss];
+	
+	NSLog(@"Request %@ succeeded", requestIdentifier);
+}
+
+- (void) requestFailed: (NSString *) requestIdentifier withError: (NSError *) error {
+	
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update failed" 
+													message:@"Please see the log for details" 
+												   delegate:self cancelButtonTitle:@"OK" 
+										  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	NSLog(@"Request %@ failed with error: %@", requestIdentifier, error);
+}
+
+//=============================================================================================================================
+
+- (void) viewDidAppear: (BOOL)animated {
+	if (_engine) return;
+	_engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
+	_engine.consumerKey = kOAuthConsumerKey;
+	_engine.consumerSecret = kOAuthConsumerSecret;
+	
+	UIViewController			*controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: _engine delegate: self];
+	
+	if (controller) {
+		[self presentModalViewController: controller animated: YES];
+	}
+}
+
+/*--------------------------------------------------*/
 @end

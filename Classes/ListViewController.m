@@ -65,23 +65,7 @@
 - (void)viewDidLoad
 {
 	self.imageDownloadsInProgress = [NSMutableDictionary dictionary];
-	
-	NSString *screenName = [CredentialHelper retrieveScreenName];
-	
-	// if the username and password don't have any values, display an Alert to the user to set them on the setting menu
-	if ( IsEmpty(screenName)) 
-	{
-		self.navigationItem.rightBarButtonItem.enabled = NO;
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(MissingCredentialsTitleKey, @"")
-														message:NSLocalizedString(MissingCredentialsMessageKey, @"") 
-													   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") 
-											  otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-	}
-	else {
-		self.navigationItem.rightBarButtonItem.enabled = YES;
-	}
+	self.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
 // override viewWillAppear to begin the data load
@@ -90,15 +74,6 @@
 	[super viewWillAppear:animated];
 	
 	NSString *screenName = [CredentialHelper retrieveScreenName];
-	
-	// if the screenName is empty, the ability to compose a status is disabled
-	if ( IsEmpty(screenName) ) 
-	{
-		self.navigationItem.rightBarButtonItem.enabled = NO;
-	}
-	else {
-		self.navigationItem.rightBarButtonItem.enabled = YES;
-	}
 
 	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
 	{
