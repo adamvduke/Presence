@@ -164,7 +164,8 @@
 	UINavigationController *searchNavigationController = [[UINavigationController alloc]init];
 	searchNavigationController = (UINavigationController *)[self setIconAndTitleForViewController:searchNavigationController 
 																						 iconName:@"SearchIcon" 
-																						 titleKey:SearchViewControllerTitleKey];	
+																						 titleKey:SearchViewControllerTitleKey];
+	// TODO: push a UIViewController with the ability to search the twitter api
 	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	return searchNavigationController;
 }
