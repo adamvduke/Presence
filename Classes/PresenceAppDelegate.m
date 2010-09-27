@@ -8,6 +8,7 @@
 
 #import "CredentialHelper.h"
 #import "DataAccessHelper.h"
+#import <dispatch/dispatch.h>
 #import "FavoritesHelper.h"
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
@@ -22,7 +23,6 @@
 - (UINavigationController *)initFollowingController;
 - (UINavigationController *)initSearchController;
 - (NSMutableArray *)initViewControllerArray;
-- (void)didFinishLoadingIdsArray:(NSArray *)idArray;
 
 @end
 
@@ -151,10 +151,29 @@
 	
 	// get the username
 	NSString *screenName = [CredentialHelper retrieveScreenName];
+	
+	dispatch_queue_t queue = dispatch_queue_create("org.ate.Presence", NULL);
+	dispatch_async(queue, ^{
+	
+		// fetch the names from twitter
+		NSMutableArray *idsArray = [TwitterHelper fetchFollowingIdsForScreenName:screenName];
 		
-	// ex.[NSThread detachNewThreadSelector:@selector(dowork:) withTarget:self object:someData]; 
-	[NSThread detachNewThreadSelector:@selector(initFollowingIdsArrayForScreenName:) toTarget:self withObject:screenName];
-
+		dispatch_async(dispatch_get_main_queue(), ^{
+			
+			// create the list view controller to push on the followingNavigationController
+			ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO 
+																							userIdArray:idsArray 
+																					   dataAccessHelper:dataAccessHelper];
+			followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
+			
+			// get the previously initialized navigation controller and push a view controller onto it's stack
+			UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];
+			[followingController pushViewController:followingListViewController animated:YES];
+			[followingListViewController release];
+		});
+	});
+	
+	dispatch_release(queue);
 	return followingNavigationController;
 }
 
@@ -168,40 +187,6 @@
 	// TODO: push a UIViewController with the ability to search the twitter api
 	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	return searchNavigationController;
-}
-
-- (void)initFollowingIdsArrayForScreenName:(NSString *)screenName
-{
-	// init an autorelease pool for a detached thread
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-		
-	// fetch the names from twitter
-	NSMutableArray *idsArray = [TwitterHelper fetchFollowingIdsForScreenName:screenName];
-	
-	// perform the did finish selector on the main thread because UIKit classes
-	// can't act on a detached thread
-	[self performSelectorOnMainThread:@selector(didFinishLoadingIdsArray:) withObject:idsArray waitUntilDone:NO];
-	[pool release];
-}
-
-- (void)didFinishLoadingIdsArray:(NSArray *)idArray
-{
-	// retain the array in case the autorelease pool releases it
-	[idArray retain];
-	
-	// create the list view controller to push on the followingNavigationController
-	ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO 
-																					userIdArray:idArray 
-																			   dataAccessHelper:dataAccessHelper];
-	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
-	
-	// get the previously initialized navigation controller and push a view controller onto it's stack
-	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];
-	[followingController pushViewController:followingListViewController animated:YES];
-	[followingListViewController release];
-	
-	// balance the call to retain
-	[idArray release];
 }
 
 - (void)dealloc 
