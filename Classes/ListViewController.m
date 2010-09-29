@@ -12,16 +12,23 @@
 #import "Person.h"
 #import "PresenceContants.h"
 #import "StatusViewController.h"
-#import "TwitterHelper.h"
 #import "ValidationHelper.h"
 
 #define kCustomRowCount 7  // enough rows to fill the table if there is no data 
 #define kCustomRowHeight 48  // height of each row 
 #define kThreadBatchCount 15 // number of rows to create before re-drawing the table view 
 
+typedef enum
+{
+	RateLimitRequest,
+	FollowedIdsRequest,
+	UserInformationRequest
+}RequestType;
+
 @interface ListViewController (Private)
 
 - (void) startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
+- (void) cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId;
 - (void) beginLoadingTwitterData;
 - (void) synchronousLoadTwitterData;
 - (void) beginLoadPerson:(NSString *)userId;
@@ -32,12 +39,12 @@
 
 @implementation ListViewController
 
+@synthesize openRequests;
 @synthesize addBarButton;
 @synthesize composeBarButton;
 @synthesize userIdArray;
 @synthesize people;
 @synthesize imageDownloadsInProgress;
-@synthesize queue;
 @synthesize finishedThreads;
 @synthesize dataAccessHelper;
 
@@ -47,11 +54,22 @@
 	[composeBarButton release];
 	[userIdArray release];
 	[people release];
-	[queue release];
 	[imageDownloadsInProgress release];
 	
 	// always call the dealloc of the super class
     [super dealloc];
+}
+
+/*
+ Cache the RequestType for a particular connectionId so that a decision can be made
+ later about how to handle the response.
+ */
+- (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId
+{
+	if (!openRequests) {
+		openRequests = [[NSMutableDictionary alloc]init];
+	}
+	[openRequests setObject:requestType forKey:connectionId];
 }
 
 #pragma mark -
@@ -71,20 +89,31 @@
 // override viewWillAppear to begin the data load
 - (void)viewWillAppear:(BOOL)animated
 {
-	[super viewWillAppear:animated];
+	if (engine) return;
+	engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
+	engine.consumerKey = kOAuthConsumerKey;
+	engine.consumerSecret = kOAuthConsumerSecret;
 	
-	NSString *screenName = [CredentialHelper retrieveScreenName];
+	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: engine delegate: self];
+	
+	if (controller)
+	{
+		[self presentModalViewController: controller animated: YES];
+	}
+}
 
+- (void)viewDidAppear:(BOOL)animated
+{
+	NSString *screenName = [CredentialHelper retrieveUsername];
+	
+	// check the userIdArray, because it may have been set already
 	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
 	{
-		self.userIdArray = [TwitterHelper fetchFollowingIdsForScreenName:screenName];
+		NSString *connectionID = [engine getFollowedIdsForUsername:screenName];
+		[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionID];
 	}
-	
-	// if the array of Person objects is empty, start loading data
-	if (IsEmpty(people)) 
-	{
-		//begin loading data from twitter
-		[self beginLoadingTwitterData];
+	else {
+		[self synchronousLoadTwitterData];
 	}
 }
 
@@ -130,15 +159,6 @@
 
 #pragma mark -
 #pragma mark Data loading
-// start to load data asynchronously so that the UI is not blocked
-- (void)beginLoadingTwitterData
-{
-	//create the NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] 
-										initWithTarget:self selector:@selector(synchronousLoadTwitterData) object:nil];
-	[self.queue addOperation:operation];
-	[operation release];
-}
 
 // synchronously get the usernames and call beginLoadPerson for each username
 - (void)synchronousLoadTwitterData
@@ -152,17 +172,8 @@
 	// TODO: should this loop be inside the IsEmpty check?
 	for (NSString *userId in userIdArray) 
 	{
-		[self beginLoadPerson:userId];
+		[self synchronousLoadPerson:userId];
 	}
-}
-
-// start to load a person object asynchronously
-- (void) beginLoadPerson:(NSString *)userId
-{
-	//create an NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(synchronousLoadPerson:) object:userId];
-	[self.queue addOperation:operation];
-	[operation release];
 }
 
 // synchronously fetch data, initialize a person object, and add it to the list of people
@@ -175,27 +186,20 @@
 		person = nil;
 		
 		// get the user's information from Twitter
-		NSDictionary *userInfo = [TwitterHelper fetchInfoForUsername:userId];
-		if (!IsEmpty(userInfo) && !IsEmpty(userId)) 
-		{
-			person = [[Person alloc]initPersonWithInfo:userInfo];
-		}
-		
-		// this person is not yet in the database
-		if ([person isValid]) {
-			[dataAccessHelper savePerson:person];
-			[self.people addObject:person];
-		}
+		NSString *connectionID = [engine getUserInformationFor:userId];
+		[self cacheRequestType:[NSNumber numberWithInt:UserInformationRequest] forConnectionId:connectionID];
 	}
 	else
 	{
 		[self.people addObject:person];
+		[person release];
+		[self didFinishLoadingPerson];
 	}
+}
 
-	[person release];
-	
-	// call the main thread to notify that the person has finished loading
-	[self performSelectorOnMainThread:@selector(didFinishLoadingPerson) withObject:nil waitUntilDone:NO];
+- (BOOL) dataLoadComplete
+{
+	return [self.userIdArray count] == [self.people count];
 }
 
 // called by synchronousLoadPerson when the load has finished
@@ -205,15 +209,13 @@
 	// or redraw in the case that the queue is on it's last operation
 	self.finishedThreads++;
 	
-	if (self.finishedThreads == kThreadBatchCount || [[queue operations] count] <= 1) {
+	if (self.finishedThreads == kThreadBatchCount || [self dataLoadComplete]) {
 		self.finishedThreads = 0;
 		
 		// reload the table's data
 		[self.tableView reloadData];
 		
-		// if this is the last operation in the queue
-		NSArray *operations = [queue operations];
-		if ([operations count] <= 1) 
+		if ([self dataLoadComplete]) 
 		{		
 			// stop the network indicator
 			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO; 
@@ -293,7 +295,7 @@
 
 #pragma mark -
 #pragma mark custom init method
--(id)initAsEditable:(BOOL)isEditable userIdArray:(NSMutableArray *)userIds dataAccessHelper:(DataAccessHelper *)accessHelper
+-(id)initAsEditable:(BOOL)isEditable userIdArray:(NSMutableArray *)userIds
 {
 	
 	if (self == [super initWithStyle:UITableViewStylePlain]) {
@@ -302,17 +304,8 @@
 			self.navigationItem.leftBarButtonItem = self.editButtonItem;
 		}
 		
-		// set the DataAccessHelper
-		self.dataAccessHelper = accessHelper;
-		
 		// set the list of users to load
 		self.userIdArray = userIds;
-		
-		//Create the NSOperationQueue for threading data loading
-		self.queue = [[NSOperationQueue alloc]init];
-		
-		//set the maxConcurrent operations to 1
-		[self.queue setMaxConcurrentOperationCount:1];
 		
 		//allocate the memory for the NSMutableArray of people on this ViewController
 		self.people = [[NSMutableArray alloc]init];
@@ -575,6 +568,98 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self loadImagesForOnscreenRows];
+}
+#pragma mark -
+#pragma mark SA_OAuthTwitterControllerDelegate
+
+- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
+{
+	// save the username
+	[CredentialHelper saveUsername:username];
+
+	// log the username for debug purposes
+	NSLog(@"Authenicated for %@", username);
+}
+
+- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
+{
+	//TODO: Handle failed authentication
+	NSLog(@"Authentication Failed!");
+}
+
+- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
+{
+	//TODO: Handle canceled authentication
+	NSLog(@"Authentication Canceled.");
+}
+
+#pragma mark -
+#pragma mark SA_OAuthTwitterEngineDelegate
+- (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username
+{
+	[CredentialHelper saveAuthData:data];
+	[CredentialHelper saveUsername:username];
+}
+- (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username
+{
+	return [CredentialHelper retrieveAuthData];
+}
+//- (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
+#pragma mark -
+#pragma mark EngineDelegate
+
+// These delegate methods are called after a connection has been established
+- (void)requestSucceeded:(NSString *)connectionIdentifier
+{
+	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
+}
+- (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
+{
+	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
+}
+
+// These delegate methods are called after all results are parsed from the connection. If 
+// the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
+// collection of all results is also returned.
+- (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling statusesReceived for request %@", connectionIdentifier);
+}
+- (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling directMessagesReceived for request %@", connectionIdentifier);
+	
+}
+
+- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling userInfoReceived for request %@", connectionIdentifier);
+	
+	for (id thing in userInfo) {
+		NSLog(@"%@",[userInfo description]);
+	}
+	
+	Person *person = [[Person alloc]initPersonWithInfo:[userInfo objectAtIndex:0]];
+	
+	// this person is not yet in the database
+	if ([person isValid]) {
+		[dataAccessHelper savePerson:person];
+		[self.people addObject:person];
+	}
+	[self didFinishLoadingPerson];
+}
+
+- (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
+{	
+	NSMutableArray *idsArray = [NSMutableArray array];
+	for(NSDictionary *dictionary in miscInfo)
+	{
+		for (NSString *key in [dictionary allKeys]) {
+			[idsArray addObject:[dictionary objectForKey:key]];
+		}
+	}
+	self.userIdArray = idsArray;
+	[self beginLoadingTwitterData];
 }
 
 @end

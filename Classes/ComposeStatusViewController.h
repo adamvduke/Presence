@@ -9,17 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "SA_OAuthTwitterController.h"
-
-@class SA_OAuthTwitterEngine;
-
+#import "SA_OAuthTwitterEngine.h"
 @protocol ComposeStatusViewControllerDelegate;
 
-@interface ComposeStatusViewController : UIViewController <UITextViewDelegate, SA_OAuthTwitterControllerDelegate >
-{
-	SA_OAuthTwitterEngine				*_engine;
-	
-	NSString *password;
-	NSString *screenName;
+@interface ComposeStatusViewController : UIViewController <UITextViewDelegate, SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>
+{		
+	SA_OAuthTwitterEngine *engine;
 	
 	// activity indicator for animation during data access
 	UIActivityIndicatorView	*spinner;
@@ -40,8 +35,6 @@
 	id<ComposeStatusViewControllerDelegate> delegate;
 }
 
-@property (nonatomic, retain) NSString *password;
-@property (nonatomic, retain) NSString *screenName;
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
 @property (nonatomic, retain) UINavigationItem *aNavigationItem;
 @property (nonatomic, retain) UILabel *charactersLabel;

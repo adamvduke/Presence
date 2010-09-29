@@ -15,48 +15,17 @@
 	// navigation item
 	IBOutlet UINavigationItem *aNavigationItem;
 	
-	// label to identify the username field
-	IBOutlet UILabel *usernameLabel;
-	
-	// label to identify the password field
-	IBOutlet UILabel *passwordLabel;
-	
 	// label to identify the live data switch
 	IBOutlet UILabel *liveDataLabel;
-	
-	// text field for the username
-	IBOutlet UITextField *usernameField;
-	
-	// text field for the password
-	IBOutlet UITextField *passwordField;
-	
+		
 	// switch to select between live twitter data and test data
 	IBOutlet UISwitch *liveDataSwitch;
-	
-	// the settings view controller delegate
-	id<SettingsViewControllerDelegate> delegate;
 }
 
 @property (nonatomic, retain)UINavigationItem *aNavigationItem;
-@property (nonatomic, retain)UILabel *usernameLabel;
-@property (nonatomic, retain)UILabel *passwordLabel;
 @property (nonatomic, retain)UILabel *liveDataLabel;
-@property (nonatomic, retain)UITextField *usernameField;
-@property (nonatomic, retain)UITextField *passwordField;
 @property (nonatomic, retain)UISwitch *liveDataSwitch;
-@property (assign) id<SettingsViewControllerDelegate> delegate;
-
-// Provide an implementation to dismiss this view contoller when presented modally
-- (IBAction)dismiss;
 
 // Provide an implementation to save the user's settings
 - (IBAction)save;
-@end
-
-// Define the protocol for the SettingsViewControllerDelegate
-@protocol SettingsViewControllerDelegate<NSObject>
-
-// method to invoke when the SettingsViewController is finished
-- (void)didFinishPresentingViewController:(SettingsViewController *)viewController;
-
 @end

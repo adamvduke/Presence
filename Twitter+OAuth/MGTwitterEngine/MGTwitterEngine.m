@@ -1279,6 +1279,18 @@
                            responseType:MGTwitterDirectMessage];
 }
 
+- (NSString *)getFollowedIdsForUsername:(NSString *)username
+{
+	if (!username) {
+        return nil;
+    }
+    NSString *path = [NSString stringWithFormat:@"friends/ids/%@.%@", username, API_FORMAT];
+    
+    return [self _sendRequestWithMethod:nil path:path queryParameters:nil body:nil 
+                            requestType:MGTwitterUpdatesEnableRequest 
+                           responseType:MGTwitterMiscellaneous];
+	
+}
 
 #pragma mark Friendship methods
 

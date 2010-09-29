@@ -13,10 +13,16 @@
 
 }
 
-// Returns the value saved in the standard UserDefaults for the key "UsernameKey"
-+ (NSString *)retrieveScreenName;
+// Saves the value of the given username
++ (void)saveUsername:(NSString *)username;
 
-// Returns the value saved in the standard UserDefaults for the key "PasswordKey"
-+ (NSString *)retrievePassword;
+// Returns the saved username
++ (NSString *)retrieveUsername;
+
+// Saves the value of the given authData
++ (void)saveAuthData:(NSString *)authData;
+
+// Returns the saved authData
++ (NSString *)retrieveAuthData;
 
 @end

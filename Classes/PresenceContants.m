@@ -100,8 +100,16 @@ NSString *const TweetContentKey = @"TweetContent";
 // string for identifying a username in NSUserDefaults
 NSString *const UsernameKey = @"Username";
 
-// string for identifying a password in NSUserDefaults
-NSString *const PasswordKey = @"Password";
-
 // string for identifying the liveData value in NSUserDefaults
 NSString *const LiveDataKey = @"LiveData";
+
+// string for identifying the AuthData value in NSUserDefaults
+NSString *const AuthDataKey = @"AuthData";
+
+
+/* 
+ OAUTH constants 
+ */
+
+NSString *const kOAuthConsumerKey = @"wFCsd9r6aDCTTostr1QOnA";
+NSString *const kOAuthConsumerSecret = @"rDk2QXUQywdjsHjsqMhKWYP5tQc9hjJHznhaEI0BbLw";

@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "DataAccessHelper.h"
+#import "SA_OAuthTwitterController.h"
+#import "SA_OAuthTwitterEngine.h"
+
 @class Person;
 
-@interface StatusViewController : UITableViewController 
-{
+@interface StatusViewController : UITableViewController <SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>
+{		
+	SA_OAuthTwitterEngine *engine;
+	
 	// the person object that this view controller will display details about
 	Person *person;
 	

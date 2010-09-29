@@ -9,21 +9,53 @@
 #import "CredentialHelper.h"
 #import "PresenceContants.h"
 
+@interface CredentialHelper(Private)
+
+// convenience method to save a given string for a given key
++ (void)saveString:(NSString *)string forKey:(NSString *)key;
+
+// convenience method to return a string for a given key
++ (NSString *)retrieveStringForKey:(NSString *)key;
+
+@end
 
 @implementation CredentialHelper
 
+// saves the given username to the standard NSUserDefaults with the key "UsernameKey"
++ (void)saveUsername:(NSString *)username  
+{
+	[self saveString:username forKey:UsernameKey];
+}
+
 // Returns the value saved in the standard UserDefaults for the key "UsernameKey"
-+ (NSString *)retrieveScreenName
++ (NSString *)retrieveUsername
 {
-	NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:UsernameKey];
-	return username;
+	return [self retrieveStringForKey:UsernameKey];
 }
 
-// Returns the value saved in the standard UserDefaults for the key "PasswordKey"
-+ (NSString *)retrievePassword
+// saves the given username to the standard NSUserDefaults with the key "AuthDataKey"
++ (void)saveAuthData:(NSString *)authData
 {
-	NSString *password = [[NSUserDefaults standardUserDefaults] objectForKey:PasswordKey];
-	return password;
+	[self saveString:authData forKey:AuthDataKey];
 }
 
+// Returns the value saved in the standard UserDefaults for the key "AuthDataKey"
++ (NSString *)retrieveAuthData
+{
+	return [self retrieveStringForKey:AuthDataKey];
+}
+
+// convenience method to save a given string for a given key
++ (void)saveString:(NSString *)string forKey:(NSString *)key
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:string forKey:key];
+	[defaults synchronize];
+}
+
+// convenience method to return a string for a given key
++ (NSString *)retrieveStringForKey:(NSString *)key
+{
+	return [[NSUserDefaults standardUserDefaults]objectForKey:key];
+}
 @end

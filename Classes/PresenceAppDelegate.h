@@ -8,16 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "DataAccessHelper.h"
+#import "SA_OAuthTwitterController.h"
+#import "SA_OAuthTwitterEngine.h"
 
-@interface PresenceAppDelegate : NSObject <UIApplicationDelegate> 
+@interface PresenceAppDelegate : NSObject <UIApplicationDelegate, SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate> 
 {
     UIWindow *window;
 	IBOutlet UITabBarController *tabBarController;
 	DataAccessHelper *dataAccessHelper;
+	SA_OAuthTwitterEngine *engine;
+	NSMutableDictionary *openRequests;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
+@property (nonatomic, retain) NSMutableDictionary *openRequests;
 
 @end
 

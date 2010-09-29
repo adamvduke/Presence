@@ -9,7 +9,7 @@
 #import "Person.h"
 #import "PresenceContants.h"
 #import "StatusViewController.h"
-#import "TwitterHelper.h"
+#import "CredentialHelper.h"
 
 @interface StatusViewController ()
 
@@ -53,13 +53,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
 	
 	// get the user's timeline
-	NSArray *userTimeline = [TwitterHelper fetchTimelineForUsername:self.person.userId];
-	
-	// parse the individual statuses out of the timeline
-	NSArray *statusArray = [self initStatusUpdatesFromTimeline:userTimeline];
-	
-	// set the statusUpdates array on the person object so that they don't need to be fetched again
-	self.person.statusUpdates = statusArray;
+	[engine getUserTimelineFor:self.person.userId sinceID:0 startingAtPage:1 count:20];
 	
 	//call the main thread to notify that the data has finished loading
 	[self performSelectorOnMainThread:@selector(didFinishLoadingUpdates) withObject:nil waitUntilDone:NO];
@@ -86,6 +80,8 @@
 // begin loading the updates asynchronously
 - (void) beginLoadUpdates
 {	
+	if (self.person && self.person.statusUpdates) return; // avoid doing any un-needed work
+	
 	// start the device's network activity indicator
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	
@@ -138,16 +134,25 @@
 {	
 	[super viewWillAppear:animated];
 	
-	//if the person's status updates have not been loaded, load them
-	if (self.person && !self.person.statusUpdates) 
+	if (engine) return;
+	engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
+	engine.consumerKey = kOAuthConsumerKey;
+	engine.consumerSecret = kOAuthConsumerSecret;
+	
+	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: engine delegate: self];
+	
+	if (controller)
 	{
-		[self beginLoadUpdates];
+		[self presentModalViewController: controller animated: YES];
 	}
+	else {
+		[self beginLoadUpdates];
+	}	
 }
 
-- (void)viewDidAppear:(BOOL)animated 
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+	
 }
 
 - (void)didReceiveMemoryWarning 
@@ -254,6 +259,92 @@
 	CGSize withinSize = CGSizeMake( 350, 150);
 	CGSize size = [someText sizeWithFont:font constrainedToSize:withinSize lineBreakMode:UILineBreakModeWordWrap];
 	return size.height + 35;
+}
+
+#pragma mark -
+#pragma mark SA_OAuthTwitterControllerDelegate
+
+- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
+{
+	// save the username
+	[CredentialHelper saveUsername:username];
+	
+	// log the username for debug purposes
+	NSLog(@"Authenicated for %@", username);
+}
+
+- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
+{
+	//TODO: Handle failed authentication
+	NSLog(@"Authentication Failed!");
+}
+
+- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
+{
+	//TODO: Handle canceled authentication
+	NSLog(@"Authentication Canceled.");
+}
+
+#pragma mark -
+#pragma mark SA_OAuthTwitterEngineDelegate
+- (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username
+{
+	[CredentialHelper saveAuthData:data];
+	[CredentialHelper saveUsername:username];
+}
+- (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username
+{
+	return [CredentialHelper retrieveAuthData];
+}
+//- (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
+#pragma mark -
+#pragma mark EngineDelegate
+
+// These delegate methods are called after a connection has been established
+- (void)requestSucceeded:(NSString *)connectionIdentifier
+{
+	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
+}
+- (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
+{
+	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
+}
+
+// These delegate methods are called after all results are parsed from the connection. If 
+// the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
+// collection of all results is also returned.
+- (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling statusesReceived for request %@", connectionIdentifier);
+	// parse the individual statuses out of the timeline
+	//NSArray *statusArray = [self initStatusUpdatesFromTimeline:userTimeline];
+	
+	// set the statusUpdates array on the person object so that they don't need to be fetched again
+	//self.person.statusUpdates = statusArray;
+}
+- (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling directMessagesReceived for request %@", connectionIdentifier);
+	
+}
+
+- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling userInfoReceived for request %@", connectionIdentifier);
+	
+}
+
+- (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling miscInfoReceived for request %@", connectionIdentifier);
+	
+	NSMutableArray *idsArray = [NSMutableArray array];
+	for(NSDictionary *dictionary in miscInfo)
+	{
+		for (NSString *key in [dictionary allKeys]) {
+			[idsArray addObject:[dictionary objectForKey:key]];
+		}
+	}
 }
 
 - (void)dealloc 

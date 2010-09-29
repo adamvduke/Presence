@@ -100,8 +100,15 @@ extern NSString *const TweetContentKey;
 // string for identifying a username in NSUserDefaults
 extern NSString *const UsernameKey;
 
-// string for identifying a password in NSUserDefaults
-extern NSString *const PasswordKey;
-
 // string for identifying the liveData value in NSUserDefaults
 extern NSString *const LiveDataKey;
+
+// string for identifying the AuthData value in NSUserDefaults
+extern NSString *const AuthDataKey;
+
+/* 
+ OAUTH constants 
+ */
+
+extern NSString *const kOAuthConsumerKey;
+extern NSString *const kOAuthConsumerSecret;

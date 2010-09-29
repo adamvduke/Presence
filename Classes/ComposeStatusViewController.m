@@ -9,16 +9,6 @@
 #import "ComposeStatusViewController.h"
 #import "CredentialHelper.h"
 #import "PresenceContants.h"
-#import "TwitterHelper.h"
-
-/* OAuth stuff */
-#import "SA_OAuthTwitterEngine.h"
-
-
-#define kOAuthConsumerKey				@"wFCsd9r6aDCTTostr1QOnA"		//Consumer Key for AD_Presence
-#define kOAuthConsumerSecret			@"rDk2QXUQywdjsHjsqMhKWYP5tQc9hjJHznhaEI0BbLw"		// Consumer Secret for AD_Presence
-
-/* end OAuth stuff */
 
 @interface ComposeStatusViewController (Private)
 
@@ -28,8 +18,6 @@
 
 @implementation ComposeStatusViewController
 
-@synthesize password;
-@synthesize screenName;
 @synthesize spinner;
 @synthesize aNavigationItem;
 @synthesize charactersLabel;
@@ -63,7 +51,7 @@
 {	
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	self.isEditable = NO;
-	[_engine sendUpdate:textView.text];
+	[engine sendUpdate:textView.text];
 }
 
 // UITextViewDelegate method
@@ -112,6 +100,20 @@
 	
 	// tell the UITextView to becomeFirstResponder, this brings up the keyboard
 	[self.textView becomeFirstResponder];
+}
+
+- (void) viewDidAppear: (BOOL)animated {
+	if (engine) return;
+	engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
+	engine.consumerKey = kOAuthConsumerKey;
+	engine.consumerSecret = kOAuthConsumerSecret;
+	
+	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: engine delegate: self];
+	
+	if (controller)
+	{
+		[self presentModalViewController: controller animated: YES];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -186,6 +188,76 @@
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 }
+#pragma mark -
+#pragma mark SA_OAuthTwitterControllerDelegate
+
+- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
+{
+	// save the username
+	[CredentialHelper saveUsername:username];
+	
+	// log the username for debug purposes
+	NSLog(@"Authenicated for %@", username);
+}
+
+- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
+{
+	//TODO: Handle failed authentication
+	NSLog(@"Authentication Failed!");
+}
+
+- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
+{
+	//TODO: Handle canceled authentication
+	NSLog(@"Authentication Canceled.");
+}
+
+#pragma mark -
+#pragma mark SA_OAuthTwitterEngineDelegate
+- (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username
+{
+	[CredentialHelper saveAuthData:data];
+	[CredentialHelper saveUsername:username];
+}
+- (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username
+{
+	return [CredentialHelper retrieveAuthData];
+}
+//- (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
+#pragma mark -
+#pragma mark EngineDelegate
+
+// These delegate methods are called after a connection has been established
+- (void)requestSucceeded:(NSString *)connectionIdentifier
+{
+	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
+}
+- (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
+{
+	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
+}
+
+// These delegate methods are called after all results are parsed from the connection. If 
+// the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
+// collection of all results is also returned.
+- (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling statusesReceived for request %@", connectionIdentifier);
+}
+- (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling directMessagesReceived for request %@", connectionIdentifier);
+}
+
+- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling userInfoReceived for request %@", connectionIdentifier);
+}
+
+- (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
+{
+	NSLog(@"Calling miscInfoReceived for request %@", connectionIdentifier);
+}
 
 - (void)dealloc 
 {
@@ -193,82 +265,6 @@
 	[aNavigationItem release];
 	[charactersLabel release];
 	[textView release];
-	[_engine release];
 	[super dealloc];
 }
-
-/* ------------------------------------------------ */
-//
-//  OAuthTwitterDemoViewController.m
-//  OAuthTwitterDemo
-//
-//  Created by Ben Gottlieb on 7/24/09.
-//  Copyright Stand Alone, Inc. 2009. All rights reserved.
-//
-
-//=============================================================================================================================
-#pragma mark SA_OAuthTwitterEngineDelegate
-- (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username {
-	NSUserDefaults			*defaults = [NSUserDefaults standardUserDefaults];
-	
-	[defaults setObject: data forKey: @"authData"];
-	[defaults synchronize];
-}
-
-- (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username {
-	return [[NSUserDefaults standardUserDefaults] objectForKey: @"authData"];
-}
-
-//=============================================================================================================================
-#pragma mark SA_OAuthTwitterControllerDelegate
-- (void) OAuthTwitterController: (SA_OAuthTwitterController *) controller authenticatedWithUsername: (NSString *) username {
-	NSLog(@"Authenicated for %@", username);
-}
-
-- (void) OAuthTwitterControllerFailed: (SA_OAuthTwitterController *) controller {
-	NSLog(@"Authentication Failed!");
-}
-
-- (void) OAuthTwitterControllerCanceled: (SA_OAuthTwitterController *) controller {
-	NSLog(@"Authentication Canceled.");
-}
-
-//=============================================================================================================================
-#pragma mark TwitterEngineDelegate
-- (void) requestSucceeded: (NSString *) requestIdentifier {
-	
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	[self dismiss];
-	
-	NSLog(@"Request %@ succeeded", requestIdentifier);
-}
-
-- (void) requestFailed: (NSString *) requestIdentifier withError: (NSError *) error {
-	
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update failed" 
-													message:@"Please see the log for details" 
-												   delegate:self cancelButtonTitle:@"OK" 
-										  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-	NSLog(@"Request %@ failed with error: %@", requestIdentifier, error);
-}
-
-//=============================================================================================================================
-
-- (void) viewDidAppear: (BOOL)animated {
-	if (_engine) return;
-	_engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
-	_engine.consumerKey = kOAuthConsumerKey;
-	_engine.consumerSecret = kOAuthConsumerSecret;
-	
-	UIViewController			*controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: _engine delegate: self];
-	
-	if (controller) {
-		[self presentModalViewController: controller animated: YES];
-	}
-}
-
-/*--------------------------------------------------*/
 @end
