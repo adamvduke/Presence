@@ -234,6 +234,16 @@
 }
 - (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
 {
+	// stop the device's network activity indicator
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
+	UIAlertView *alert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"") 
+												   message:NSLocalizedString(UpdateFailedMessageKey, @"") 
+												  delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") 
+										 otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	return;
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
 }
 
@@ -242,7 +252,12 @@
 // collection of all results is also returned.
 - (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
 {
-	NSLog(@"Calling statusesReceived for request %@", connectionIdentifier);
+	// stop the device's network activity indicator
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	
+	// if the update was a success, set the text to nil and dismiss the view
+	self.textView.text = nil;
+	[self dismiss];
 }
 - (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
 {

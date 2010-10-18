@@ -112,7 +112,7 @@ typedef enum
 		NSString *connectionID = [engine getFollowedIdsForUsername:screenName];
 		[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionID];
 	}
-	else {
+	else if(IsEmpty(people)){
 		[self synchronousLoadTwitterData];
 	}
 }
