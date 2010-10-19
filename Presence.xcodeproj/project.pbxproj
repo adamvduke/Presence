@@ -25,7 +25,6 @@
 		564EF07112076FAD00ED4523 /* Schema_Version_1.plist in Resources */ = {isa = PBXBuildFile; fileRef = 564EF07012076FAD00ED4523 /* Schema_Version_1.plist */; };
 		566ADEE811B8BFBF00931CFD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* Person.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
-		5670FACE122373AC004E2BC2 /* libiOSfmdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5670FACD122373A2004E2BC2 /* libiOSfmdb.a */; };
 		56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D21611CEEC4400BF541D /* FavoritesHelper.m */; };
 		56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D2FB11CEFF4400BF541D /* CredentialHelper.m */; };
 		56AA6D911207D0D3001A31E9 /* SchemaVersions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56AA6D901207D0D3001A31E9 /* SchemaVersions.plist */; };
@@ -45,26 +44,27 @@
 		56C8E7C511D023A600B21D38 /* ComposeStatusViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56C8E7C211D023A600B21D38 /* ComposeStatusViewController.xib */; };
 		56C8E7C611D023A600B21D38 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56C8E7C311D023A600B21D38 /* MainWindow.xib */; };
 		56C8E7C711D023A600B21D38 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56C8E7C411D023A600B21D38 /* SettingsViewController.xib */; };
+		56DEC92B126D46AD002E4825 /* libiOSfmdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC928126D466D002E4825 /* libiOSfmdb.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		5670FACA122373A2004E2BC2 /* PBXContainerItemProxy */ = {
+		56DEC925126D466D002E4825 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */;
+			containerPortal = 56DEC91C126D466D002E4825 /* fmdb.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8DD76FA10486AA7600D96B5E;
 			remoteInfo = fmdb;
 		};
-		5670FACC122373A2004E2BC2 /* PBXContainerItemProxy */ = {
+		56DEC927126D466D002E4825 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */;
+			containerPortal = 56DEC91C126D466D002E4825 /* fmdb.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 5670FA98122371D1004E2BC2;
 			remoteInfo = iOSfmdb;
 		};
-		5670FADA122373FF004E2BC2 /* PBXContainerItemProxy */ = {
+		56DEC929126D468C002E4825 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */;
+			containerPortal = 56DEC91C126D466D002E4825 /* fmdb.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 5670FA97122371D1004E2BC2;
 			remoteInfo = iOSfmdb;
@@ -103,7 +103,6 @@
 		566ADEE511B8BFBF00931CFD /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		566ADEE611B8BFBF00931CFD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		566ADEE711B8BFBF00931CFD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
-		5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = ../../fmdb/fmdb.xcodeproj; sourceTree = SOURCE_ROOT; };
 		56A8D21511CEEC4400BF541D /* FavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesHelper.h; sourceTree = "<group>"; };
 		56A8D21611CEEC4400BF541D /* FavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesHelper.m; sourceTree = "<group>"; };
 		56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialHelper.h; sourceTree = "<group>"; };
@@ -131,6 +130,7 @@
 		56C8E7C211D023A600B21D38 /* ComposeStatusViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ComposeStatusViewController.xib; path = Resources/Nibs/ComposeStatusViewController.xib; sourceTree = "<group>"; };
 		56C8E7C311D023A600B21D38 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = Resources/Nibs/MainWindow.xib; sourceTree = "<group>"; };
 		56C8E7C411D023A600B21D38 /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = Resources/Nibs/SettingsViewController.xib; sourceTree = "<group>"; };
+		56DEC91C126D466D002E4825 /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = External/fmdb/fmdb.xcodeproj; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Presence-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Presence-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,7 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5670FACE122373AC004E2BC2 /* libiOSfmdb.a in Frameworks */,
+				56DEC92B126D46AD002E4825 /* libiOSfmdb.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -175,7 +175,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */,
+				56DEC91A126D4643002E4825 /* External */,
 				56C5613310B2481E0014D33C /* JSON */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -283,15 +283,6 @@
 			name = Database;
 			sourceTree = "<group>";
 		};
-		5670FAC6122373A2004E2BC2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5670FACB122373A2004E2BC2 /* fmdb */,
-				5670FACD122373A2004E2BC2 /* libiOSfmdb.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		56C5613310B2481E0014D33C /* JSON */ = {
 			isa = PBXGroup;
 			children = (
@@ -330,6 +321,31 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		56DEC91A126D4643002E4825 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				56DEC91B126D464D002E4825 /* fmdb */,
+			);
+			name = External;
+			sourceTree = "<group>";
+		};
+		56DEC91B126D464D002E4825 /* fmdb */ = {
+			isa = PBXGroup;
+			children = (
+				56DEC91C126D466D002E4825 /* fmdb.xcodeproj */,
+			);
+			name = fmdb;
+			sourceTree = "<group>";
+		};
+		56DEC91D126D466D002E4825 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56DEC926126D466D002E4825 /* fmdb */,
+				56DEC928126D466D002E4825 /* libiOSfmdb.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -344,7 +360,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				5670FADB122373FF004E2BC2 /* PBXTargetDependency */,
+				56DEC92A126D468C002E4825 /* PBXTargetDependency */,
 			);
 			name = Presence;
 			productName = Presence;
@@ -374,8 +390,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 5670FAC6122373A2004E2BC2 /* Products */;
-					ProjectRef = 5670FAC5122373A2004E2BC2 /* fmdb.xcodeproj */;
+					ProductGroup = 56DEC91D126D466D002E4825 /* Products */;
+					ProjectRef = 56DEC91C126D466D002E4825 /* fmdb.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -386,18 +402,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		5670FACB122373A2004E2BC2 /* fmdb */ = {
+		56DEC926126D466D002E4825 /* fmdb */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = fmdb;
-			remoteRef = 5670FACA122373A2004E2BC2 /* PBXContainerItemProxy */;
+			remoteRef = 56DEC925126D466D002E4825 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5670FACD122373A2004E2BC2 /* libiOSfmdb.a */ = {
+		56DEC928126D466D002E4825 /* libiOSfmdb.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libiOSfmdb.a;
-			remoteRef = 5670FACC122373A2004E2BC2 /* PBXContainerItemProxy */;
+			remoteRef = 56DEC927126D466D002E4825 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -455,10 +471,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5670FADB122373FF004E2BC2 /* PBXTargetDependency */ = {
+		56DEC92A126D468C002E4825 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = iOSfmdb;
-			targetProxy = 5670FADA122373FF004E2BC2 /* PBXContainerItemProxy */;
+			targetProxy = 56DEC929126D468C002E4825 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -484,7 +500,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Presence_Prefix.pch;
-				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../../fmdb/build/${BUILD_STYLE}-${PLATFORM_NAME}/usr/local/include";
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/External/fmdb/build/${BUILD_STYLE}-${PLATFORM_NAME}/usr/local/include";
 				INFOPLIST_FILE = "Presence-Info.plist";
 				PRODUCT_NAME = Presence;
 			};
