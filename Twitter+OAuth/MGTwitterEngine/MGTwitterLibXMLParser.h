@@ -36,7 +36,7 @@ connectionIdentifier:(NSString *)identifier requestType:(MGTwitterRequestType)re
 - (xmlChar *)_nodeValue;
 - (NSString *)_nodeValueAsString;
 - (NSDate *)_nodeValueAsDate;
-- (NSNumber *)_nodeValueAsInt;
+- (NSNumber *)_nodeValueAsLongLong;
 - (NSNumber *)_nodeValueAsBool;
 - (NSDictionary *)_statusDictionaryForNodeWithName:(const xmlChar *)parentNodeName;
 - (NSDictionary *)_userDictionaryForNodeWithName:(const xmlChar *)parentNodeName;

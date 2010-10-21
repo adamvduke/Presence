@@ -151,7 +151,7 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 	return [NSDate dateWithTimeIntervalSince1970:epochTime];
 }
 
-- (NSNumber *)_nodeValueAsInt
+- (NSNumber *)_nodeValueAsLongLong
 {
 	xmlChar *nodeValue = [self _nodeValue];
 	if (! nodeValue)
@@ -159,9 +159,9 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 		return nil;
 	}
 
-	NSString *intString = [NSString stringWithUTF8String:(const char *)nodeValue];
+	NSString *longLongString = [NSString stringWithUTF8String:(const char *)nodeValue];
 	xmlFree(nodeValue);
-	return [NSNumber numberWithInt:[intString intValue]];
+	return [NSNumber numberWithLongLong:[longLongString longLongValue]];
 }
 
 - (NSNumber *)_nodeValueAsBool
@@ -199,8 +199,8 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 			}
 			else if (xmlStrEqual(name, BAD_CAST "id") || xmlStrEqual(name, BAD_CAST "in_reply_to_user_id") || xmlStrEqual(name, BAD_CAST "in_reply_to_status_id"))
 			{
-				// process element as an integer
-				NSNumber *number = [self _nodeValueAsInt];
+				// process element as a number
+				NSNumber *number = [self _nodeValueAsLongLong];
 				if (number)
 				{
 					[dictionary setObject:number forKey:[NSString stringWithUTF8String:(const char *)name]];
@@ -268,8 +268,8 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 					|| xmlStrEqual(name, BAD_CAST "friends_count") || xmlStrEqual(name, BAD_CAST "favourites_count")
 					|| xmlStrEqual(name, BAD_CAST "statuses_count"))
 			{
-				// process element as an integer
-				NSNumber *number = [self _nodeValueAsInt];
+				// process element as a number
+				NSNumber *number = [self _nodeValueAsLongLong];
 				if (number)
 				{
 					[dictionary setObject:number forKey:[NSString stringWithUTF8String:(const char *)name]];
@@ -277,6 +277,7 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 			}
 			else if (xmlStrEqual(name, BAD_CAST "status"))
 			{
+				// process the element as a sub dictionary
 				[dictionary setObject:[self _statusDictionaryForNodeWithName:name] forKey:@"status"];
 			}
 			else if (xmlStrEqual(name, BAD_CAST "protected"))
@@ -306,6 +307,7 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 		nodeType = xmlTextReaderNodeType(_reader);
 		name = xmlTextReaderConstName(_reader);
 	}
+	NSLog(@"%@", [dictionary description]);
 	return dictionary;
 }
 
@@ -327,8 +329,8 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 			if (xmlStrEqual(name, BAD_CAST "hourly-limit") || xmlStrEqual(name, BAD_CAST "remaining-hits")
 					|| xmlStrEqual(name, BAD_CAST "reset-time-in-seconds"))
 			{
-				// process element as an integer
-				NSNumber *number = [self _nodeValueAsInt];
+				// process element as a number
+				NSNumber *number = [self _nodeValueAsLongLong];
 				if (number)
 				{
 					[dictionary setObject:number forKey:[NSString stringWithUTF8String:(const char *)name]];
