@@ -47,6 +47,7 @@ typedef enum
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
+	NSLog(@"%d", NSIntegerMax);
 	// initialize the tab bar
 	tabBarController = [[UITabBarController alloc]init];
 	
@@ -101,11 +102,7 @@ typedef enum
 }
 
 - (void)completeLaunching
-{
-	// get the current rate limit status
-	NSString *connectionId = [engine getRateLimitStatus];
-	[self cacheRequestType:[NSNumber numberWithInt:RateLimitRequest] forConnectionId:connectionId];
-	
+{	
 	// add the tabBarController's view to the window
 	[window addSubview:tabBarController.view];
 	
@@ -288,11 +285,12 @@ typedef enum
 	[CredentialHelper saveAuthData:data];
 	[CredentialHelper saveUsername:username];
 }
+
 - (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username
 {
 	return [CredentialHelper retrieveAuthData];
 }
-//- (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
+
 #pragma mark -
 #pragma mark EngineDelegate
 
@@ -301,11 +299,13 @@ typedef enum
 {
 	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
 }
+
 - (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
 {
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
 }
 
+//TODO: Remove these unimplemented delegate methods
 // These delegate methods are called after all results are parsed from the connection. If 
 // the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
 // collection of all results is also returned.
@@ -316,13 +316,11 @@ typedef enum
 - (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
 {
 	NSLog(@"Calling directMessagesReceived for request %@", connectionIdentifier);
-	
 }
 
 - (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
 {
 	NSLog(@"Calling userInfoReceived for request %@", connectionIdentifier);
-	
 }
 
 - (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
