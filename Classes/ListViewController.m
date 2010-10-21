@@ -88,6 +88,8 @@ typedef enum
 // override viewWillAppear to begin the data load
 - (void)viewWillAppear:(BOOL)animated
 {
+	[super viewWillAppear:animated];
+	
 	if (engine) return;
 	engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
 	engine.consumerKey = kOAuthConsumerKey;
@@ -103,6 +105,8 @@ typedef enum
 
 - (void)viewDidAppear:(BOOL)animated
 {
+	[super viewDidAppear:animated];
+	
 	NSString *screenName = [CredentialHelper retrieveUsername];
 	
 	// check the userIdArray, because it may have been set already
