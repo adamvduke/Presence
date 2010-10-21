@@ -46,22 +46,6 @@
 	[self.tableView flashScrollIndicators];
 }
 
-// synchronous method to fetch a list of updates
-- (void) synchronousLoadUpdates
-{	
-	// attempt to limit the auto release footprint by creating an autorelease pool around the data load
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-	
-	// get the user's timeline
-	[engine getUserTimelineFor:self.person.userId sinceID:0 startingAtPage:1 count:20];
-	
-	//call the main thread to notify that the data has finished loading
-	[self performSelectorOnMainThread:@selector(didFinishLoadingUpdates) withObject:nil waitUntilDone:NO];
-	
-	// release the NSAutoReleasePool
-	[pool release];
-}
-
 -(NSArray *)initStatusUpdatesFromTimeline:(NSArray *)userTimeline
 {		
 	NSMutableArray *statusUpdates = [[NSMutableArray alloc]init];
@@ -78,9 +62,9 @@
 }
 
 // begin loading the updates asynchronously
-- (void) beginLoadUpdates
+- (void) beginLoadUpdates:(BOOL)refresh
 {	
-	if (self.person && self.person.statusUpdates) return; // avoid doing any un-needed work
+	if (!refresh && self.person && self.person.statusUpdates) return; // avoid doing any un-needed work
 	
 	// start the device's network activity indicator
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -88,11 +72,8 @@
 	// start animating the spinner
 	[self.spinner startAnimating];
 	
-	// create the NSInvocationOperation and add it to the queue
-	NSInvocationOperation *operation = [[NSInvocationOperation alloc] 
-										initWithTarget:self selector:@selector(synchronousLoadUpdates) object:nil];
-	[self.queue addOperation:operation];
-	[operation release];
+	// get the user's timeline
+	[engine getUserTimelineFor:self.person.userId sinceID:0 startingAtPage:1 count:20];
 }
 
 // initialize with a UITableViewStyle and Person object
@@ -146,7 +127,7 @@
 		[self presentModalViewController: controller animated: YES];
 	}
 	else {
-		[self beginLoadUpdates];
+		[self beginLoadUpdates:NO];
 	}	
 }
 
@@ -315,12 +296,13 @@
 // collection of all results is also returned.
 - (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
 {
-	NSLog(@"Calling statusesReceived for request %@", connectionIdentifier);
 	// parse the individual statuses out of the timeline
-	//NSArray *statusArray = [self initStatusUpdatesFromTimeline:userTimeline];
+	NSArray *statusArray = [self initStatusUpdatesFromTimeline:statuses];
 	
 	// set the statusUpdates array on the person object so that they don't need to be fetched again
-	//self.person.statusUpdates = statusArray;
+	self.person.statusUpdates = statusArray;
+	
+	[self didFinishLoadingUpdates];
 }
 - (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
 {
