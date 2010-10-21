@@ -31,7 +31,6 @@ typedef enum
 - (void) cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId;
 - (void) beginLoadingTwitterData;
 - (void) synchronousLoadTwitterData;
-- (void) beginLoadPerson:(NSString *)userId;
 - (void) synchronousLoadPerson:(NSString *)userId;
 - (void) didFinishLoadingPerson;
 
@@ -287,7 +286,7 @@ typedef enum
 				NSString *username = textField.text;
 				[self.userIdArray addObject:username];
 				[FavoritesHelper saveFavorites:userIdArray];
-				[self beginLoadPerson:username];
+				[self synchronousLoadPerson:username];
 			}
 		}
 	}
@@ -633,12 +632,6 @@ typedef enum
 
 - (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
 {
-	NSLog(@"Calling userInfoReceived for request %@", connectionIdentifier);
-	
-	for (id thing in userInfo) {
-		NSLog(@"%@",[userInfo description]);
-	}
-	
 	Person *person = [[Person alloc]initPersonWithInfo:[userInfo objectAtIndex:0]];
 	
 	// this person is not yet in the database
