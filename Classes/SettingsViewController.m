@@ -6,14 +6,14 @@
 //  Copyright 2010 Adam Duke. All rights reserved.
 //
 
+#import "CredentialHelper.h"
 #import "PresenceContants.h"
 #import "SettingsViewController.h"
 
 @implementation SettingsViewController
 
 @synthesize aNavigationItem;
-@synthesize liveDataLabel;
-@synthesize liveDataSwitch;
+@synthesize deauthorizeButton;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -21,19 +21,10 @@
 	return YES;
 }
 
-// convenience method to hide the keyboard
-- (void)hideKeyBoardForTextField:(UITextField *)textField
-{
-	if ([textField isFirstResponder]) {
-		[textField resignFirstResponder];
-	}
-}
-
 // save the state of the settings to NSUserDefaults
 -(IBAction)save
 {	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setBool:liveDataSwitch.isOn forKey:LiveDataKey];
 	[defaults synchronize];
 	
 	// display an alert indicating the values were saved
@@ -44,19 +35,18 @@
 	[alert release];
 }
 
+-(IBAction)deauthorize
+{
+	[CredentialHelper removeCredentials];
+	[self save];
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
 	// set the views title
 	self.aNavigationItem.title = NSLocalizedString(SettingsViewTitleKey, @"");
-	
-	// localize the labels on the screen
-	self.liveDataLabel.text = NSLocalizedString(LiveDataLabelKey, @"");
-	
-	// get any values out of NSUserDefaults and set those values on the fields
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	self.liveDataSwitch.on = [defaults boolForKey:LiveDataKey];
 }
 
 - (void)didReceiveMemoryWarning 
@@ -76,7 +66,6 @@
 
 - (void)dealloc 
 {
-	[liveDataSwitch release];
     [super dealloc];
 }
 

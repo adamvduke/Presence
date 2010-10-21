@@ -14,18 +14,15 @@
 {
 	// navigation item
 	IBOutlet UINavigationItem *aNavigationItem;
-	
-	// label to identify the live data switch
-	IBOutlet UILabel *liveDataLabel;
-		
-	// switch to select between live twitter data and test data
-	IBOutlet UISwitch *liveDataSwitch;
+	IBOutlet UIButton *deauthorizeButton;
 }
 
 @property (nonatomic, retain)UINavigationItem *aNavigationItem;
-@property (nonatomic, retain)UILabel *liveDataLabel;
-@property (nonatomic, retain)UISwitch *liveDataSwitch;
+@property (nonatomic, retain)UIButton *deauthorizeButton;
 
 // Provide an implementation to save the user's settings
 - (IBAction)save;
+
+// Provide an implementation to remove the user's saved authorization credentials
+- (IBAction)deauthorize;
 @end

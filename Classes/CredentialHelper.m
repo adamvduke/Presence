@@ -58,4 +58,12 @@
 {
 	return [[NSUserDefaults standardUserDefaults]objectForKey:key];
 }
+
++ (void)removeCredentials
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults removeObjectForKey:AuthDataKey];
+	[defaults removeObjectForKey:UsernameKey];
+	[defaults synchronize];
+}
 @end

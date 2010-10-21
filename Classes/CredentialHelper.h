@@ -25,4 +25,6 @@
 // Returns the saved authData
 + (NSString *)retrieveAuthData;
 
++ (void)removeCredentials;
+
 @end
