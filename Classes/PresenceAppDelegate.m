@@ -47,7 +47,6 @@ typedef enum
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
-	NSLog(@"%d", NSIntegerMax);
 	// initialize the tab bar
 	tabBarController = [[UITabBarController alloc]init];
 	

@@ -647,6 +647,12 @@
 #if USE_LIBXML
 	NSURL *URL = [connection URL];
 
+#if DEBUG
+	if (NO) {
+		NSLog(@"MGTwitterEngine: xmlData = %@ from %@", [[[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding] autorelease], URL);
+	}
+#endif
+	
     switch (responseType) {
         case MGTwitterStatuses:
         case MGTwitterStatus:
