@@ -1,0 +1,3 @@
+[submodule "External/fmdb"]
+	path = External/fmdb
+	url = git@github.com:adamvduke/fmdb.git
