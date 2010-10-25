@@ -9,8 +9,8 @@ Building/Running:
 -----------------
 
 Presence depends on the fmdb sqlite3 wrapper written by Gus Mueller. To that end, I have
-forked his fmdb repository [here](http://github.com/adamvduke/fmdb) and included it as a git
-submodule. The steps to get up and running are:
+forked [his](http://github.com/ccgus/fmdb) fmdb repository [here](http://github.com/adamvduke/fmdb) 
+and included it as a git submodule. The steps to get up and running are:
      git clone git://github.com/adamvduke/Presence.git
      cd Presence
      git submodule init
