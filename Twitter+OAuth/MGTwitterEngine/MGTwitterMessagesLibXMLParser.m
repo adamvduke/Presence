@@ -33,7 +33,7 @@
 			else if (xmlStrEqual(name, BAD_CAST "id") || xmlStrEqual(name, BAD_CAST "sender_id") || xmlStrEqual(name, BAD_CAST "recipient_id"))
 			{
 				// process element as an integer
-				NSNumber *number = [self _nodeValueAsInt];
+				NSNumber *number = [self _nodeValueAsLongLong];
 				if (number)
 				{
 					[dictionary setObject:number forKey:[NSString stringWithUTF8String:(const char *)name]];
