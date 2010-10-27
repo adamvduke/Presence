@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>CREATE TABLE Image (id INTEGER PRIMARY KEY, imageUrl TEXT UNIQUE NOT NULL, userId TEXT UNIQUE NOT NULL, FOREIGN KEY(userId) REFERENCES Person(userId))</string>
+</array>
+</plist>

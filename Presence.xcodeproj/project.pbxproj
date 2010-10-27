@@ -25,6 +25,7 @@
 		564EF07112076FAD00ED4523 /* Schema_Version_1.plist in Resources */ = {isa = PBXBuildFile; fileRef = 564EF07012076FAD00ED4523 /* Schema_Version_1.plist */; };
 		566ADEE811B8BFBF00931CFD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* Person.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
+		566C53C8127778CD0097A858 /* Schema_Version_3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 566C53C7127778CD0097A858 /* Schema_Version_3.plist */; };
 		56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D21611CEEC4400BF541D /* FavoritesHelper.m */; };
 		56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D2FB11CEFF4400BF541D /* CredentialHelper.m */; };
 		56AA6D911207D0D3001A31E9 /* SchemaVersions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56AA6D901207D0D3001A31E9 /* SchemaVersions.plist */; };
@@ -116,6 +117,7 @@
 		566ADEE511B8BFBF00931CFD /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		566ADEE611B8BFBF00931CFD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		566ADEE711B8BFBF00931CFD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		566C53C7127778CD0097A858 /* Schema_Version_3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Schema_Version_3.plist; path = Resources/Database/Schema_Version_3.plist; sourceTree = "<group>"; };
 		56A8D21511CEEC4400BF541D /* FavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesHelper.h; sourceTree = "<group>"; };
 		56A8D21611CEEC4400BF541D /* FavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesHelper.m; sourceTree = "<group>"; };
 		56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialHelper.h; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 				56AA6D901207D0D3001A31E9 /* SchemaVersions.plist */,
 				564EF07012076FAD00ED4523 /* Schema_Version_1.plist */,
 				56AA6D921207D18C001A31E9 /* Schema_Version_2.plist */,
+				566C53C7127778CD0097A858 /* Schema_Version_3.plist */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -596,6 +599,7 @@
 				56C5E76E123E6E520099F48D /* jQueryInject.txt in Resources */,
 				56C5E76F123E6E520099F48D /* jQueryInjectLandscape.txt in Resources */,
 				56C5E781123E6E520099F48D /* twitter_load.png in Resources */,
+				566C53C8127778CD0097A858 /* Schema_Version_3.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
