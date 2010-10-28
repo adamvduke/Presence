@@ -73,7 +73,12 @@
 	[self.spinner startAnimating];
 	
 	// get the user's timeline
-	[engine getUserTimelineFor:self.person.userId sinceID:0 startingAtPage:1 count:20];
+	[engine getUserTimelineFor:self.person.user_id sinceID:0 startingAtPage:1 count:20];
+}
+
+- (void)refresh
+{
+	[self beginLoadUpdates:YES];
 }
 
 // initialize with a UITableViewStyle and Person object
@@ -103,7 +108,7 @@
 		// set the right bar button for reloading the data with the Refresh style
 		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] 
 										   initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh 
-										   target:self action:@selector(beginLoadUpdates)];
+										   target:self action:@selector(refresh)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
 	}
@@ -188,7 +193,7 @@
 		}
 		
 		// set only the text and image properties on the cell
-		cell.textLabel.text = self.person.screenName;
+		cell.textLabel.text = self.person.screen_name;
 		if (self.person.image) 
 		{
 			cell.imageView.image = self.person.image;
@@ -277,7 +282,7 @@
 {
 	return [CredentialHelper retrieveAuthData];
 }
-//- (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
+
 #pragma mark -
 #pragma mark EngineDelegate
 
@@ -289,6 +294,7 @@
 - (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
 {
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
+	[self didFinishLoadingUpdates];
 }
 
 // These delegate methods are called after all results are parsed from the connection. If 
@@ -303,30 +309,6 @@
 	self.person.statusUpdates = statusArray;
 	
 	[self didFinishLoadingUpdates];
-}
-- (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling directMessagesReceived for request %@", connectionIdentifier);
-	
-}
-
-- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling userInfoReceived for request %@", connectionIdentifier);
-	
-}
-
-- (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling miscInfoReceived for request %@", connectionIdentifier);
-	
-	NSMutableArray *idsArray = [NSMutableArray array];
-	for(NSDictionary *dictionary in miscInfo)
-	{
-		for (NSString *key in [dictionary allKeys]) {
-			[idsArray addObject:[dictionary objectForKey:key]];
-		}
-	}
 }
 
 - (void)dealloc 
