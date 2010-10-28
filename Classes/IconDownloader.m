@@ -39,7 +39,7 @@
 	
     // alloc+init and start an NSURLConnection; release on completion/failure
     NSURLConnection *conn = [[NSURLConnection alloc] 
-							 initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.person.imageUrlString]] delegate:self];
+							 initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.person.profile_image_url]] delegate:self];
     self.imageConnection = conn;
     [conn release];
 }

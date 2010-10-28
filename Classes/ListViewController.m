@@ -28,10 +28,10 @@ typedef enum
 @interface ListViewController (Private)
 
 - (void) startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
-- (void) cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId;
+- (void) cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connection_id;
 - (void) beginLoadingTwitterData;
 - (void) synchronousLoadTwitterData;
-- (void) synchronousLoadPerson:(NSString *)userId;
+- (void) synchronousLoadPerson:(NSString *)user_id;
 - (void) didFinishLoadingPerson;
 
 @end
@@ -63,12 +63,12 @@ typedef enum
  Cache the RequestType for a particular connectionId so that a decision can be made
  later about how to handle the response.
  */
-- (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId
+- (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connection_id
 {
 	if (!openRequests) {
 		openRequests = [[NSMutableDictionary alloc]init];
 	}
-	[openRequests setObject:requestType forKey:connectionId];
+	[openRequests setObject:requestType forKey:connection_id];
 }
 
 #pragma mark -
@@ -112,8 +112,8 @@ typedef enum
 	// check the userIdArray, because it may have been set already
 	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
 	{
-		NSString *connectionID = [engine getFollowedIdsForUsername:screenName];
-		[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionID];
+		NSString *connection_id = [engine getFollowedIdsForUsername:screenName];
+		[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connection_id];
 	}
 	else if(IsEmpty(people)){
 		[self synchronousLoadTwitterData];
@@ -173,24 +173,24 @@ typedef enum
 	}
 	
 	// TODO: should this loop be inside the IsEmpty check?
-	for (NSString *userId in userIdArray) 
+	for (NSString *user_id in userIdArray) 
 	{
-		[self synchronousLoadPerson:userId];
+		[self synchronousLoadPerson:user_id];
 	}
 }
 
 // synchronously fetch data, initialize a person object, and add it to the list of people
 // call the main thread when finished
--(void) synchronousLoadPerson:(NSString *)userId
+-(void) synchronousLoadPerson:(NSString *)user_id
 {
-	Person *person = [dataAccessHelper initPersonByUserId:userId];
+	Person *person = [dataAccessHelper initPersonByUserId:user_id];
 	if (![person isValid]) {
 		[person release];
 		person = nil;
 		
 		// get the user's information from Twitter
-		NSString *connectionID = [engine getUserInformationFor:userId];
-		[self cacheRequestType:[NSNumber numberWithInt:UserInformationRequest] forConnectionId:connectionID];
+		NSString *connection_id = [engine getUserInformationFor:user_id];
+		[self cacheRequestType:[NSNumber numberWithInt:UserInformationRequest] forConnectionId:connection_id];
 	}
 	else
 	{
@@ -454,13 +454,13 @@ typedef enum
 		// Set up the cell...
 		Person *person = [self.people objectAtIndex:indexPath.row];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.textLabel.text = person.screenName;
+		cell.textLabel.text = person.screen_name;
 		
 		// Only load cached images; defer new downloads until scrolling ends
 		if (!person.image)
 		{
 			// first check the database
-			UIImage *anImage = [dataAccessHelper initImageForUserId:person.userId];
+			UIImage *anImage = [dataAccessHelper initImageForUserId:person.user_id];
 			if (!anImage) 
 			{
 				if (self.tableView.dragging == NO && self.tableView.decelerating == NO)
@@ -643,6 +643,7 @@ typedef enum
 		[dataAccessHelper savePerson:person];
 		[self.people addObject:person];
 	}
+	[person release];
 	[self didFinishLoadingPerson];
 }
 

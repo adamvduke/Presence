@@ -35,10 +35,10 @@
 // retrieve a Person's details from the database and 
 // construct a person object from the results by their
 // numeric userId
-- (Person *)initPersonByUserId:(NSString *)userId;
+- (Person *)initPersonByUserId:(NSString *)user_id;
 
 // retrieve a Person's image from the database
-- (UIImage *)initImageForUserId:(NSString *)userId;
+- (UIImage *)initImageForUserId:(NSString *)user_id;
 
 // save a status record to the database
 + (BOOL) saveStatus:(Status *)status;

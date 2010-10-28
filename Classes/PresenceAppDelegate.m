@@ -76,7 +76,7 @@ typedef enum
 /* 
  Helper method to set the image and title for a view controller
  */
-- (UIViewController *)setIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey
+- (UIViewController *)initIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey
 {
 	// icon image loading
 	NSString *iconPath = [[NSBundle mainBundle]pathForResource:iconName ofType:@"png"];
@@ -163,7 +163,7 @@ typedef enum
 	NSBundle *mainBundle = [NSBundle mainBundle];
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc]
 													  initWithNibName:SettingsViewControllerNibName bundle:mainBundle];
-	settingsViewController = (SettingsViewController *)[self setIconAndTitleForViewController:settingsViewController 
+	settingsViewController = (SettingsViewController *)[self initIconAndTitleForViewController:settingsViewController 
 																					 iconName:@"SettingsIcon" titleKey:SettingsViewTitleKey];
 	return settingsViewController;
 }
@@ -173,7 +173,7 @@ typedef enum
 {
 	// create a navigation controller and set it's title and tabBar icon
 	UINavigationController *favoritesNavigationController = [[UINavigationController alloc]init];
-	favoritesNavigationController = (UINavigationController *)[self setIconAndTitleForViewController:favoritesNavigationController 
+	favoritesNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:favoritesNavigationController 
 																							iconName:@"FavoritesIcon" 
 																							titleKey:FavoritesViewControllerTitleKey];
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -198,7 +198,7 @@ typedef enum
 {
 	// create a navigation controller and set it's title and tabBar icon
 	UINavigationController *followingNavigationController = [[UINavigationController alloc]init];
-	followingNavigationController = (UINavigationController *)[self setIconAndTitleForViewController:followingNavigationController 
+	followingNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:followingNavigationController 
 																							iconName:@"PeopleIcon" 
 																							titleKey:ListViewControllerTitleKey];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -242,7 +242,7 @@ typedef enum
 - (UINavigationController *)initSearchController
 {
 	UINavigationController *searchNavigationController = [[UINavigationController alloc]init];
-	searchNavigationController = (UINavigationController *)[self setIconAndTitleForViewController:searchNavigationController 
+	searchNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:searchNavigationController 
 																						 iconName:@"SearchIcon" 
 																						 titleKey:SearchViewControllerTitleKey];
 	// TODO: push a UIViewController with the ability to search the twitter api
@@ -296,7 +296,7 @@ typedef enum
 // These delegate methods are called after a connection has been established
 - (void)requestSucceeded:(NSString *)connectionIdentifier
 {
-	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
+	NSLog(@"Request succeeded %@, response pending.\n", connectionIdentifier);
 }
 
 - (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
@@ -327,7 +327,6 @@ typedef enum
 	NSNumber *requestType = [openRequests objectForKey:connectionIdentifier];
 	switch ([requestType intValue]) {
 		case RateLimitRequest:
-			NSLog(@"%@", [[miscInfo objectAtIndex:0] description]);
 			break;
 		case FollowedIdsRequest:
 			[self recievedFollowingIdsResponse:miscInfo];
