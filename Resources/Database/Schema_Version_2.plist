@@ -2,6 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <array>
-	<string>CREATE TABLE Status (id INTEGER PRIMARY KEY, statusId TEXT, text TEXT, createdDate DOUBLE, createrId TEXT)</string>
+	<string>CREATE TABLE Status (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL, status_id INTEGER UNIQUE NOT NULL, created_at TEXT NOT NULL, text TEXT NOT NULL, source TEXT NOT NULL, FOREIGN KEY(user_id) REFERENCES Person(user_id))</string>
 </array>
 </plist>

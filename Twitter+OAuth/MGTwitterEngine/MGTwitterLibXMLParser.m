@@ -307,7 +307,6 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 		nodeType = xmlTextReaderNodeType(_reader);
 		name = xmlTextReaderConstName(_reader);
 	}
-	NSLog(@"%@", [dictionary description]);
 	return dictionary;
 }
 

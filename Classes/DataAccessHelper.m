@@ -17,6 +17,8 @@
 @synthesize documentsDirectoryPath;
 @synthesize schemaVersionsPath;
 
+#pragma mark -
+#pragma mark NSObject
 /* Release memory that is being held in any instance variables during deconstruction
  */
 - (void) dealloc
@@ -37,19 +39,12 @@
 		// initialize the fileManager
 		self.fileManager = [NSFileManager defaultManager];
 		
-		// Get the path to the documents directory
+		// Hold on to the path to the documents directory
 		NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 		self.documentsDirectoryPath = [documentPaths objectAtIndex:0];
 		
 		// Hold on to the paths for the SchemaVersions.plis and Presence.db files
-		self.schemaVersionsPath = [self.documentsDirectoryPath stringByAppendingPathComponent:@"SchemaVersions.plist"];
 		self.documentsDatabasePath = [self.documentsDirectoryPath stringByAppendingPathComponent:@"Presence.db"];
-		
-		// if the SchemaVersions.plist file hasn't been copied from the bundle to the Documents directory, copy it
-		if (![self.fileManager fileExistsAtPath:self.schemaVersionsPath]) {
-			NSString *bundleSchemaVersionsPath = [[NSBundle mainBundle]pathForResource:@"SchemaVersions" ofType:@"plist"];
-			[self.fileManager copyItemAtPath:bundleSchemaVersionsPath toPath:self.schemaVersionsPath error:nil];
-		}
 	}
 	return self;
 }
@@ -73,26 +68,24 @@
  */
 - (void) updateSchema
 {
-	// get a dictionary representation of the SchemaVersions.plist file
-	NSMutableDictionary *schemaVersions = [[NSMutableDictionary alloc] initWithContentsOfFile:self.schemaVersionsPath];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
-	// get the current and target schema versions
-	NSInteger currentVersion = [[schemaVersions objectForKey:@"CurrentVersion"] integerValue];
-	NSInteger targetVersion = [[schemaVersions objectForKey:@"TargetVersion"] integerValue];
+	// get the current schema version
+	NSString *const CurrentSchemaVersion = @"CurrentSchemaVersion";
+	NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
+	NSInteger currentVersion = [userDefaults integerForKey:CurrentSchemaVersion];
 	
 	// a boolean to indicate the schema has changed
-	BOOL writeSchemaVersions = NO;
+	BOOL schemaUpdated = NO;
 	
-	// while the current version is less than the target version
-	// get the next set of DDL statements and execute them
-	while (currentVersion < targetVersion) {
+	NSString *fileName = [NSString stringWithFormat:SchemaVersionFormatString, currentVersion + 1];
+	
+	// get the list of statements to make the DDL change
+	NSString *path = [[NSBundle mainBundle]pathForResource:fileName ofType:@"plist"];
+	while (path) {
 		
-		writeSchemaVersions = YES;
-		NSString *fileName = [NSString stringWithFormat:@"Schema_Version_%d", currentVersion + 1];
-		
-		// get the list of statements to create the schema
-		NSString *path = [[NSBundle mainBundle]pathForResource:fileName ofType:@"plist"];
 		NSArray *sqlStatements = [NSArray arrayWithContentsOfFile:path];
+		schemaUpdated = YES;
 		
 		// open the database
 		FMDatabase *database = [self openApplicationDatabase];
@@ -109,13 +102,16 @@
 		
 		//increment version
 		currentVersion++;
-		NSNumber *updatedToVersion = [NSNumber numberWithInt:currentVersion];
-		[schemaVersions setValue:updatedToVersion forKey:@"CurrentVersion"];
+		[userDefaults setInteger:currentVersion forKey:CurrentSchemaVersion];
+		fileName = [NSString stringWithFormat:SchemaVersionFormatString, currentVersion + 1];
+		path = [[NSBundle mainBundle]pathForResource:fileName ofType:@"plist"];
 	}
-	if (writeSchemaVersions) {
-		[schemaVersions writeToFile:self.schemaVersionsPath atomically:YES];
+	
+	// if the schemaUpdated flag has flipped, we'll want to write out the NSUserDefaults
+	// because the CurrentSchemaVersion will have been updated
+	if (schemaUpdated) {
+		[userDefaults synchronize];
 	}
-	[schemaVersions release];
 }
 
 // create the default database and save it in the Documents directory
@@ -131,6 +127,9 @@
 	return YES;
 }
 
+#pragma mark -
+#pragma mark Direct SQL methods
+
 // save a Person object's details to the database
 - (BOOL) savePerson:(Person *)person
 {
@@ -138,18 +137,25 @@
 	FMDatabase *database = [self openApplicationDatabase];
 	
 	// attempt to select a record based on the username
-	FMResultSet *resultSet = [database executeQuery:@"select id from Person where userId = ?", person.userId];
+	FMResultSet *resultSet = [database executeQuery:@"SELECT id FROM Person WHERE user_id = ?", person.user_id];
 	
 	// if the resultset contains a record this is an update
 	if ([resultSet next]) 
 	{
 		//execute update
 		[database beginTransaction];
-		[database executeUpdate:@"update person set screenName = ?, imageUrlString = ?, image = ? where userId = ?", 
-		 person.screenName,
-		 person.imageUrlString, 
+		[database executeUpdate:@"UPDATE Person SET screen_name = ?, display_name = ?, location = ?, description = ?, url = ? WHERE user_id = ?", 
+		 person.screen_name,
+		 person.display_name,
+		 person.display_location,
+		 person.display_description,
+		 person.display_url,
+		 person.user_id];
+		
+		[database executeUpdate:@"UPDATE Image SET profile_image_url = ?, image = ? WHERE user_id = ?",
+		 person.profile_image_url, 
 		 UIImagePNGRepresentation(person.image),
-		 person.userId];
+		 person.user_id];
 		[database commit];
 	}
 	
@@ -158,10 +164,17 @@
 	{
 		//execute insert
 		[database beginTransaction];
-		[database executeUpdate:@"insert into Person (userId, screenName, imageUrlString, image) values (?, ?, ?, ?)", 
-		 person.userId, 
-		 person.screenName, 
-		 person.imageUrlString, 
+		[database executeUpdate:@"INSERT INTO Person (user_id, screen_name, display_name, location, description, url) VALUES (?, ?, ?, ?, ?, ?)", 
+		 person.user_id, 
+		 person.screen_name,
+		 person.display_name,
+		 person.display_location,
+		 person.display_description,
+		 person.display_url];
+		 
+		[database executeUpdate:@"INSERT INTO Image (profile_image_url, user_id, image) VALUES (?,?,?)",
+		 person.profile_image_url,
+		 person.user_id,
 		 UIImagePNGRepresentation(person.image)];
 		[database commit];		
 	}
@@ -178,21 +191,35 @@
  Attempt to initialize and populate a Person object using data in the database for the given 
  userId
  */
-- (Person *) initPersonByUserId:(NSString *)userId
+- (Person *) initPersonByUserId:(NSString *)user_id
 {
 	// open the database
 	FMDatabase *database = [self openApplicationDatabase];
 	
 	Person *person = [[Person alloc]init];
-	
 	// query the database for the Person's details
-	FMResultSet *resultSet = [database executeQuery:@"select * from Person where userId = ?", userId];
+	FMResultSet *resultSet = [database executeQuery:@"SELECT "
+														"person.user_id, "
+														"person.screen_name, "
+														"person.display_name, "
+														"person.location, "
+														"person.description, "
+														"person.url, "
+														"image_table.profile_image_url, "
+														"image_table.image "
+													"FROM Person person "
+														"JOIN Image image_table ON image_table.user_id = person.user_id " 
+													"WHERE person.user_id = ?", user_id];
 	
 	// if the resultset contains data, construct a Person object from it
 	while ([resultSet next]) {
-		person.userId = userId;
-		person.screenName = [resultSet stringForColumn:@"screenName"];
-		person.imageUrlString = [resultSet stringForColumn:@"imageUrlString"];
+		person.user_id = user_id;
+		person.screen_name = [resultSet stringForColumn:@"screen_name"];
+		person.display_name = [resultSet stringForColumn:@"display_name"];
+		person.display_location = [resultSet stringForColumn:@"location"];
+		person.display_description = [resultSet stringForColumn:@"description"];
+		person.display_url = [resultSet stringForColumn:@"url"];		
+		person.profile_image_url = [resultSet stringForColumn:@"profile_image_url"];
 		person.image = [UIImage imageWithData:[resultSet dataForColumn:@"image"]];
 	}
 	
@@ -206,34 +233,17 @@
 
 /* Attempt to retrieve an image from the database for the given userId. The image data is stored in a blob type
  */
-- (UIImage *)initImageForUserId:(NSString *)userId
+- (UIImage *)initImageForUserId:(NSString *)user_id
 {
 	FMDatabase *database = [self openApplicationDatabase];
 	
-	FMResultSet *resultSet = [database executeQuery:@"select image from Person where userId = ?", userId];
+	FMResultSet *resultSet = [database executeQuery:@"SELECT image FROM Image WHERE user_id = ?", user_id];
 	
 	UIImage *returnImage = nil;
 	if([resultSet next]) {
 		returnImage = [[UIImage alloc]initWithData:[resultSet dataForColumn:@"image"]];
 	}
 	return returnImage;
-}
-
-/* Attempt to retrieve the userId for a user given that user's screenName
- */
-- (NSString *)fetchUserIdByScreenName:(NSString *)screenName
-{
-	// open the database
-	FMDatabase *database = [self openApplicationDatabase];
-	FMResultSet *resultSet = [database executeQuery:@"select userId from Person where screenName = ?", screenName];
-	NSString *userId = nil;
-	while ([resultSet next]) {
-		userId = [resultSet stringForColumn:@"userId"];
-	}
-	[resultSet close];
-	[database close];
-	
-	return userId;
 }
 
 + (BOOL) saveStatus:(Status *)status
