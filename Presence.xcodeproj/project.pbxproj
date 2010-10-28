@@ -693,7 +693,10 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Presence_Prefix.pch;
-				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/External/fmdb/build/${BUILD_STYLE}-${PLATFORM_NAME}/usr/local/include";
+				HEADER_SEARCH_PATHS = (
+					$SDKROOT/usr/include/libxml2,
+					"${PROJECT_DIR}/External/fmdb/build/${BUILD_STYLE}-${PLATFORM_NAME}/usr/local/include",
+				);
 				INFOPLIST_FILE = "Presence-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -733,7 +736,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator4.0;
+				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
