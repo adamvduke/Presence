@@ -146,26 +146,18 @@
 // When the keyboard becomes visible, do some math to redraw things to the appropriate size
 - (void)keyboardWillShow:(NSNotification *)note
 {
-	CGRect keyboardFrame = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-	CGRect windowFrame = self.view.frame;
-	CGRect textViewFrame = self.textView.frame;
-	CGPoint textViewOrigin = textViewFrame.origin;
-	CGFloat textViewHeight;
-	if(UIDeviceOrientationIsLandscape(self.interfaceOrientation))
+	CGRect newTextViewFrame;
+	if(UIDeviceOrientationIsPortrait(self.interfaceOrientation))
 	{
-		// the concept of width and height don't change with respect to portrait orientation
-		// when the phone is rotated, in order to calculate what a user views as height in 
-		// landscape the calculations should be done on the widths
-		textViewHeight = windowFrame.size.width - keyboardFrame.size.width - textViewOrigin.y;
+		newTextViewFrame = CGRectMake(5.0f, 70.0f, 310.0f, 170.0f);
 	}
 	else 
 	{
-		textViewHeight = windowFrame.size.height - keyboardFrame.size.height - textViewOrigin.y;
+		newTextViewFrame = CGRectMake(5.0f, 70.0f, 470.0f, 65.0f);
 	}
-	CGRect newTextViewFrame = CGRectMake(textViewFrame.origin.x, textViewFrame.origin.y, textViewFrame.size.width, textViewHeight);
 	[self.textView setFrame:newTextViewFrame];
 	
-	// re-center the spinner in the new text view frame
+	// center the spinner in the new text view frame
 	CGRect originalSpinnerFrame = self.spinner.frame;
 	CGRect spinnerFrame = CGRectMake(newTextViewFrame.size.width/2 - originalSpinnerFrame.size.width/2, 
 									 newTextViewFrame.size.height/2 - originalSpinnerFrame.size.height/2, 
