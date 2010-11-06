@@ -9,24 +9,33 @@
 #import "DataAccessHelper.h"
 #import "FMDatabase.h"
 
+@interface DataAccessHelper (Private)
+
+- (FMDatabase *) openApplicationDatabase;
+- (void) updateSchema;
+- (void)executeSqlOnAllTables:(NSString *)sql;
+- (NSArray *)getTableNames;
+- (void)dropAllTables;
+
+@end
+
 @implementation DataAccessHelper
 
-@synthesize fileManager;
-@synthesize databaseName;
-@synthesize documentsDatabasePath;
-@synthesize documentsDirectoryPath;
-@synthesize schemaVersionsPath;
+@synthesize databaseName, documentsDatabasePath;
+
+// local constants
+NSString *const CurrentSchemaVersion = @"CurrentSchemaVersion";
+NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 
 #pragma mark -
 #pragma mark NSObject
+
 /* Release memory that is being held in any instance variables during deconstruction
  */
 - (void) dealloc
 {
-	[fileManager release];
 	[databaseName release];
 	[documentsDatabasePath release];
-	[documentsDirectoryPath release];	
 	[super dealloc];
 }
 
@@ -34,104 +43,42 @@
  */
 -(DataAccessHelper *)init
 {
-	if (self == [super init]) {
-		
-		// initialize the fileManager
-		self.fileManager = [NSFileManager defaultManager];
+	if (self == [super init]) {		
 		
 		// Hold on to the path to the documents directory
 		NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-		self.documentsDirectoryPath = [documentPaths objectAtIndex:0];
+		NSString *documentsDirectoryPath = [documentPaths objectAtIndex:0];
 		
 		// Hold on to the paths for the SchemaVersions.plis and Presence.db files
-		self.documentsDatabasePath = [self.documentsDirectoryPath stringByAppendingPathComponent:@"Presence.db"];
+		self.documentsDatabasePath = [documentsDirectoryPath stringByAppendingPathComponent:@"Presence.db"];
 	}
 	return self;
 }
 
-/* Convenience method to get a reference to an open FMDatabase object and log any associated erros
- */
-- (FMDatabase *) openApplicationDatabase
-{
-	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
-	if (![database open]) {
-		NSLog(@"Error opening database.");
-		if ([database hadError]) {
-			NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
-		}
-	}
-	return database;
-}
-
-/* Determines the current state of the database schema and applies the neccesary updates 
-   to match the currently expected version by the application
- */
-- (void) updateSchema
-{
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	
-	// get the current schema version
-	NSString *const CurrentSchemaVersion = @"CurrentSchemaVersion";
-	NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
-	NSInteger currentVersion = [userDefaults integerForKey:CurrentSchemaVersion];
-	
-	// a boolean to indicate the schema has changed
-	BOOL schemaUpdated = NO;
-	
-	NSString *fileName = [NSString stringWithFormat:SchemaVersionFormatString, currentVersion + 1];
-	
-	// get the list of statements to make the DDL change
-	NSString *path = [[NSBundle mainBundle]pathForResource:fileName ofType:@"plist"];
-	while (path) {
-		
-		NSArray *sqlStatements = [NSArray arrayWithContentsOfFile:path];
-		schemaUpdated = YES;
-		
-		// open the database
-		FMDatabase *database = [self openApplicationDatabase];
-		
-		// execute the statements
-		for(NSString *statement in sqlStatements)
-		{
-			[database executeUpdate:statement];
-			if ([database hadError]) {
-				NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
-			}
-		}
-		[database close];
-		
-		//increment version
-		currentVersion++;
-		[userDefaults setInteger:currentVersion forKey:CurrentSchemaVersion];
-		fileName = [NSString stringWithFormat:SchemaVersionFormatString, currentVersion + 1];
-		path = [[NSBundle mainBundle]pathForResource:fileName ofType:@"plist"];
-	}
-	
-	// if the schemaUpdated flag has flipped, we'll want to write out the NSUserDefaults
-	// because the CurrentSchemaVersion will have been updated
-	if (schemaUpdated) {
-		[userDefaults synchronize];
-	}
-}
+#pragma mark -
+#pragma mark Public Methods
 
 // create the default database and save it in the Documents directory
 - (BOOL) createAndValidateDatabase
 {
-	// open the database
 	FMDatabase *database = [self openApplicationDatabase];
 	
+	// update the schema
 	[self updateSchema];
 	
-	// close the database
 	[database close];
 	return YES;
 }
 
-#pragma mark -
-#pragma mark Direct SQL methods
+// delete any data that has been stored in the database
+- (void)deleteAllData
+{
+	[self executeSqlOnAllTables:@"DELETE FROM %@"];
+	[self dropAllTables];
+}
 
 // save a Person object's details to the database
-- (BOOL) savePerson:(Person *)person
+- (BOOL) saveOrUpdatePerson:(Person *)person
 {
 	// open the database
 	FMDatabase *database = [self openApplicationDatabase];
@@ -236,9 +183,7 @@
 - (UIImage *)initImageForUserId:(NSString *)user_id
 {
 	FMDatabase *database = [self openApplicationDatabase];
-	
 	FMResultSet *resultSet = [database executeQuery:@"SELECT image FROM Image WHERE user_id = ?", user_id];
-	
 	UIImage *returnImage = nil;
 	if([resultSet next]) {
 		returnImage = [[UIImage alloc]initWithData:[resultSet dataForColumn:@"image"]];
@@ -246,9 +191,111 @@
 	return returnImage;
 }
 
-+ (BOOL) saveStatus:(Status *)status
+#pragma mark -
+#pragma mark Private Methods
+
+/* Convenience method to get a reference to an open FMDatabase object and log any associated erros
+ */
+- (FMDatabase *) openApplicationDatabase
 {
-	// TODO: implement saving status updates
-	return YES;
+	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
+	if (![database open]) {
+		NSLog(@"Error opening database.");
+		if ([database hadError]) {
+			NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
+		}
+	}
+	return database;
 }
+
+/* Determines the current state of the database schema and applies the neccesary updates 
+ to match the currently expected version by the application
+ */
+- (void) updateSchema
+{
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	
+	// get the current schema version
+	NSInteger currentVersion = [userDefaults integerForKey:CurrentSchemaVersion];
+	
+	// a boolean to indicate the schema has changed
+	BOOL schemaUpdated = NO;
+	
+	NSString *fileName = [NSString stringWithFormat:SchemaVersionFormatString, currentVersion + 1];
+	
+	// get the list of statements to make the DDL change
+	NSString *path = [[NSBundle mainBundle]pathForResource:fileName ofType:@"plist"];
+	while (path) {
+		
+		NSArray *sqlStatements = [NSArray arrayWithContentsOfFile:path];
+		schemaUpdated = YES;
+		
+		// open the database
+		FMDatabase *database = [self openApplicationDatabase];
+		
+		// execute the statements
+		for(NSString *statement in sqlStatements)
+		{
+			[database executeUpdate:statement];
+			if ([database hadError]) {
+				NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
+			}
+		}
+		[database close];
+		
+		//increment version
+		currentVersion++;
+		[userDefaults setInteger:currentVersion forKey:CurrentSchemaVersion];
+		fileName = [NSString stringWithFormat:SchemaVersionFormatString, currentVersion + 1];
+		path = [[NSBundle mainBundle]pathForResource:fileName ofType:@"plist"];
+	}
+	
+	// if the schemaUpdated flag has flipped, we'll want to write out the NSUserDefaults
+	// because the CurrentSchemaVersion will have been updated
+	if (schemaUpdated) {
+		[userDefaults synchronize];
+	}
+}
+
+/* Drops all the tables currently in the database
+ */
+- (void)dropAllTables
+{
+	[self executeSqlOnAllTables:@"DROP TABLE %@"];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults removeObjectForKey:CurrentSchemaVersion];
+	[defaults synchronize];
+}
+
+/* gets an NSArray of NSString's containing the names of current tables
+   added to the database
+ */
+- (NSArray *)getTableNames
+{
+	FMDatabase *database = [self openApplicationDatabase];
+	FMResultSet *resultSet = [database executeQuery:@"SELECT DISTINCT tbl_name FROM sqlite_master"];
+	NSMutableArray *tableNames = [NSMutableArray array];
+	while ([resultSet next]) {
+		[tableNames addObject:[resultSet stringForColumn:@"tbl_name"]];
+	}
+	[resultSet close];
+	[database close];
+	return tableNames;
+}
+
+/* Executes the sql statement against all tables retrieved from the 
+ getTableNames method. The sql statement must have a %@ string format
+ specifier in the place of the table name
+*/
+- (void)executeSqlOnAllTables:(NSString *)sql
+{
+	FMDatabase *database = [self openApplicationDatabase];
+	NSArray *tableNames = [self getTableNames];
+	for (NSString *tableName in tableNames) {
+		NSString *finalSql = [NSString stringWithFormat:sql, tableName];
+		[database executeUpdate:finalSql];		
+	}
+	[database close];
+}
+
 @end

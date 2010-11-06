@@ -13,24 +13,18 @@
 
 @interface DataAccessHelper : NSObject {
 
-	NSFileManager *fileManager;
 	NSString *databaseName;
 	NSString *documentsDatabasePath;
-	NSString *documentsDirectoryPath;
-	NSString *schemaVersionsPath;
 }
 
-@property (nonatomic, retain) NSFileManager *fileManager;
 @property (nonatomic, retain) NSString *databaseName;
 @property (nonatomic, retain) NSString *documentsDatabasePath;
-@property (nonatomic, retain) NSString *documentsDirectoryPath;
-@property (nonatomic, retain) NSString *schemaVersionsPath;
 
 // copy the default database to the file system
 - (BOOL) createAndValidateDatabase;
 
 // save a person record in the database
-- (BOOL) savePerson:(Person *)person;
+- (BOOL) saveOrUpdatePerson:(Person *)person;
 
 // retrieve a Person's details from the database and 
 // construct a person object from the results by their
@@ -40,6 +34,7 @@
 // retrieve a Person's image from the database
 - (UIImage *)initImageForUserId:(NSString *)user_id;
 
-// save a status record to the database
-+ (BOOL) saveStatus:(Status *)status;
+// Delete all information in the database
+- (void) deleteAllData;
+
 @end

@@ -550,7 +550,7 @@ typedef enum
         
         // Display the newly loaded image
 		Person *person = iconDownloader.person;
-		[dataAccessHelper savePerson:person];
+		[dataAccessHelper saveOrUpdatePerson:person];
         cell.imageView.image = person.image;
     }
 	[imageDownloadsInProgress removeObjectForKey:indexPath];
@@ -640,7 +640,7 @@ typedef enum
 	
 	// this person is not yet in the database
 	if ([person isValid]) {
-		[dataAccessHelper savePerson:person];
+		[dataAccessHelper saveOrUpdatePerson:person];
 		[self.people addObject:person];
 	}
 	[person release];
