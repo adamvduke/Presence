@@ -9,11 +9,11 @@
 #import "CredentialHelper.h"
 #import "PresenceContants.h"
 #import "SettingsViewController.h"
+#import "DataAccessHelper.h"
 
 @implementation SettingsViewController
 
-@synthesize aNavigationItem;
-@synthesize deauthorizeButton;
+@synthesize aNavigationItem, deauthorizeButton, dataAccessHelper;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -21,24 +21,14 @@
 	return YES;
 }
 
-// save the state of the settings to NSUserDefaults
--(IBAction)save
-{	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults synchronize];
-	
-	// display an alert indicating the values were saved
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(SuccessTitleKey, @"") 
-													message:NSLocalizedString(CredentialsSavedMessageKey, @"") 
-												   delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-}
-
 -(IBAction)deauthorize
 {
 	[CredentialHelper removeCredentials];
-	[self save];
+}
+
+-(IBAction)deleteData
+{
+	[self.dataAccessHelper deleteAllData];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -53,19 +43,11 @@
 {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload 
-{
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-	
 }
 
 - (void)dealloc 
 {
+	[self.dataAccessHelper release];
     [super dealloc];
 }
 

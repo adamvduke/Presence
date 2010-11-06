@@ -165,6 +165,7 @@ typedef enum
 													  initWithNibName:SettingsViewControllerNibName bundle:mainBundle];
 	settingsViewController = (SettingsViewController *)[self initIconAndTitleForViewController:settingsViewController 
 																					 iconName:@"SettingsIcon" titleKey:SettingsViewTitleKey];
+	settingsViewController.dataAccessHelper = self.dataAccessHelper;
 	return settingsViewController;
 }
 
@@ -183,7 +184,7 @@ typedef enum
 	
 	// initialize a ListViewController with the favoriteUsersArray
 	ListViewController *favoritesListViewController = [[ListViewController alloc]initAsEditable:YES userIdArray:favoriteUsersArray];
-	favoritesListViewController.dataAccessHelper = [self dataAccessHelper];
+	favoritesListViewController.dataAccessHelper = self.dataAccessHelper;
 	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 	
 	// push the followingListViewController onto the following navigation stack and release it
@@ -230,7 +231,7 @@ typedef enum
 - (void)updateFollowingControllerWithArray:(NSMutableArray *)idsArray
 {
 	ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO userIdArray:idsArray];
-	followingListViewController.dataAccessHelper = [self dataAccessHelper];
+	followingListViewController.dataAccessHelper = self.dataAccessHelper;
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 	
 	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];

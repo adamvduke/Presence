@@ -15,7 +15,10 @@
 {
     UIWindow *window;
 	IBOutlet UITabBarController *tabBarController;
+	
+	// Treated as a singleton
 	DataAccessHelper *dataAccessHelper;
+	
 	SA_OAuthTwitterEngine *engine;
 	NSMutableDictionary *openRequests;
 }

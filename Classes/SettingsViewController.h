@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataAccessHelper.h"
 
 @protocol SettingsViewControllerDelegate;
 
@@ -15,14 +16,19 @@
 	// navigation item
 	IBOutlet UINavigationItem *aNavigationItem;
 	IBOutlet UIButton *deauthorizeButton;
+	
+	//Data access helper
+	DataAccessHelper *dataAccessHelper;
 }
 
 @property (nonatomic, retain)UINavigationItem *aNavigationItem;
 @property (nonatomic, retain)UIButton *deauthorizeButton;
-
-// Provide an implementation to save the user's settings
-- (IBAction)save;
+@property (nonatomic, retain)DataAccessHelper *dataAccessHelper;
 
 // Provide an implementation to remove the user's saved authorization credentials
 - (IBAction)deauthorize;
+
+// Provide an implementation to delete any saved data
+- (IBAction)deleteData;
+
 @end
