@@ -22,15 +22,6 @@
 // English localization for "Settings"
 "SettingsKey" = "Settings";
 
-// English localization for "Username"
-"UsernameLabelKey" = "Username";
-
-// English localization for "Password"
-"PasswordLabelKey" = "Password";
-
-// English localization for "Live Data"
-"LiveDataLabelKey" = "Live Data";
-
 // English localization for "Compose"
 "ComposeKey" = "Compose";
 
@@ -52,14 +43,5 @@
 // English localization for "The status update failed. Please check your network settings and try again."
 "UpdateFailedMessageKey" = "The status update failed. Please check your network settings and try again.";
 
-// English localization for "Missing Credentials"
-"MissingCrendentialsTitleKey" = "Missing Credentials!";
-
-// English localization for the missing credentials message
-"MissingCredentialsMessageKey" = "Your twitter username and/or password are not set. Some features may not function as expected. Please enter your username and password in the application settings.";
-
 // English localization for the word "Success!"
 "SuccessTitleKey" = "Success!";
-
-// English localization for the message "Your credentials have been saved."
-"CrendtialsSavedMessageKey" = "Your credentials have been saved.";

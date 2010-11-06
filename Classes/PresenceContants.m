@@ -33,15 +33,6 @@ NSString *const ComposeViewTitleKey = @"ComposeKey";
 // key for finding the localized value for the word "characters"
 NSString *const CharactersLabelKey = @"CharactersLabelKey";
 
-// key for finding the localized value for the word "username"
-NSString *const UsernameLabelKey = @"UsernameLabelKey";
-
-// key for finding the localized value for the word "password"
-NSString *const PasswordLabelKey = @"PasswordLabelKey";
-
-// key for finding the localized value for the words "live data"
-NSString *const LiveDataLabelKey = @"LiveDataLabelKey";
-
 // key for finding the localized value for the word "dismiss"
 NSString *const DismissKey = @"DismissKey";
 
@@ -55,20 +46,11 @@ NSString *const LoadingKey = @"LoadingKey";
 // key for finding the localized button title for the word "Success!"
 NSString *const SuccessTitleKey = @"SuccessTitleKey";
 
-// key for finding the localized message for the message indicating the credentials have been saved
-NSString *const CredentialsSavedMessageKey = @"CrendtialsSavedMessageKey";
-
 // key for finding the localized button title for the update failed alert
 NSString *const UpdateFailedTitleKey = @"UpdateFailedTitleKey";
 
 // key for finding the localized message for the update failed alert
 NSString *const UpdateFailedMessageKey = @"UpdateFailedMessageKey";
-
-// key for finding the localized button title for missing credentials alert
-NSString *const MissingCredentialsTitleKey = @"MissingCrendentialsTitleKey";
-
-// key for finding the localized message for missing credentials alert
-NSString *const MissingCredentialsMessageKey = @"MissingCredentialsMessageKey";
 
 /*
  Centrally defined strings to avoid misspelling
@@ -97,11 +79,8 @@ NSString *const StatusCellReuseIdentifier = @"StatusCell";
 // string for identifying a Tweet in NSUserDefaults
 NSString *const TweetContentKey = @"TweetContent";
 
-// string for identifying a username in NSUserDefaults
+// string for identifying the Username in NSUserDefaults
 NSString *const UsernameKey = @"Username";
-
-// string for identifying the liveData value in NSUserDefaults
-NSString *const LiveDataKey = @"LiveData";
 
 // string for identifying the AuthData value in NSUserDefaults
 NSString *const AuthDataKey = @"AuthData";
