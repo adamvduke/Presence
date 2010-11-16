@@ -256,15 +256,9 @@
                         responseType:(MGTwitterResponseType)responseType
 {
     NSString *fullPath = path;
-
-	// --------------------------------------------------------------------------------
-	// modificaiton from the base clase
-	// the base class appends parameters here
-	// --------------------------------------------------------------------------------
-	//    if (params) {
-	//        fullPath = [self _queryStringWithBase:fullPath parameters:params prefixed:YES];
-	//    }
-	// --------------------------------------------------------------------------------
+	if (params) {
+		fullPath = [self _queryStringWithBase:fullPath parameters:params prefixed:YES];
+	}
 
     NSString *urlString = [NSString stringWithFormat:@"%@://%@/%@", 
                            (_secureConnection) ? @"https" : @"http",
