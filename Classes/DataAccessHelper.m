@@ -16,6 +16,8 @@
 - (void)executeSqlOnAllTables:(NSString *)sql;
 - (NSArray *)getTableNames;
 - (void)dropAllTables;
+- (BOOL)savePerson:(Person *)person inDatabase:(FMDatabase *)database;
+- (BOOL)updatePerson:(Person *)person inDatabase:(FMDatabase *)database;
 
 @end
 
@@ -80,6 +82,8 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 // save a Person object's details to the database
 - (BOOL) saveOrUpdatePerson:(Person *)person
 {
+	BOOL saveOrUpdateResult = NO;
+	
 	// open the database
 	FMDatabase *database = [self openApplicationDatabase];
 	
@@ -89,49 +93,68 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	// if the resultset contains a record this is an update
 	if ([resultSet next]) 
 	{
-		//execute update
-		[database beginTransaction];
-		[database executeUpdate:@"UPDATE Person SET screen_name = ?, display_name = ?, location = ?, description = ?, url = ? WHERE user_id = ?", 
-		 person.screen_name,
-		 person.display_name,
-		 person.display_location,
-		 person.display_description,
-		 person.display_url,
-		 person.user_id];
-		
-		[database executeUpdate:@"UPDATE Image SET profile_image_url = ?, image = ? WHERE user_id = ?",
-		 person.profile_image_url, 
-		 UIImagePNGRepresentation(person.image),
-		 person.user_id];
-		[database commit];
+		saveOrUpdateResult = [self updatePerson:person inDatabase:database];
 	}
 	
 	// if the resultset does not contain a record this is an insert
 	else 
 	{
-		//execute insert
-		[database beginTransaction];
-		[database executeUpdate:@"INSERT INTO Person (user_id, screen_name, display_name, location, description, url) VALUES (?, ?, ?, ?, ?, ?)", 
-		 person.user_id, 
-		 person.screen_name,
-		 person.display_name,
-		 person.display_location,
-		 person.display_description,
-		 person.display_url];
-		 
-		[database executeUpdate:@"INSERT INTO Image (profile_image_url, user_id, image) VALUES (?,?,?)",
-		 person.profile_image_url,
-		 person.user_id,
-		 UIImagePNGRepresentation(person.image)];
-		[database commit];		
+		saveOrUpdateResult = [self savePerson:person inDatabase:database];
 	}
 	
 	// close the resultset and database
 	[resultSet close];
 	[database close];
 	
-	// TODO: return a value based on wether the insert was successful or not
-	return YES;
+	return saveOrUpdateResult;
+}
+
+- (BOOL)updatePerson:(Person *)person inDatabase:(FMDatabase *)database
+{
+	[database beginTransaction];
+	[database executeUpdate:@"UPDATE Person SET screen_name = ?, display_name = ?, location = ?, description = ?, url = ? WHERE user_id = ?", 
+	 person.screen_name,
+	 person.display_name,
+	 person.display_location,
+	 person.display_description,
+	 person.display_url,
+	 person.user_id];
+	
+	[database executeUpdate:@"UPDATE Image SET profile_image_url = ?, image = ? WHERE user_id = ?",
+	 person.profile_image_url, 
+	 UIImagePNGRepresentation(person.image),
+	 person.user_id];
+	[database commit];
+	
+	if(![database hadError])
+	{
+		return YES;
+	}
+	return NO;
+}
+
+- (BOOL)savePerson:(Person *)person inDatabase:(FMDatabase *)database
+{
+	[database beginTransaction];
+	[database executeUpdate:@"INSERT INTO Person (user_id, screen_name, display_name, location, description, url) VALUES (?, ?, ?, ?, ?, ?)", 
+	 person.user_id, 
+	 person.screen_name,
+	 person.display_name,
+	 person.display_location,
+	 person.display_description,
+	 person.display_url];
+	
+	[database executeUpdate:@"INSERT INTO Image (profile_image_url, user_id, image) VALUES (?,?,?)",
+	 person.profile_image_url,
+	 person.user_id,
+	 UIImagePNGRepresentation(person.image)];
+	[database commit];		
+	
+	if(![database hadError])
+	{
+		return YES;
+	}
+	return NO;
 }
 
 /*
