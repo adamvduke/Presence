@@ -18,17 +18,9 @@
 #define kCustomRowHeight 48  // height of each row 
 #define kThreadBatchCount 15 // number of rows to create before re-drawing the table view 
 
-typedef enum
-{
-	RateLimitRequest,
-	FollowedIdsRequest,
-	UserInformationRequest
-}RequestType;
-
 @interface ListViewController (Private)
 
 - (void) startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
-- (void) cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connection_id;
 - (void) beginLoadingTwitterData;
 - (void) synchronousLoadTwitterData;
 - (void) synchronousLoadPerson:(NSString *)user_id;
@@ -57,18 +49,6 @@ typedef enum
 	
 	// always call the dealloc of the super class
     [super dealloc];
-}
-
-/*
- Cache the RequestType for a particular connectionId so that a decision can be made
- later about how to handle the response.
- */
-- (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connection_id
-{
-	if (!openRequests) {
-		openRequests = [[NSMutableDictionary alloc]init];
-	}
-	[openRequests setObject:requestType forKey:connection_id];
 }
 
 #pragma mark -
@@ -112,8 +92,7 @@ typedef enum
 	// check the userIdArray, because it may have been set already
 	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
 	{
-		NSString *connection_id = [engine getFollowedIdsForUsername:screenName];
-		[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connection_id];
+		[engine getFollowedIdsForUsername:screenName];
 	}
 	else if(IsEmpty(people)){
 		[self synchronousLoadTwitterData];
@@ -189,8 +168,7 @@ typedef enum
 		person = nil;
 		
 		// get the user's information from Twitter
-		NSString *connection_id = [engine getUserInformationFor:user_id];
-		[self cacheRequestType:[NSNumber numberWithInt:UserInformationRequest] forConnectionId:connection_id];
+		[engine getUserInformationFor:user_id];
 	}
 	else
 	{
