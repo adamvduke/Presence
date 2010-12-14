@@ -18,9 +18,10 @@
 - (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
 @end
 
-
 @class OAToken;
 @class OAConsumer;
+
+typedef void(^RequestTokenSetCallback)();
 
 @interface SA_OAuthTwitterEngine : MGTwitterEngine {
 	NSString	*_consumerSecret;
@@ -28,10 +29,9 @@
 	NSURL		*_requestTokenURL;
 	NSURL		*_accessTokenURL;
 	NSURL		*_authorizeURL;
-
-
 	NSString	*_pin;
 
+	RequestTokenSetCallback requestTokenSetCallback;
 @private
 	OAConsumer	*_consumer;
 	OAToken		*_requestToken;
@@ -45,14 +45,8 @@
 + (SA_OAuthTwitterEngine *) OAuthTwitterEngineWithDelegate: (NSObject *) delegate;
 - (SA_OAuthTwitterEngine *) initOAuthWithDelegate: (NSObject *) delegate;
 - (BOOL) isAuthorized;
-
-
-
-
-
-
 - (void) requestAccessToken;
-- (void) requestRequestToken;
+- (void) requestRequestTokenWithCallback:(RequestTokenSetCallback)callback;
 - (void) clearAccessToken;
 
 @property (nonatomic, readwrite, retain)  NSString	*pin;

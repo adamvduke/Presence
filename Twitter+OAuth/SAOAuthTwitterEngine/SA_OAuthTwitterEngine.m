@@ -35,8 +35,6 @@
 
 @end
 
-
-
 @implementation SA_OAuthTwitterEngine
 
 @synthesize pin = _pin, requestTokenURL = _requestTokenURL, accessTokenURL = _accessTokenURL, authorizeURL = _authorizeURL;
@@ -51,6 +49,8 @@
 	[_accessToken release];
 	[_requestToken release];
 	[_consumer release];
+	
+	[requestTokenSetCallback release];
 	[super dealloc];
 }
 
@@ -105,7 +105,7 @@
 - (NSURLRequest *) authorizeURLRequest {
 	if (!_requestToken.key && _requestToken.secret) return nil;	// we need a valid request token to generate the URL
 
-	OAMutableURLRequest			*request = [[[OAMutableURLRequest alloc] initWithURL: self.authorizeURL consumer: nil token: _requestToken realm: nil signatureProvider: nil] autorelease];	
+	OAMutableURLRequest	*request = [[[OAMutableURLRequest alloc] initWithURL:self.authorizeURL consumer:nil token:_requestToken realm:nil signatureProvider:nil] autorelease];	
 
 	[request setParameters: [NSArray arrayWithObject: [[[OARequestParameter alloc] initWithName: @"oauth_token" value: _requestToken.key] autorelease]]];	
 	return request;
@@ -113,8 +113,9 @@
 
 
 //A request token is used to eventually generate an access token
-- (void) requestRequestToken {
-	[self requestURL: self.requestTokenURL token: nil onSuccess: @selector(setRequestToken:withData:) onFail: @selector(outhTicketFailed:data:)];
+- (void) requestRequestTokenWithCallback:(RequestTokenSetCallback)callback {
+	requestTokenSetCallback = [callback copy];
+	[self requestURL:self.requestTokenURL token:nil onSuccess:@selector(setRequestToken:withData:) onFail:@selector(outhTicketFailed:data:)];
 }
 
 //this is what we eventually want
@@ -138,8 +139,8 @@
 	[_pin autorelease];
 	_pin = [pin retain];
 	
-	_accessToken.pin = pin;
-	_requestToken.pin = pin;
+	_accessToken.verifier = pin;
+	_requestToken.verifier = pin;
 }
 
 //=============================================================================================================================
@@ -148,7 +149,7 @@
     OAMutableURLRequest				*request = [[[OAMutableURLRequest alloc] initWithURL: url consumer: self.consumer token:token realm:nil signatureProvider: nil] autorelease];
 	if (!request) return;
 	
-	if (self.pin.length) token.pin = self.pin;
+	if (self.pin.length) token.verifier = self.pin;
     [request setHTTPMethod: @"POST"];
 	
     OADataFetcher				*fetcher = [[[OADataFetcher alloc] init] autorelease];	
@@ -180,7 +181,10 @@
 	[_requestToken release];
 	_requestToken = [[OAToken alloc] initWithHTTPResponseBody:dataString];
 	
-	if (self.pin.length) _requestToken.pin = self.pin;
+	if (self.pin.length) _requestToken.verifier = self.pin;
+	if(requestTokenSetCallback){
+		requestTokenSetCallback();
+	}
 }
 
 
@@ -256,10 +260,6 @@
                         responseType:(MGTwitterResponseType)responseType
 {
     NSString *fullPath = path;
-	if (params) {
-		fullPath = [self _queryStringWithBase:fullPath parameters:params prefixed:YES];
-	}
-
     NSString *urlString = [NSString stringWithFormat:@"%@://%@/%@", 
                            (_secureConnection) ? @"https" : @"http",
                            _APIDomain, fullPath];
@@ -267,17 +267,6 @@
     if (!finalURL) {
         return nil;
     }
-	
-	// --------------------------------------------------------------------------------
-	// modificaiton from the base clase
-	// the base class creates a regular url request
-	// we're going to create an oauth url request
-	// --------------------------------------------------------------------------------
-	//    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:finalURL 
-	//                                                              cachePolicy:NSURLRequestReloadIgnoringCacheData 
-	//                                                          timeoutInterval:URL_REQUEST_TIMEOUT];
-	// --------------------------------------------------------------------------------
-	
 	OAMutableURLRequest *theRequest = [[[OAMutableURLRequest alloc] initWithURL:finalURL
 																	   consumer:self.consumer 
 																		  token:_accessToken 
@@ -306,16 +295,11 @@
                                                             (body) ? @"&" : @"?" , 
                                                             _clientSourceToken]];
         }
-        
         if (finalBody) {
             [theRequest setHTTPBody:[finalBody dataUsingEncoding:NSUTF8StringEncoding]];
         }
+		NSLog(@"%@",finalBody);
     }
-
-	// --------------------------------------------------------------------------------
-	// modificaiton from the base clase
-	// our version "prepares" the oauth url request
-	// --------------------------------------------------------------------------------
 	[theRequest prepare];
     
     // Create a connection using this request, with the default timeout and caching policy, 
@@ -325,7 +309,6 @@
                                                             delegate:self 
                                                          requestType:requestType 
                                                         responseType:responseType];
-    
     if (!connection) {
         return nil;
     } else {
@@ -339,22 +322,6 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-	
-	// --------------------------------------------------------------------------------
-	// modificaiton from the base clase
-	// instead of answering the authentication challenge, we just ignore it.
-	// seems a bit odd to me, but this is what Chris Kimpton did and it seems to work,
-	// so i'm rolling with it.
-	// --------------------------------------------------------------------------------
-	//	if ([challenge previousFailureCount] == 0 && ![challenge proposedCredential]) {
-	//		NSURLCredential *credential = [NSURLCredential credentialWithUser:_username password:_password 
-	//															  persistence:NSURLCredentialPersistenceForSession];
-	//		[[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-	//	} else {
-	//		[[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
-	//	}
-	// --------------------------------------------------------------------------------
-
 	[[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
 	return;
 	

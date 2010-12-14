@@ -97,7 +97,9 @@ typedef enum
 	if (!openRequests) {
 		openRequests = [[NSMutableDictionary alloc]init];
 	}
-	[openRequests setObject:requestType forKey:connectionId];
+	if (connectionId) {
+		[openRequests setObject:requestType forKey:connectionId];
+	}
 }
 
 - (void)completeLaunching

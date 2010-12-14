@@ -235,7 +235,6 @@
 										 otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-	return;
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
 }
 
