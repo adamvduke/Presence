@@ -16,4 +16,4 @@ The steps to get up and running are:
      git submodule init
      git submodule update
 
-The submodules will be their own git repositories in the directory Presence/External/"module-name"
+The submodules will be their own git repositories in the directories Presence/External/fmdb and Presence/External/JSON
