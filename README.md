@@ -8,12 +8,12 @@ explore other aspects of iPhone Development.
 Building/Running:
 -----------------
 
-Presence depends on the fmdb sqlite3 wrapper written by Gus Mueller. To that end, I have
-forked [his](http://github.com/ccgus/fmdb) fmdb repository [here](http://github.com/adamvduke/fmdb) 
-and included it as a git submodule. The steps to get up and running are:
+Presence depends on the fmdb sqlite3 wrapper written by Gus Mueller and json-framework by Stig Brautaset.
+To that end, I have forked the github repositories for those projects and included them as git submodules.
+The steps to get up and running are:
      git clone git://github.com/adamvduke/Presence.git
      cd Presence
      git submodule init
      git submodule update
 
-The submodule will be it's own git repository in the directory Presence/External/fmdb
+The submodules will be their own git repositories in the directory Presence/External/"module-name"
