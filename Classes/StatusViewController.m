@@ -51,7 +51,8 @@
 	NSMutableArray *statusUpdates = [[NSMutableArray alloc]init];
 	for (NSDictionary *timelineEntry in userTimeline) 
 	{
-		if ([timelineEntry isKindOfClass:[NSDictionary class]]) {
+		if ([timelineEntry isKindOfClass:[NSDictionary class]])
+		{
 			
 			Status *status = [[Status alloc] initWithTimelineEntry:timelineEntry];
 			[statusUpdates addObject:status];
@@ -66,14 +67,14 @@
 {	
 	if (!refresh && self.person && self.person.statusUpdates) return; // avoid doing any un-needed work
 	
-		// start the device's network activity indicator
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-		
-		// start animating the spinner
-		[self.spinner startAnimating];
-		
-		// get the user's timeline
-		[engine getUserTimelineFor:self.person.user_id sinceID:0 startingAtPage:1 count:20];
+	// start the device's network activity indicator
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+	
+	// start animating the spinner
+	[self.spinner startAnimating];
+	
+	// get the user's timeline
+	[engine getUserTimelineFor:self.person.user_id sinceID:0 startingAtPage:1 count:20];
 }
 
 - (void)refresh
@@ -114,11 +115,13 @@
 {	
 	[super viewWillAppear:animated];
 	
-	if(![engine isAuthorized]){
+	if(![engine isAuthorized])
+	{
 		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
 		engine = [appDelegate getEngineForDelegate:self];
 	}
-	if ([engine isAuthorized]) {
+	if ([engine isAuthorized])
+	{
 		[self authSucceededForEngine];
 	}
 }
@@ -170,7 +173,8 @@
     UITableViewCell *cell;
 	
 	// if the section variable is zero, the requested cell is for the title section of the view
-	if (section == 0) {
+	if (section == 0)
+	{
 		
 		// attempt to deque a reuseable cell with the TitleCellReuseIdentifier, if not available create one
 		cell = [tableView dequeueReusableCellWithIdentifier:TitleCellReuseIdentifier];
@@ -196,7 +200,8 @@
 	{
 		// attempt to deque a reuseable cel with the TitleCellReuseIdentifier, if not available create one
 		cell = [tableView dequeueReusableCellWithIdentifier:StatusCellReuseIdentifier];
-		if (cell == nil) {
+		if (cell == nil)
+		{
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:StatusCellReuseIdentifier] autorelease];
 		}
 		

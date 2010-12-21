@@ -58,12 +58,14 @@ typedef enum
 	[FavoritesHelper moveFavoritesToDocumentsDir];
 	
 	dataAccessHelper = [[DataAccessHelper alloc]init];
-	if (![dataAccessHelper createAndValidateDatabase]) {
+	if (![dataAccessHelper createAndValidateDatabase])
+	{
 		NSLog(@"Error creating database");
 	}
 	
 	engine = [self getEngineForDelegate:self];		
-	if ([engine isAuthorized]) {
+	if ([engine isAuthorized])
+	{
 		[self authSucceededForEngine];
 	}
 }
@@ -92,10 +94,12 @@ typedef enum
  */
 - (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId
 {
-	if (!openRequests) {
+	if (!openRequests)
+	{
 		openRequests = [[NSMutableDictionary alloc]init];
 	}
-	if (connectionId) {
+	if (connectionId)
+	{
 		[openRequests setObject:requestType forKey:connectionId];
 	}
 }
@@ -155,7 +159,7 @@ typedef enum
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc]
 													  initWithNibName:SettingsViewControllerNibName bundle:mainBundle];
 	settingsViewController = (SettingsViewController *)[self initIconAndTitleForViewController:settingsViewController 
-																					 iconName:@"SettingsIcon" titleKey:SettingsViewTitleKey];
+																					  iconName:@"SettingsIcon" titleKey:SettingsViewTitleKey];
 	settingsViewController.dataAccessHelper = self.dataAccessHelper;
 	return settingsViewController;
 }
@@ -166,8 +170,8 @@ typedef enum
 	// create a navigation controller and set it's title and tabBar icon
 	UINavigationController *favoritesNavigationController = [[UINavigationController alloc]init];
 	favoritesNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:favoritesNavigationController 
-																							iconName:@"FavoritesIcon" 
-																							titleKey:FavoritesViewControllerTitleKey];
+																							 iconName:@"FavoritesIcon" 
+																							 titleKey:FavoritesViewControllerTitleKey];
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
 	// get the list of favorites
@@ -191,8 +195,8 @@ typedef enum
 	// create a navigation controller and set it's title and tabBar icon
 	UINavigationController *followingNavigationController = [[UINavigationController alloc]init];
 	followingNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:followingNavigationController 
-																							iconName:@"PeopleIcon" 
-																							titleKey:ListViewControllerTitleKey];
+																							 iconName:@"PeopleIcon" 
+																							 titleKey:ListViewControllerTitleKey];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	NSString *username = [CredentialHelper retrieveUsername];
 	NSString *connectionId = [engine getFollowedIdsForUsername:username];
@@ -203,13 +207,14 @@ typedef enum
 /*
  Parse the ids out of the response and call to update the 
  followingNavigationController
-*/
+ */
 - (void)recievedFollowingIdsResponse:(NSArray *)response
 {
 	NSMutableArray *idsArray = [NSMutableArray array];
 	for(NSDictionary *dictionary in response)
 	{
-		for (NSString *key in [dictionary allKeys]) {
+		for (NSString *key in [dictionary allKeys])
+		{
 			[idsArray addObject:[dictionary objectForKey:key]];
 		}
 	}
@@ -219,7 +224,7 @@ typedef enum
 /*
  Initialize a ListViewController with the ids and set it push it
  onto the stack of UIViewControllers on the followingNavigationController
-*/
+ */
 - (void)updateFollowingControllerWithArray:(NSMutableArray *)idsArray
 {
 	ListViewController *followingListViewController = [[ListViewController alloc]initAsEditable:NO userIdArray:idsArray];
@@ -236,8 +241,8 @@ typedef enum
 {
 	UINavigationController *searchNavigationController = [[UINavigationController alloc]init];
 	searchNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:searchNavigationController 
-																						 iconName:@"SearchIcon" 
-																						 titleKey:SearchViewControllerTitleKey];
+																						  iconName:@"SearchIcon" 
+																						  titleKey:SearchViewControllerTitleKey];
 	// TODO: push a UIViewController with the ability to search the twitter api
 	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	return searchNavigationController;
@@ -277,7 +282,8 @@ typedef enum
 	
 	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:anEngine delegate:self];
 	
-	if (controller) {
+	if (controller)
+	{
 		[tabBarController presentModalViewController:controller animated:NO];
 	}
 	return anEngine;
@@ -319,7 +325,8 @@ typedef enum
 - (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
 {
 	NSNumber *requestType = [openRequests objectForKey:connectionIdentifier];
-	switch ([requestType intValue]) {
+	switch ([requestType intValue])
+	{
 		case RateLimitRequest:
 			break;
 		case FollowedIdsRequest:

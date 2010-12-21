@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
-@interface Status : NSObject {
-
+@interface Status : NSObject 
+{
 	NSString *text;
 	NSString *createdDate;
 	NSString *createrId;

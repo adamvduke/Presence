@@ -45,7 +45,8 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
  */
 -(DataAccessHelper *)init
 {
-	if (self == [super init]) {		
+	if (self == [super init])
+	{		
 		
 		// Hold on to the path to the documents directory
 		NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -169,20 +170,21 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	Person *person = [[Person alloc]init];
 	// query the database for the Person's details
 	FMResultSet *resultSet = [database executeQuery:@"SELECT "
-														"person.user_id, "
-														"person.screen_name, "
-														"person.display_name, "
-														"person.location, "
-														"person.description, "
-														"person.url, "
-														"image_table.profile_image_url, "
-														"image_table.image "
-													"FROM Person person "
-														"JOIN Image image_table ON image_table.user_id = person.user_id " 
-													"WHERE person.user_id = ?", user_id];
+							  "person.user_id, "
+							  "person.screen_name, "
+							  "person.display_name, "
+							  "person.location, "
+							  "person.description, "
+							  "person.url, "
+							  "image_table.profile_image_url, "
+							  "image_table.image "
+							  "FROM Person person "
+							  "JOIN Image image_table ON image_table.user_id = person.user_id " 
+							  "WHERE person.user_id = ?", user_id];
 	
 	// if the resultset contains data, construct a Person object from it
-	while ([resultSet next]) {
+	while ([resultSet next])
+	{
 		person.user_id = user_id;
 		person.screen_name = [resultSet stringForColumn:@"screen_name"];
 		person.display_name = [resultSet stringForColumn:@"display_name"];
@@ -208,7 +210,8 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	FMDatabase *database = [self openApplicationDatabase];
 	FMResultSet *resultSet = [database executeQuery:@"SELECT image FROM Image WHERE user_id = ?", user_id];
 	UIImage *returnImage = nil;
-	if([resultSet next]) {
+	if([resultSet next])
+	{
 		returnImage = [[UIImage alloc]initWithData:[resultSet dataForColumn:@"image"]];
 	}
 	return returnImage;
@@ -222,9 +225,11 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 - (FMDatabase *) openApplicationDatabase
 {
 	FMDatabase *database = [FMDatabase databaseWithPath:self.documentsDatabasePath];
-	if (![database open]) {
+	if (![database open])
+	{
 		NSLog(@"Error opening database.");
-		if ([database hadError]) {
+		if ([database hadError])
+		{
 			NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
 		}
 	}
@@ -248,7 +253,8 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	
 	// get the list of statements to make the DDL change
 	NSString *path = [[NSBundle mainBundle]pathForResource:fileName ofType:@"plist"];
-	while (path) {
+	while (path)
+	{
 		
 		NSArray *sqlStatements = [NSArray arrayWithContentsOfFile:path];
 		schemaUpdated = YES;
@@ -260,7 +266,8 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 		for(NSString *statement in sqlStatements)
 		{
 			[database executeUpdate:statement];
-			if ([database hadError]) {
+			if ([database hadError])
+			{
 				NSLog(@"Err %d: %@", [database lastErrorCode], [database lastErrorMessage]);
 			}
 		}
@@ -275,7 +282,8 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	
 	// if the schemaUpdated flag has flipped, we'll want to write out the NSUserDefaults
 	// because the CurrentSchemaVersion will have been updated
-	if (schemaUpdated) {
+	if (schemaUpdated)
+	{
 		[userDefaults synchronize];
 	}
 }
@@ -291,14 +299,15 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 }
 
 /* gets an NSArray of NSString's containing the names of current tables
-   added to the database
+ added to the database
  */
 - (NSArray *)getTableNames
 {
 	FMDatabase *database = [self openApplicationDatabase];
 	FMResultSet *resultSet = [database executeQuery:@"SELECT DISTINCT tbl_name FROM sqlite_master"];
 	NSMutableArray *tableNames = [NSMutableArray array];
-	while ([resultSet next]) {
+	while ([resultSet next])
+	{
 		[tableNames addObject:[resultSet stringForColumn:@"tbl_name"]];
 	}
 	[resultSet close];
@@ -309,12 +318,13 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 /* Executes the sql statement against all tables retrieved from the 
  getTableNames method. The sql statement must have a %@ string format
  specifier in the place of the table name
-*/
+ */
 - (void)executeSqlOnAllTables:(NSString *)sql
 {
 	FMDatabase *database = [self openApplicationDatabase];
 	NSArray *tableNames = [self getTableNames];
-	for (NSString *tableName in tableNames) {
+	for (NSString *tableName in tableNames)
+	{
 		NSString *finalSql = [NSString stringWithFormat:sql, tableName];
 		[database executeUpdate:finalSql];		
 	}

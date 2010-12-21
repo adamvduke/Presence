@@ -106,7 +106,8 @@
 	[self.textView becomeFirstResponder];
 }
 
-- (void) viewDidAppear: (BOOL)animated {
+- (void) viewDidAppear: (BOOL)animated
+{
 	
 	//TODO: if the engine is not authorized, disable the
 	//tweet button until the engine is authorized
@@ -209,7 +210,7 @@
 {
 	// stop the device's network activity indicator
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
+	
 	UIAlertView *alert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"") 
 												   message:NSLocalizedString(UpdateFailedMessageKey, @"") 
 												  delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"") 

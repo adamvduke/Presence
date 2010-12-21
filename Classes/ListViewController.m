@@ -70,11 +70,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	if(![engine isAuthorized]){
+	if(![engine isAuthorized])
+	{
 		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
 		engine = [appDelegate getEngineForDelegate:self];
 	}
-	if ([engine isAuthorized]) {
+	if ([engine isAuthorized])
+	{
 		[self authSucceededForEngine];
 	}
 }
@@ -97,20 +99,24 @@
 	
 	// for each person, determine if the person is visible
 	// if not, set the person's statusUpdate and image properties to nil
-	for (int i = 0; i < [people count]; i++) {
+	for (int i = 0; i < [people count]; i++)
+	{
 		
 		BOOL visible = NO;
 		for (NSIndexPath *path in visiblePaths)
 		{
-			if (path.row == i ) {
+			if (path.row == i )
+			{
 				visible = YES;
 				break;
 			}
 		}
 		
-		if (!visible) {			
+		if (!visible)
+		{			
 			Person *person = [people objectAtIndex:i];
-			if (person) {
+			if (person)
+			{
 				person.statusUpdates = nil;
 				person.image = nil;
 			}
@@ -130,7 +136,8 @@
 // synchronously get the usernames and call beginLoadPerson for each username
 - (void)synchronousLoadTwitterData
 {
-	if (!IsEmpty(self.userIdArray)) {
+	if (!IsEmpty(self.userIdArray))
+	{
 		
 		// start the device's network activity indicator
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -148,7 +155,8 @@
 -(void) synchronousLoadPerson:(NSString *)user_id
 {
 	Person *person = [dataAccessHelper initPersonByUserId:user_id];
-	if (![person isValid]) {
+	if (![person isValid])
+	{
 		[person release];
 		person = nil;
 		
@@ -175,7 +183,8 @@
 	// or redraw in the case that the queue is on it's last operation
 	self.finishedThreads++;
 	
-	if (self.finishedThreads == kThreadBatchCount || [self dataLoadComplete]) {
+	if (self.finishedThreads == kThreadBatchCount || [self dataLoadComplete])
+	{
 		self.finishedThreads = 0;
 		
 		// reload the table's data
@@ -200,7 +209,7 @@
 {
 	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] 
 														 initWithNibName:ComposeStatusViewControllerNibName 
-																  bundle:[NSBundle mainBundle]];
+														 bundle:[NSBundle mainBundle]];
 	statusViewController.delegate = self;
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
 	[statusViewController release];
@@ -223,7 +232,8 @@
 												   delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 	UITextView *alertTextField = nil;
 	CGRect frame = CGRectMake(14, 45, 255, 23);
-	if(!alertTextField) {
+	if(!alertTextField)
+	{
 		alertTextField = [[UITextField alloc] initWithFrame:frame];
 		alertTextField.layer.cornerRadius = 8;
 		alertTextField.textColor = [UIColor blackColor];
@@ -250,7 +260,8 @@
 	{
 		for(UIView *subview in alertView.subviews)
 		{
-			if ([subview isKindOfClass:[UITextField class]]) {
+			if ([subview isKindOfClass:[UITextField class]])
+			{
 				UITextField *textField = (UITextField *)subview;
 				NSString *username = textField.text;
 				[self.userIdArray addObject:username];
@@ -266,9 +277,11 @@
 -(id)initAsEditable:(BOOL)isEditable userIdArray:(NSMutableArray *)userIds
 {
 	
-	if (self == [super initWithStyle:UITableViewStylePlain]) {
+	if (self == [super initWithStyle:UITableViewStylePlain])
+	{
 		
-		if (isEditable) {
+		if (isEditable)
+		{
 			self.navigationItem.leftBarButtonItem = self.editButtonItem;
 		}
 		
@@ -295,8 +308,10 @@
 {
     [super setEditing:editing animated:animated];
     [self.tableView setEditing:editing animated:YES];
-    if (editing) {
-		if (!self.addBarButton) {
+    if (editing)
+	{
+		if (!self.addBarButton)
+		{
 			UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
 										  initWithBarButtonSystemItem:UIBarButtonSystemItemAdd 
 										  target:self action:@selector(presentAddToFavoritesController)];
@@ -318,11 +333,13 @@
     }
 }
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     
 	// if the indexPath.row is the first empty row, the editing style is insert
 	// else it's delete
-	if (indexPath.row == [self.people count]) {
+	if (indexPath.row == [self.people count])
+	{
         return UITableViewCellEditingStyleInsert;
     } else {
         return UITableViewCellEditingStyleDelete;
@@ -334,7 +351,8 @@
 	return YES;
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
     
 	NSUInteger sourceRow = sourceIndexPath.row;
 	NSUInteger destinationRow = destinationIndexPath.row;
@@ -348,10 +366,12 @@
 	[userId release];
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
     
 	// If row is deleted, remove it from the list.
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+	{
         [self.people removeObjectAtIndex:indexPath.row];
 		[self.userIdArray removeObjectAtIndex:indexPath.row];
 		[FavoritesHelper saveFavorites:self.userIdArray];
@@ -457,7 +477,8 @@
 // override didSelectRowAtIndexPath to push a StatusViewController onto the navigation stack when a row is selected
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {    
-	if (!IsEmpty(self.people) > 0) {
+	if (!IsEmpty(self.people) > 0)
+	{
 		
 		// get the correct person out of the people array and initialize the status view controller for that person
 		Person *person = [people objectAtIndex:indexPath.row];
@@ -560,7 +581,8 @@
 	{
 		[engine getFollowedIdsForUsername:screenName];
 	}
-	else if(IsEmpty(people)){
+	else if(IsEmpty(people))
+	{
 		[self synchronousLoadTwitterData];
 	}	
 }
@@ -585,7 +607,8 @@
 	Person *person = [[Person alloc]initPersonWithInfo:[userInfo objectAtIndex:0]];
 	
 	// this person is not yet in the database
-	if ([person isValid]) {
+	if ([person isValid])
+	{
 		[dataAccessHelper saveOrUpdatePerson:person];
 		[self.people addObject:person];
 	}
@@ -598,7 +621,8 @@
 	NSMutableArray *idsArray = [NSMutableArray array];
 	for(NSDictionary *dictionary in miscInfo)
 	{
-		for (NSString *key in [dictionary allKeys]) {
+		for (NSString *key in [dictionary allKeys])
+		{
 			[idsArray addObject:[dictionary objectForKey:key]];
 		}
 	}
