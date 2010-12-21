@@ -9,6 +9,7 @@
 #import "ComposeStatusViewController.h"
 #import "CredentialHelper.h"
 #import "PresenceContants.h"
+#import "PresenceAppDelegate.h"
 
 @interface ComposeStatusViewController (Private)
 
@@ -91,6 +92,9 @@
 	// set the navigation item's title to the localized value
 	self.aNavigationItem.title = NSLocalizedString(ComposeViewTitleKey, @"");
 	
+	//TODO: set the charactersLabel so that it is populated before the text view
+	//changes. At the moment, it doesn't have a value until after a character is typed
+	
 	// get any previous text out of NSUserDefaults, if the content has length set the UITextView's text to that content
 	NSString *previousText = [[NSUserDefaults standardUserDefaults] objectForKey:TweetContentKey];
 	if (previousText != nil ) 
@@ -103,17 +107,14 @@
 }
 
 - (void) viewDidAppear: (BOOL)animated {
-	if (engine) return;
-	engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
-	engine.consumerKey = kOAuthConsumerKey;
-	engine.consumerSecret = kOAuthConsumerSecret;
 	
-	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: engine delegate: self];
-	
-	if (controller)
+	//TODO: if the engine is not authorized, disable the
+	//tweet button until the engine is authorized
+	if(![engine isAuthorized])
 	{
-		[self presentModalViewController: controller animated: YES];
-	}
+		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+		engine = [appDelegate getEngineForDelegate:self];
+	}	
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -180,42 +181,21 @@
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 }
-#pragma mark -
-#pragma mark SA_OAuthTwitterControllerDelegate
-
-- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
-{
-	// save the username
-	[CredentialHelper saveUsername:username];
-	
-	// log the username for debug purposes
-	NSLog(@"Authenicated for %@", username);
-}
-
-- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
-{
-	//TODO: Handle failed authentication
-	NSLog(@"Authentication Failed!");
-}
-
-- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
-{
-	//TODO: Handle canceled authentication
-	NSLog(@"Authentication Canceled.");
-}
 
 #pragma mark -
 #pragma mark SA_OAuthTwitterEngineDelegate
+
 - (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username
 {
 	[CredentialHelper saveAuthData:data];
 	[CredentialHelper saveUsername:username];
 }
+
 - (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username
 {
 	return [CredentialHelper retrieveAuthData];
 }
-//- (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
+
 #pragma mark -
 #pragma mark EngineDelegate
 
@@ -224,6 +204,7 @@
 {
 	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
 }
+
 - (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
 {
 	// stop the device's network activity indicator
@@ -235,7 +216,11 @@
 										 otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
+}
+
+- (void)authSucceededForEngine
+{
+	//TODO: if the engine was not authorized, enable the tweet button
 }
 
 // These delegate methods are called after all results are parsed from the connection. If 
@@ -249,20 +234,6 @@
 	// if the update was a success, set the text to nil and dismiss the view
 	self.textView.text = nil;
 	[self dismiss];
-}
-- (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling directMessagesReceived for request %@", connectionIdentifier);
-}
-
-- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling userInfoReceived for request %@", connectionIdentifier);
-}
-
-- (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling miscInfoReceived for request %@", connectionIdentifier);
 }
 
 - (void)dealloc 

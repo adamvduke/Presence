@@ -27,5 +27,6 @@
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
 @property (nonatomic, retain) NSMutableDictionary *openRequests;
 
+- (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate;
 @end
 

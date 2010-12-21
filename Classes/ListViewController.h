@@ -17,7 +17,8 @@
 @interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate, 
                                                        UIScrollViewDelegate, 
 													   IconDownloaderDelegate, 
-													   UITextViewDelegate, SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>
+													   UITextViewDelegate,
+													   SA_OAuthTwitterEngineDelegate>
 {	
 	SA_OAuthTwitterEngine *engine;
 	NSMutableDictionary *openRequests;

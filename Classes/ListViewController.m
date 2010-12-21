@@ -11,12 +11,13 @@
 #import "ListViewController.h"
 #import "Person.h"
 #import "PresenceContants.h"
+#import "PresenceAppDelegate.h"
 #import "StatusViewController.h"
 #import "ValidationHelper.h"
 
 #define kCustomRowCount 7  // enough rows to fill the table if there is no data 
 #define kCustomRowHeight 48  // height of each row 
-#define kThreadBatchCount 15 // number of rows to create before re-drawing the table view 
+#define kThreadBatchCount 5 // number of rows to create before re-drawing the table view 
 
 @interface ListViewController (Private)
 
@@ -69,34 +70,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
-	if (engine) return;
-	engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
-	engine.consumerKey = kOAuthConsumerKey;
-	engine.consumerSecret = kOAuthConsumerSecret;
-	
-	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: engine delegate: self];
-	
-	if (controller)
-	{
-		[self presentModalViewController: controller animated: YES];
+	if(![engine isAuthorized]){
+		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+		engine = [appDelegate getEngineForDelegate:self];
+	}
+	if ([engine isAuthorized]) {
+		[self authSucceededForEngine];
 	}
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-	
-	NSString *screenName = [CredentialHelper retrieveUsername];
-	
-	// check the userIdArray, because it may have been set already
-	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
-	{
-		[engine getFollowedIdsForUsername:screenName];
-	}
-	else if(IsEmpty(people)){
-		[self synchronousLoadTwitterData];
-	}
 }
 
 - (void)didReceiveMemoryWarning 
@@ -209,11 +194,13 @@
 
 #pragma mark -
 #pragma mark Modal ComposeStatusViewController
+
 // show a modal view controller that will allow a user to compose a twitter status
 -(void)presentUpdateStatusController
 {
 	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] 
-														 initWithNibName:ComposeStatusViewControllerNibName bundle:[NSBundle mainBundle]];
+														 initWithNibName:ComposeStatusViewControllerNibName 
+																  bundle:[NSBundle mainBundle]];
 	statusViewController.delegate = self;
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
 	[statusViewController release];
@@ -550,29 +537,6 @@
 {
     [self loadImagesForOnscreenRows];
 }
-#pragma mark -
-#pragma mark SA_OAuthTwitterControllerDelegate
-
-- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
-{
-	// save the username
-	[CredentialHelper saveUsername:username];
-
-	// log the username for debug purposes
-	NSLog(@"Authenicated for %@", username);
-}
-
-- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
-{
-	//TODO: Handle failed authentication
-	NSLog(@"Authentication Failed!");
-}
-
-- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
-{
-	//TODO: Handle canceled authentication
-	NSLog(@"Authentication Canceled.");
-}
 
 #pragma mark -
 #pragma mark SA_OAuthTwitterEngineDelegate
@@ -581,10 +545,26 @@
 	[CredentialHelper saveAuthData:data];
 	[CredentialHelper saveUsername:username];
 }
+
 - (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username
 {
 	return [CredentialHelper retrieveAuthData];
 }
+
+- (void)authSucceededForEngine
+{
+	NSString *screenName = [CredentialHelper retrieveUsername];
+	
+	// check the userIdArray, because it may have been set already
+	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
+	{
+		[engine getFollowedIdsForUsername:screenName];
+	}
+	else if(IsEmpty(people)){
+		[self synchronousLoadTwitterData];
+	}	
+}
+
 //- (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
 #pragma mark -
 #pragma mark EngineDelegate
@@ -594,22 +574,10 @@
 {
 	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
 }
+
 - (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
 {
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
-}
-
-// These delegate methods are called after all results are parsed from the connection. If 
-// the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
-// collection of all results is also returned.
-- (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling statusesReceived for request %@", connectionIdentifier);
-}
-- (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling directMessagesReceived for request %@", connectionIdentifier);
-	
 }
 
 - (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier

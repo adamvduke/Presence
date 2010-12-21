@@ -83,10 +83,12 @@
 }
 
 - (BOOL) isAuthorized {	
-	if (_accessToken.key && _accessToken.secret) return YES;
+	if (_accessToken.key && _accessToken.secret) {
+		return YES;
+	}
 	
 	//first, check for cached creds
-	NSString					*accessTokenString = [_delegate respondsToSelector: @selector(cachedTwitterOAuthDataForUsername:)] ? [(id) _delegate cachedTwitterOAuthDataForUsername: self.username] : @"";
+	NSString *accessTokenString = [_delegate respondsToSelector: @selector(cachedTwitterOAuthDataForUsername:)] ? [(id) _delegate cachedTwitterOAuthDataForUsername: self.username] : @"";
 
 	if (accessTokenString.length) {				
 		[_accessToken release];
@@ -194,18 +196,27 @@
 // we store it in our ivar as well as writing it to the keychain
 // 
 - (void) setAccessToken: (OAServiceTicket *) ticket withData: (NSData *) data {
-	if (!ticket.didSucceed || !data) return;
+	if (!ticket.didSucceed || !data) {
+		return;
+	}
 	
 	NSString *dataString = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding] autorelease];
-	if (!dataString) return;
+	if (!dataString) {
+		return;
+	}
 
-	if (self.pin.length && [dataString rangeOfString: @"oauth_verifier"].location == NSNotFound) dataString = [dataString stringByAppendingFormat: @"&oauth_verifier=%@", self.pin];
+	if (self.pin.length && [dataString rangeOfString: @"oauth_verifier"].location == NSNotFound) {
+		dataString = [dataString stringByAppendingFormat: @"&oauth_verifier=%@", self.pin];
+	}
 	
-	NSString				*username = [self extractUsernameFromHTTPBody:dataString];
+	NSString *username = [self extractUsernameFromHTTPBody:dataString];
 
 	if (username.length > 0) {
-		[self setUsername: username password: nil];
-		if ([_delegate respondsToSelector: @selector(storeCachedTwitterOAuthData:forUsername:)]) [(id) _delegate storeCachedTwitterOAuthData: dataString forUsername: username];
+		[self setUsername:username password:nil];
+		if ([_delegate respondsToSelector:@selector(storeCachedTwitterOAuthData:forUsername:)]) {
+			[(id)_delegate storeCachedTwitterOAuthData:dataString forUsername:username];
+		}
+		[self.delegate authSucceededForEngine]; 
 	}
 	
 	[_accessToken release];
@@ -298,7 +309,6 @@
         if (finalBody) {
             [theRequest setHTTPBody:[finalBody dataUsingEncoding:NSUTF8StringEncoding]];
         }
-		NSLog(@"%@",finalBody);
     }
 	[theRequest prepare];
     

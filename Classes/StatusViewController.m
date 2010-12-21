@@ -8,6 +8,7 @@
 
 #import "Person.h"
 #import "PresenceContants.h"
+#import "PresenceAppDelegate.h"
 #import "StatusViewController.h"
 #import "CredentialHelper.h"
 
@@ -19,7 +20,6 @@
 
 @implementation StatusViewController
 @synthesize person;
-@synthesize queue;
 @synthesize spinner;
 @synthesize dataAccessHelper;
 
@@ -66,14 +66,14 @@
 {	
 	if (!refresh && self.person && self.person.statusUpdates) return; // avoid doing any un-needed work
 	
-	// start the device's network activity indicator
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	
-	// start animating the spinner
-	[self.spinner startAnimating];
-	
-	// get the user's timeline
-	[engine getUserTimelineFor:self.person.user_id sinceID:0 startingAtPage:1 count:20];
+		// start the device's network activity indicator
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+		
+		// start animating the spinner
+		[self.spinner startAnimating];
+		
+		// get the user's timeline
+		[engine getUserTimelineFor:self.person.user_id sinceID:0 startingAtPage:1 count:20];
 }
 
 - (void)refresh
@@ -93,12 +93,6 @@
 		self.person = aPerson;
 		
 		self.dataAccessHelper = accessHelper;
-		
-		//Create the NSOperationQueue for threading data loading
-		self.queue = [[[NSOperationQueue alloc]init] autorelease];
-		
-		//set the maxConcurrent operations to 1
-		[self.queue setMaxConcurrentOperationCount:1];
 		
 		// initialize the UIActivityIndicatorView for this view controller
 		self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
@@ -120,20 +114,13 @@
 {	
 	[super viewWillAppear:animated];
 	
-	if (engine) return;
-	engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
-	engine.consumerKey = kOAuthConsumerKey;
-	engine.consumerSecret = kOAuthConsumerSecret;
-	
-	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: engine delegate: self];
-	
-	if (controller)
-	{
-		[self presentModalViewController: controller animated: YES];
+	if(![engine isAuthorized]){
+		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+		engine = [appDelegate getEngineForDelegate:self];
 	}
-	else {
-		[self beginLoadUpdates:NO];
-	}	
+	if ([engine isAuthorized]) {
+		[self authSucceededForEngine];
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -248,30 +235,6 @@
 }
 
 #pragma mark -
-#pragma mark SA_OAuthTwitterControllerDelegate
-
-- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
-{
-	// save the username
-	[CredentialHelper saveUsername:username];
-	
-	// log the username for debug purposes
-	NSLog(@"Authenicated for %@", username);
-}
-
-- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
-{
-	//TODO: Handle failed authentication
-	NSLog(@"Authentication Failed!");
-}
-
-- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
-{
-	//TODO: Handle canceled authentication
-	NSLog(@"Authentication Canceled.");
-}
-
-#pragma mark -
 #pragma mark SA_OAuthTwitterEngineDelegate
 - (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username
 {
@@ -297,6 +260,11 @@
 	[self didFinishLoadingUpdates];
 }
 
+- (void)authSucceededForEngine
+{		
+	[self beginLoadUpdates:NO];
+}
+
 // These delegate methods are called after all results are parsed from the connection. If 
 // the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
 // collection of all results is also returned.
@@ -314,7 +282,6 @@
 - (void)dealloc 
 {
 	[person release];
-	[queue release];
 	[spinner release];
     [super dealloc];
 }

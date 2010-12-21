@@ -13,15 +13,12 @@
 
 @class Person;
 
-@interface StatusViewController : UITableViewController <SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>
+@interface StatusViewController : UITableViewController <SA_OAuthTwitterEngineDelegate>
 {		
 	SA_OAuthTwitterEngine *engine;
 	
 	// the person object that this view controller will display details about
 	Person *person;
-	
-	// operation queue for threading the UI
-	NSOperationQueue *queue;
 	
 	// activity indicator for animation during data access
 	UIActivityIndicatorView	*spinner;
@@ -31,7 +28,6 @@
 }
 
 @property (nonatomic, retain) Person *person;
-@property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
 

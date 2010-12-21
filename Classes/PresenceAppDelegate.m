@@ -50,23 +50,21 @@ typedef enum
 	// initialize the tab bar
 	tabBarController = [[UITabBarController alloc]init];
 	
-	// add the navigation controller's view to the window's subviews
+	// add the tabBarController's view to the window
 	[window addSubview:tabBarController.view];
     [window makeKeyAndVisible];
 	
-	// initialize the twitter engine and present the modal view controller
-	// to enter credentials if the engine is not authorized
-	engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
-	engine.consumerKey = kOAuthConsumerKey;
-	engine.consumerSecret = kOAuthConsumerSecret;
+	// copy the favorites plist to the documents directory
+	[FavoritesHelper moveFavoritesToDocumentsDir];
 	
-	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:engine delegate:self];
-	
-	if (controller) {
-		[tabBarController presentModalViewController:controller animated:NO];
+	dataAccessHelper = [[DataAccessHelper alloc]init];
+	if (![dataAccessHelper createAndValidateDatabase]) {
+		NSLog(@"Error creating database");
 	}
-	else {
-		[self completeLaunching];
+	
+	engine = [self getEngineForDelegate:self];		
+	if ([engine isAuthorized]) {
+		[self authSucceededForEngine];
 	}
 }
 
@@ -104,16 +102,7 @@ typedef enum
 
 - (void)completeLaunching
 {	
-	// add the tabBarController's view to the window
-	[window addSubview:tabBarController.view];
 	
-	// copy the favorites plist to the documents directory
-	[FavoritesHelper moveFavoritesToDocumentsDir];
-	
-	dataAccessHelper = [[DataAccessHelper alloc]init];
-	if (![dataAccessHelper createAndValidateDatabase]) {
-		NSLog(@"Error creating database");
-	}
 	
 	// initialize the viewControllerArray
 	NSMutableArray *aViewControllerArray = [self initViewControllers];
@@ -205,7 +194,8 @@ typedef enum
 																							iconName:@"PeopleIcon" 
 																							titleKey:ListViewControllerTitleKey];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-	NSString *connectionId = [engine getFollowedIdsForUsername:[CredentialHelper retrieveUsername]];
+	NSString *username = [CredentialHelper retrieveUsername];
+	NSString *connectionId = [engine getFollowedIdsForUsername:username];
 	[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionId];
 	return followingNavigationController;
 }
@@ -261,9 +251,6 @@ typedef enum
 	// save the username
 	[CredentialHelper saveUsername:username];
 	
-	// complete launching the application
-	[self completeLaunching];
-	
 	// log the username for debug purposes
 	NSLog(@"Authenicated for %@", username);
 }
@@ -280,9 +267,25 @@ typedef enum
 	NSLog(@"Authentication Canceled.");
 }
 
+- (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate
+{
+	// initialize the twitter engine and present the modal view controller
+	// to enter credentials if the engine is not authorized
+	SA_OAuthTwitterEngine *anEngine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate:engineDelegate];
+	anEngine.consumerKey = kOAuthConsumerKey;
+	anEngine.consumerSecret = kOAuthConsumerSecret;
+	
+	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:anEngine delegate:self];
+	
+	if (controller) {
+		[tabBarController presentModalViewController:controller animated:NO];
+	}
+	return anEngine;
+}
+
 #pragma mark -
 #pragma mark SA_OAuthTwitterEngineDelegate
-- (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username
+- (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username
 {
 	[CredentialHelper saveAuthData:data];
 	[CredentialHelper saveUsername:username];
@@ -290,7 +293,13 @@ typedef enum
 
 - (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username
 {
-	return [CredentialHelper retrieveAuthData];
+	NSString *authData = [CredentialHelper retrieveAuthData];
+	return authData;
+}
+
+- (void)authSucceededForEngine
+{
+	[self completeLaunching];
 }
 
 #pragma mark -
@@ -305,24 +314,6 @@ typedef enum
 - (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
 {
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
-}
-
-//TODO: Remove these unimplemented delegate methods
-// These delegate methods are called after all results are parsed from the connection. If 
-// the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
-// collection of all results is also returned.
-- (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling statusesReceived for request %@", connectionIdentifier);
-}
-- (void)directMessagesReceived:(NSArray *)messages forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling directMessagesReceived for request %@", connectionIdentifier);
-}
-
-- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
-{
-	NSLog(@"Calling userInfoReceived for request %@", connectionIdentifier);
 }
 
 - (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier

@@ -85,6 +85,7 @@
 
 @implementation MGTwitterEngine
 
+@synthesize delegate = _delegate;
 
 #pragma mark Constructors
 

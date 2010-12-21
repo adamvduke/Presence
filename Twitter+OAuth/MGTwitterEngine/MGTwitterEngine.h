@@ -31,6 +31,8 @@
 #endif
 }
 
+@property(nonatomic, readonly) id delegate;
+
 #pragma mark Class management
 
 // Constructors

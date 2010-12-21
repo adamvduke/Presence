@@ -11,15 +11,17 @@
 
 #import "MGTwitterEngine.h"
 
+@class OAToken;
+@class OAConsumer;
+@class SA_OAuthTwitterEngine;
+
 @protocol SA_OAuthTwitterEngineDelegate 
+- (void)authSucceededForEngine;
 @optional
 - (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username;					//implement these methods to store off the creds returned by Twitter
 - (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username;										//if you don't do this, the user will have to re-authenticate every time they run
 - (void) twitterOAuthConnectionFailedWithData: (NSData *) data; 
 @end
-
-@class OAToken;
-@class OAConsumer;
 
 typedef void(^RequestTokenSetCallback)();
 
