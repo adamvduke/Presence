@@ -1,15 +1,15 @@
-//
-//  SettingsViewController.m
-//  Presence
-//
-//  Created by Adam Duke on 6/3/10.
-//  Copyright 2010 Adam Duke. All rights reserved.
-//
+/*  SettingsViewController.m
+ *  Presence
+ *
+ *  Created by Adam Duke on 6/3/10.
+ *  Copyright 2010 Adam Duke. All rights reserved.
+ *
+ */
 
 #import "CredentialHelper.h"
+#import "DataAccessHelper.h"
 #import "PresenceContants.h"
 #import "SettingsViewController.h"
-#import "DataAccessHelper.h"
 
 @implementation SettingsViewController
 
@@ -17,38 +17,38 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	// return YES for all interface orientations
+	/* return YES for all interface orientations */
 	return YES;
 }
 
--(IBAction)deauthorize
+- (IBAction)deauthorize
 {
 	[CredentialHelper removeCredentials];
 }
 
--(IBAction)deleteData
+- (IBAction)deleteData
 {
 	[self.dataAccessHelper deleteAllData];
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
-	// set the views title
+
+	/* set the views title */
 	self.aNavigationItem.title = NSLocalizedString(SettingsViewTitleKey, @"");
 }
 
-- (void)didReceiveMemoryWarning 
+- (void)didReceiveMemoryWarning
 {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
+	/* Releases the view if it doesn't have a superview. */
+	[super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
+- (void)dealloc
 {
 	[self.dataAccessHelper release];
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

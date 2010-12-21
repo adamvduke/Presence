@@ -1,9 +1,9 @@
-//
-//  Person.m
-//  Presence
-//
-//  Created by Adam Duke on 11/12/09.
-//  Copyright 2009 Adam Duke. All rights reserved.
+/*  Person.m
+ *  Presence
+ *
+ *  Created by Adam Duke on 11/12/09.
+ *  Copyright 2009 Adam Duke. All rights reserved.
+ */
 
 #import "Person.h"
 #import "ValidationHelper.h"
@@ -12,13 +12,14 @@
 
 @synthesize user_id, screen_name, display_name, display_location, display_description, display_url, profile_image_url, statusUpdates, image;
 
-// Returns a Person object initialized with an NSDictionary of information retrieved 
-// using the TwitterHelper, for a particular user name
-- (Person *) initPersonWithInfo:(NSDictionary *)userInfo 
-{	
-	if (self == [super init]) 
+/* Returns a Person object initialized with an NSDictionary of information retrieved
+ * using the TwitterHelper, for a particular user name
+ */
+- (Person *)initPersonWithInfo:(NSDictionary *)userInfo
+{
+	if(self == [super init])
 	{
-		//get the values out of the userInfo dictionary
+		/* get the values out of the userInfo dictionary */
 		NSNumber *rawId = [userInfo valueForKey:@"id"];
 		NSString *string_id = [NSString stringWithFormat:@"%qi", [rawId longLongValue]];
 		self.user_id = string_id;
@@ -55,4 +56,5 @@
 	[image release];
 	[super dealloc];
 }
+
 @end

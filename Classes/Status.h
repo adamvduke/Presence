@@ -1,15 +1,14 @@
-//
-//  Status.h
-//  Presence
-//
-//  Created by Adam Duke on 8/1/10.
-//  Copyright 2010 Adam Duke. All rights reserved.
-//
+/*  Status.h
+ *  Presence
+ *
+ *  Created by Adam Duke on 8/1/10.
+ *  Copyright 2010 Adam Duke. All rights reserved.
+ *
+ */
 
 #import <Foundation/Foundation.h>
 
-
-@interface Status : NSObject 
+@interface Status : NSObject
 {
 	NSString *text;
 	NSString *createdDate;

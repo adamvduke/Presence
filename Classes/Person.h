@@ -1,41 +1,40 @@
-//
-//  Person.h
-//  Presence
-//
-//  Created by Adam Duke on 11/12/09.
-//  Copyright 2009 Adam Duke. All rights reserved.
-//
+/*  Person.h
+ *  Presence
+ *
+ *  Created by Adam Duke on 11/12/09.
+ *  Copyright 2009 Adam Duke. All rights reserved.
+ *
+ */
 
 #import <Foundation/Foundation.h>
 
-
-@interface Person : NSObject 
+@interface Person : NSObject
 {
-	// Twitter API user/id
+	/* Twitter API user/id */
 	NSString *user_id;
-	
-	// Twitter API user/screen_name
+
+	/* Twitter API user/screen_name */
 	NSString *screen_name;
-	
-	// Twitter API user/name
+
+	/* Twitter API user/name */
 	NSString *display_name;
-	
-	// Twitter API user/location
+
+	/* Twitter API user/location */
 	NSString *display_location;
-	
-	// Twitter API user/description
+
+	/* Twitter API user/description */
 	NSString *display_description;
-	
-	// Twitter API user/url
+
+	/* Twitter API user/url */
 	NSString *display_url;
-	
-	// Twitter API user/profile_image_url
+
+	/* Twitter API user/profile_image_url */
 	NSString *profile_image_url;
-	
-	// List of the user's status updates
+
+	/* List of the user's status updates */
 	NSArray *statusUpdates;
-	
-	// Instance of the image created from profile_image_url
+
+	/* Instance of the image created from profile_image_url */
 	UIImage *image;
 }
 
@@ -49,11 +48,12 @@
 @property (nonatomic, retain) NSArray *statusUpdates;
 @property (nonatomic, retain) UIImage *image;
 
-// Returns a Person object initialized with an NSDictionary of information retrieved 
-// using the TwitterHelper
-- (Person *) initPersonWithInfo:(NSDictionary *)userInfo;
+/* Returns a Person object initialized with an NSDictionary of information retrieved
+ * using the TwitterHelper
+ */
+- (Person *)initPersonWithInfo:(NSDictionary *)userInfo;
 
-// Returns a boolean value indicating that the a person object has all of the necessary data
+/* Returns a boolean value indicating that the a person object has all of the necessary data */
 - (BOOL)isValid;
 
 @end

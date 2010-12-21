@@ -1,16 +1,16 @@
-//
-//  Status.m
-//  Presence
-//
-//  Created by Adam Duke on 8/1/10.
-//  Copyright 2010 Adam Duke. All rights reserved.
-//
+/*  Status.m
+ *  Presence
+ *
+ *  Created by Adam Duke on 8/1/10.
+ *  Copyright 2010 Adam Duke. All rights reserved.
+ *
+ */
 
 #import "Status.h"
 
 @interface Status (Private)
 
--(NSString *)retrieveCreaterIdFromDictionary:(NSDictionary *)dictionary;
+- (NSString *)retrieveCreaterIdFromDictionary:(NSDictionary *)dictionary;
 
 @end
 
@@ -30,7 +30,7 @@
 
 - (Status *)initWithTimelineEntry:(NSDictionary *)timelineEntry
 {
-	if (self == [super init])
+	if(self == [super init])
 	{
 		self.text = [timelineEntry valueForKey:@"text"];
 		self.createdDate = [timelineEntry valueForKey:@"created_at"];
@@ -42,7 +42,8 @@
 - (NSString *)retrieveCreaterIdFromDictionary:(NSDictionary *)dictionary
 {
 	NSNumber *rawId = [dictionary valueForKey:@"id"];
-	NSString *stringId = [NSString stringWithFormat:@"%d",[rawId integerValue]];
+	NSString *stringId = [NSString stringWithFormat:@"%d", [rawId integerValue]];
 	return stringId;
 }
+
 @end
