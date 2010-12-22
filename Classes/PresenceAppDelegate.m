@@ -154,8 +154,8 @@ typedef enum
 - (SettingsViewController *)initSettingsViewController
 {
 	NSBundle *mainBundle = [NSBundle mainBundle];
-	SettingsViewController *settingsViewController = [[SettingsViewController alloc]
-	                                                  initWithNibName:SettingsViewControllerNibName bundle:mainBundle];
+	SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:SettingsViewControllerNibName
+	                                                                                          bundle:mainBundle];
 	settingsViewController = (SettingsViewController *)[self initIconAndTitleForViewController:settingsViewController
 	                                                                                  iconName:@"SettingsIcon"
 	                                                                                  titleKey:SettingsViewTitleKey];
