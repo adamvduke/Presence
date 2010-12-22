@@ -89,5 +89,5 @@ NSString *const AuthDataKey = @"AuthData";
  * OAUTH constants
  */
 
-NSString *const kOAuthConsumerKey = @"wFCsd9r6aDCTTostr1QOnA";
-NSString *const kOAuthConsumerSecret = @"rDk2QXUQywdjsHjsqMhKWYP5tQc9hjJHznhaEI0BbLw";
+NSString *const kOAuthConsumerKey = @"Ce5gG4bUX3ziyFedSCWRrQ";
+NSString *const kOAuthConsumerSecret = @"wpeuhsWP6GRJKCuy8AGSk87zQ98cnKlEhs8aO1CC34E";

@@ -14,6 +14,7 @@
 @interface ComposeStatusViewController (Private)
 
 - (void)keyboardWillShow:(NSNotification *)note;
+- (void)setCharactersEntered:(NSUInteger)characters;
 
 @end
 
@@ -74,13 +75,21 @@
 	return NO;
 }
 
-/* UITextViewDelegate method */
-- (void)textViewDidChange:(UITextView *)theTextView
+/* Sets the text for the label that displays the current character count */
+- (void)setCharactersEntered:(NSUInteger)characters
 {
 	/* update the countLabel's text with the current length of the text */
 	NSString *localizedText = NSLocalizedString(CharactersLabelKey, @"");
-	NSString *charactersLabelText = [NSString stringWithFormat:@"%@:%d/140", localizedText, [theTextView.text length]];
+	NSString *charactersLabelText = [NSString stringWithFormat:@"%@:%u/140", localizedText, characters];
 	self.charactersLabel.text = charactersLabelText;
+}
+
+/* executes any logic that should happen when the text
+ * in the text view changes
+ */
+- (void)textViewDidChange:(UITextView *)theTextView
+{
+	[self setCharactersEntered:[theTextView.text length]];
 }
 
 /* override viewWillAppear to do some initialization */
@@ -94,9 +103,8 @@
 	/* set the navigation item's title to the localized value */
 	self.aNavigationItem.title = NSLocalizedString(ComposeViewTitleKey, @"");
 
-	/* TODO: set the charactersLabel so that it is populated before the text view
-	 * changes. At the moment, it doesn't have a value until after a character is typed
-	 */
+	/* set the character count */
+	[self setCharactersEntered:0];
 
 	/* get any previous text out of NSUserDefaults, if the content has length set the
 	 * UITextView's text to that content */
