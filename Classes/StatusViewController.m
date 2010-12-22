@@ -104,9 +104,9 @@
 		[self.view addSubview:spinner];
 
 		/* set the right bar button for reloading the data with the Refresh style */
-		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]
-		                                   initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-		                                                        target:self action:@selector(refresh)];
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+		                                                                                target:self
+		                                                                                action:@selector(refresh)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
 	}

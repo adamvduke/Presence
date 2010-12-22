@@ -205,9 +205,8 @@
 /* show a modal view controller that will allow a user to compose a twitter status */
 - (void)presentUpdateStatusController
 {
-	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc]
-	                                                     initWithNibName:ComposeStatusViewControllerNibName
-	                                                              bundle:[NSBundle mainBundle]];
+	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] initWithNibName:ComposeStatusViewControllerNibName
+	                                                                                                  bundle:[NSBundle mainBundle]];
 	statusViewController.delegate = self;
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
 	[statusViewController release];
@@ -227,8 +226,11 @@
 	 * added to from the status views with a "Favorite" button
 	 * open a alert with text field,  OK and cancel button
 	 */
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add to Favorites" message:@"Enter a username."
-	                                               delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add to Favorites"
+	                                                message:@"Enter a username."
+	                                               delegate:self
+	                                      cancelButtonTitle:@"Cancel"
+	                                      otherButtonTitles:@"OK", nil];
 	UITextView *alertTextField = nil;
 	CGRect frame = CGRectMake(14, 45, 255, 23);
 	if(!alertTextField)
@@ -291,9 +293,9 @@
 
 		/* create a UIBarButtonItem for the right side using the Compose style, this will
 		 * present the ComposeStatusViewController modally */
-		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]
-		                                   initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-		                                                        target:self action:@selector(presentUpdateStatusController)];
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+		                                                                                target:self
+		                                                                                action:@selector(presentUpdateStatusController)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
 	}
@@ -311,9 +313,9 @@
 	{
 		if(!self.addBarButton)
 		{
-			UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
-			                              initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-			                                                   target:self action:@selector(presentAddToFavoritesController)];
+			UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+			                                                                           target:self
+			                                                                           action:@selector(presentAddToFavoritesController)];
 			self.addBarButton = addButton;
 			[addButton release];
 		}

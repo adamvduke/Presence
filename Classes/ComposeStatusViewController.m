@@ -218,7 +218,8 @@
 
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"")
 	                                                message:NSLocalizedString(UpdateFailedMessageKey, @"")
-	                                               delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"")
+	                                               delegate:nil
+	                                      cancelButtonTitle:NSLocalizedString(DismissKey, @"")
 	                                      otherButtonTitles:nil];
 	[alert show];
 	[alert release];
