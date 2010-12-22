@@ -88,7 +88,9 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	FMDatabase *database = [self openApplicationDatabase];
 
 	/* attempt to select a record based on the username */
-	FMResultSet *resultSet = [database executeQuery:@"SELECT id FROM Person WHERE user_id = ?", person.user_id];
+	FMResultSet *resultSet = [database executeQuery:@"SELECT id "
+	                                                " FROM   Person "
+	                                                " WHERE  user_id = ?", person.user_id];
 	/* if the resultset contains a record this is an update */
 	if([resultSet next])
 	{
@@ -111,7 +113,13 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 - (BOOL)updatePerson:(Person *)person inDatabase:(FMDatabase *)database
 {
 	[database beginTransaction];
-	[database executeUpdate:@"UPDATE Person SET screen_name = ?, display_name = ?, location = ?, description = ?, url = ? WHERE user_id = ?",
+	[database executeUpdate:@"UPDATE Person "
+	                        " SET    screen_name = ?, "
+	                        "        display_name = ?, "
+	                        "        location = ?, "
+	                        "        description = ?, "
+	                        "        url = ? "
+	                        " WHERE  user_id = ?",
 	 person.screen_name,
 	 person.display_name,
 	 person.display_location,
@@ -119,7 +127,10 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	 person.display_url,
 	 person.user_id];
 
-	[database executeUpdate:@"UPDATE Image SET profile_image_url = ?, image = ? WHERE user_id = ?",
+	[database executeUpdate:@"UPDATE Image "
+	                        " SET    profile_image_url = ?, "
+	                        "        image = ? "
+	                        " WHERE  user_id = ?",
 	 person.profile_image_url,
 	 UIImagePNGRepresentation(person.image),
 	 person.user_id];
@@ -134,7 +145,14 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 - (BOOL)savePerson:(Person *)person inDatabase:(FMDatabase *)database
 {
 	[database beginTransaction];
-	[database executeUpdate:@"INSERT INTO Person (user_id, screen_name, display_name, location, description, url) VALUES (?, ?, ?, ?, ?, ?)",
+	[database executeUpdate:@"INSERT INTO Person "
+	                        "             (user_id, "
+	                        "             screen_name, "
+	                        "             display_name, "
+	                        "             location, "
+	                        "             description, "
+	                        "             url) "
+	                        "VALUES (?, ?, ?, ?, ?, ?)",
 	 person.user_id,
 	 person.screen_name,
 	 person.display_name,
@@ -142,7 +160,11 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	 person.display_description,
 	 person.display_url];
 
-	[database executeUpdate:@"INSERT INTO Image (profile_image_url, user_id, image) VALUES (?,?,?)",
+	[database executeUpdate:@"INSERT INTO Image "
+	                        "             (profile_image_url, "
+	                        "             user_id, "
+	                        "             image) "
+	                        "VALUES (?,?,?)",
 	 person.profile_image_url,
 	 person.user_id,
 	 UIImagePNGRepresentation(person.image)];
@@ -166,18 +188,18 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	Person *person = [[Person alloc] init];
 
 	/* query the database for the Person's details */
-	FMResultSet *resultSet = [database executeQuery:@"SELECT "
-	                                                "person.user_id, "
-	                                                "person.screen_name, "
-	                                                "person.display_name, "
-	                                                "person.location, "
-	                                                "person.description, "
-	                                                "person.url, "
-	                                                "image_table.profile_image_url, "
-	                                                "image_table.image "
-	                                                "FROM Person person "
-	                                                "JOIN Image image_table ON image_table.user_id = person.user_id "
-	                                                "WHERE person.user_id = ?", user_id];
+	FMResultSet *resultSet = [database executeQuery:@"SELECT person.user_id, "
+	                                                "        person.screen_name, "
+	                                                "        person.display_name, "
+	                                                "        person.location, "
+	                                                "        person.description, "
+	                                                "        person.url, "
+	                                                "        image_table.profile_image_url, "
+	                                                "        image_table.image "
+	                                                " FROM   Person person "
+	                                                " JOIN   Image image_table "
+	                                                "   ON   image_table.user_id = person.user_id "
+	                                                "WHERE   person.user_id = ?", user_id];
 	/* if the resultset contains data, construct a Person object from it */
 	while([resultSet next])
 	{
@@ -205,7 +227,9 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 - (UIImage *)initImageForUserId:(NSString *)user_id
 {
 	FMDatabase *database = [self openApplicationDatabase];
-	FMResultSet *resultSet = [database executeQuery:@"SELECT image FROM Image WHERE user_id = ?", user_id];
+	FMResultSet *resultSet = [database executeQuery:@"SELECT image "
+	                                                " FROM Image "
+	                                                " WHERE user_id = ?", user_id];
 	UIImage *returnImage = nil;
 	if([resultSet next])
 	{
