@@ -207,7 +207,7 @@
 {
 	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc]
 	                                                     initWithNibName:ComposeStatusViewControllerNibName
-	                                                     bundle:[NSBundle mainBundle]];
+	                                                              bundle:[NSBundle mainBundle]];
 	statusViewController.delegate = self;
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
 	[statusViewController release];
@@ -228,7 +228,7 @@
 	 * open a alert with text field,  OK and cancel button
 	 */
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add to Favorites" message:@"Enter a username."
-	                      delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+	                                               delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 	UITextView *alertTextField = nil;
 	CGRect frame = CGRectMake(14, 45, 255, 23);
 	if(!alertTextField)
@@ -293,7 +293,7 @@
 		 * present the ComposeStatusViewController modally */
 		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]
 		                                   initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-		                                   target:self action:@selector(presentUpdateStatusController)];
+		                                                        target:self action:@selector(presentUpdateStatusController)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
 	}
@@ -313,7 +313,7 @@
 		{
 			UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
 			                              initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-			                              target:self action:@selector(presentAddToFavoritesController)];
+			                                                   target:self action:@selector(presentAddToFavoritesController)];
 			self.addBarButton = addButton;
 			[addButton release];
 		}

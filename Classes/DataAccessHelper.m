@@ -94,6 +94,7 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	{
 		saveOrUpdateResult = [self updatePerson:person inDatabase:database];
 	}
+
 	/* if the resultset does not contain a record this is an insert */
 	else
 	{

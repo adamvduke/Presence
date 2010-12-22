@@ -106,7 +106,7 @@
 		/* set the right bar button for reloading the data with the Refresh style */
 		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]
 		                                   initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-		                                   target:self action:@selector(refresh)];
+		                                                        target:self action:@selector(refresh)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
 		[rightBarButton release];
 	}
@@ -198,6 +198,7 @@
 			cell.imageView.image = [UIImage imageNamed:@"Placeholder.png"];
 		}
 	}
+
 	/* because there are only two sections, the else block will always create cells styled for
 	 *statuses */
 	else
@@ -228,7 +229,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	/* if the index path represents the "Title cell" return the height of the user's image plus
-	 **/
+	**/
 	NSUInteger section = indexPath.section;
 	if(section == 0)
 	{

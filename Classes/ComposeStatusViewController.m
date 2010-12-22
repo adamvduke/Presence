@@ -144,9 +144,9 @@
 
 	/* subscribe to the UIKeyboardWillShowNotification */
 	[[NSNotificationCenter defaultCenter] addObserver:self
-	 selector:@selector(keyboardWillShow:)
-	 name:UIKeyboardWillShowNotification
-	 object:nil];
+	                                         selector:@selector(keyboardWillShow:)
+	                                             name:UIKeyboardWillShowNotification
+	                                           object:nil];
 }
 
 /* When the keyboard becomes visible, do some math to redraw things to the appropriate size */
@@ -217,9 +217,9 @@
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"")
-	                      message:NSLocalizedString(UpdateFailedMessageKey, @"")
-	                      delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"")
-	                      otherButtonTitles:nil];
+	                                                message:NSLocalizedString(UpdateFailedMessageKey, @"")
+	                                               delegate:nil cancelButtonTitle:NSLocalizedString(DismissKey, @"")
+	                                      otherButtonTitles:nil];
 	[alert show];
 	[alert release];
 }
