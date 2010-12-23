@@ -16,16 +16,13 @@
 	UIWindow *window;
 	IBOutlet UITabBarController *tabBarController;
 
-	/* Treated as a singleton */
-	DataAccessHelper *dataAccessHelper;
-
-	SA_OAuthTwitterEngine *engine;
+	@private
 	NSMutableDictionary *openRequests;
+	SA_OAuthTwitterEngine *engine;
+	DataAccessHelper *dataAccessHelper;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
-@property (nonatomic, retain) NSMutableDictionary *openRequests;
 
 - (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate;
 @end

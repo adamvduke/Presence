@@ -14,14 +14,18 @@
 
 @interface StatusViewController ()
 
+@property (nonatomic, retain) UIActivityIndicatorView *spinner;
+@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
+@property (nonatomic, retain) Person *person;
+@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
+
 - (NSArray *)initStatusUpdatesFromTimeline:(NSArray *)userTimeline;
 
 @end
 
 @implementation StatusViewController
-@synthesize person;
-@synthesize spinner;
-@synthesize dataAccessHelper;
+
+@synthesize spinner, engine, person, dataAccessHelper;
 
 /* override shouldAutorotateToInterfaceOrientation to return YES for all interface orientations */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -77,7 +81,7 @@
 	[self.spinner startAnimating];
 
 	/* get the user's timeline */
-	[engine getUserTimelineFor:self.person.user_id sinceID:0 startingAtPage:1 count:20];
+	[self.engine getUserTimelineFor:self.person.user_id sinceID:0 startingAtPage:1 count:20];
 }
 
 - (void)refresh
@@ -117,19 +121,21 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	if(![engine isAuthorized])
+	if(![self.engine isAuthorized])
 	{
 		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-		engine = [appDelegate getEngineForDelegate:self];
+		self.engine = [appDelegate getEngineForDelegate:self];
 	}
-	if([engine isAuthorized])
+	if([self.engine isAuthorized])
 	{
 		[self authSucceededForEngine];
 	}
 }
 
 - (void)viewDidAppear:(BOOL)animated
-{}
+{
+	[super viewDidAppear:animated];
+}
 
 - (void)didReceiveMemoryWarning
 {

@@ -20,35 +20,19 @@
 	                                               UITextViewDelegate,
 	                                               SA_OAuthTwitterEngineDelegate>
 {
-	SA_OAuthTwitterEngine *engine;
-	NSMutableDictionary *openRequests;
+	DataAccessHelper *dataAccessHelper;
 
+	@private
+	SA_OAuthTwitterEngine *engine;
 	UIBarButtonItem *addBarButton;
 	UIBarButtonItem *composeBarButton;
-
-	/* the list of users to display */
 	NSMutableArray *userIdArray;
-
-	/* mutable array of people */
 	NSMutableArray *people;
-
-	/* set of icon downloader objects */
 	NSMutableDictionary *imageDownloadsInProgress;
-
-	/* count of the number of threads that are finished loading data */
 	int finishedThreads;
-
-	DataAccessHelper *dataAccessHelper;
 }
 
-@property (nonatomic, retain) NSMutableDictionary *openRequests;
-@property (nonatomic, retain) UIBarButtonItem *addBarButton;
-@property (nonatomic, retain) UIBarButtonItem *composeBarButton;
-@property (nonatomic, retain) NSMutableArray *userIdArray;
-@property (nonatomic, retain) NSMutableArray *people;
-@property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
-@property int finishedThreads;
 
 - (id)initAsEditable:(BOOL)isEditable userIdArray:(NSArray *)userIds;
 

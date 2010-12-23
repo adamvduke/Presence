@@ -11,7 +11,11 @@
 #import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
 
-@interface ComposeStatusViewController (Private)
+@interface ComposeStatusViewController ()
+
+@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
+@property (nonatomic, retain) UIActivityIndicatorView *spinner;
+@property BOOL isEditable;
 
 - (void)keyboardWillShow:(NSNotification *)note;
 - (void)setCharactersEntered:(NSUInteger)characters;
@@ -22,12 +26,7 @@
 
 @implementation ComposeStatusViewController
 
-@synthesize spinner;
-@synthesize aNavigationItem;
-@synthesize charactersLabel;
-@synthesize textView;
-@synthesize isEditable;
-@synthesize delegate;
+@synthesize engine, spinner, aNavigationItem, charactersLabel, textView, isEditable, delegate;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -57,7 +56,7 @@
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	self.isEditable = NO;
-	[engine sendUpdate:textView.text];
+	[self.engine sendUpdate:textView.text];
 }
 
 /* UITextViewDelegate method */
@@ -101,7 +100,7 @@
  */
 - (void)setTweetButtonStatus
 {
-	BOOL authorized = [engine isAuthorized];
+	BOOL authorized = [self.engine isAuthorized];
 	BOOL hasText = [self textViewHasText];
 	BOOL enabled = (authorized && hasText);
 	UINavigationItem *navBar = self.aNavigationItem;
@@ -145,13 +144,13 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-	if(![engine isAuthorized])
+	if(![self.engine isAuthorized])
 	{
 		[self setTweetButtonStatus];
 		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-		engine = [appDelegate getEngineForDelegate:self];
+		self.engine = [appDelegate getEngineForDelegate:self];
 	}
-	if([engine isAuthorized])
+	if([self.engine isAuthorized])
 	{
 		[self authSucceededForEngine];
 	}

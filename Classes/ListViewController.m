@@ -19,10 +19,17 @@
 #define kCustomRowHeight 48  /* height of each row */
 #define kThreadBatchCount 5 /* number of rows to create before re-drawing the table view */
 
-@interface ListViewController (Private)
+@interface ListViewController ()
+
+@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
+@property (nonatomic, retain) UIBarButtonItem *addBarButton;
+@property (nonatomic, retain) UIBarButtonItem *composeBarButton;
+@property (nonatomic, retain) NSMutableArray *userIdArray;
+@property (nonatomic, retain) NSMutableArray *people;
+@property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
+@property int finishedThreads;
 
 - (void)startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
-- (void)beginLoadingTwitterData;
 - (void)synchronousLoadTwitterData;
 - (void)synchronousLoadPerson:(NSString *)user_id;
 - (void)didFinishLoadingPerson;
@@ -31,14 +38,7 @@
 
 @implementation ListViewController
 
-@synthesize openRequests;
-@synthesize addBarButton;
-@synthesize composeBarButton;
-@synthesize userIdArray;
-@synthesize people;
-@synthesize imageDownloadsInProgress;
-@synthesize finishedThreads;
-@synthesize dataAccessHelper;
+@synthesize engine, addBarButton, composeBarButton, userIdArray, people, imageDownloadsInProgress, finishedThreads, dataAccessHelper;
 
 - (void)dealloc
 {
@@ -70,12 +70,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	if(![engine isAuthorized])
+	if(![self.engine isAuthorized])
 	{
 		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-		engine = [appDelegate getEngineForDelegate:self];
+		self.engine = [appDelegate getEngineForDelegate:self];
 	}
-	if([engine isAuthorized])
+	if([self.engine isAuthorized])
 	{
 		[self authSucceededForEngine];
 	}
@@ -158,7 +158,7 @@
 		person = nil;
 
 		/* get the user's information from Twitter */
-		[engine getUserInformationFor:user_id];
+		[self.engine getUserInformationFor:user_id];
 	}
 	else
 	{
@@ -583,7 +583,7 @@
 	/* check the userIdArray, because it may have been set already */
 	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
 	{
-		[engine getFollowedIdsForUsername:screenName];
+		[self.engine getFollowedIdsForUsername:screenName];
 	}
 	else
 	if( IsEmpty(people) )
@@ -630,7 +630,7 @@
 		}
 	}
 	self.userIdArray = idsArray;
-	[self beginLoadingTwitterData];
+	[self synchronousLoadTwitterData];
 }
 
 @end

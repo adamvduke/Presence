@@ -15,21 +15,12 @@
 
 @interface StatusViewController : UITableViewController <SA_OAuthTwitterEngineDelegate>
 {
-	SA_OAuthTwitterEngine *engine;
-
-	/* the person object that this view controller will display details about */
-	Person *person;
-
-	/* activity indicator for animation during data access */
+	@private
 	UIActivityIndicatorView *spinner;
-
-	/* DataAccessHelper to save status updates */
+	SA_OAuthTwitterEngine *engine;
+	Person *person;
 	DataAccessHelper *dataAccessHelper;
 }
-
-@property (nonatomic, retain) Person *person;
-@property (nonatomic, retain) UIActivityIndicatorView *spinner;
-@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
 
 /* initialize an instance with a UITableViewStyle and Person object */
 - (id)initWithPerson:(Person *)aPerson dataAccessHelper:(DataAccessHelper *)accessHelper;

@@ -14,11 +14,6 @@
 
 @interface ComposeStatusViewController : UIViewController <UITextViewDelegate, SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>
 {
-	SA_OAuthTwitterEngine *engine;
-
-	/* activity indicator for animation during data access */
-	UIActivityIndicatorView *spinner;
-
 	/* IBOutlet for the navigationItem */
 	IBOutlet UINavigationItem *aNavigationItem;
 
@@ -28,18 +23,18 @@
 	/* IBOutlet for the UITextView */
 	IBOutlet UITextView *textView;
 
-	/* BOOL to control textView editiability */
-	BOOL isEditable;
-
 	/* the delegate */
 	id<ComposeStatusViewControllerDelegate> delegate;
+
+	@private
+	SA_OAuthTwitterEngine *engine;
+	UIActivityIndicatorView *spinner;
+	BOOL isEditable;
 }
 
-@property (nonatomic, retain) UIActivityIndicatorView *spinner;
 @property (nonatomic, retain) UINavigationItem *aNavigationItem;
 @property (nonatomic, retain) UILabel *charactersLabel;
 @property (nonatomic, retain) UITextView *textView;
-@property BOOL isEditable;
 @property (nonatomic, retain) id<ComposeStatusViewControllerDelegate> delegate;
 
 /* action to call to dismiss this view controller when displayed modally */

@@ -21,11 +21,15 @@ typedef enum
 	FollowedIdsRequest
 } RequestType;
 
-@interface PresenceAppDelegate (Private)
+@interface PresenceAppDelegate ()
+
+@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
+@property (nonatomic, retain) NSMutableDictionary *openRequests;
+@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
 
 - (void)completeLaunchingWithViewControllerIndex:(NSUInteger)index;
 - (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId;
-- (UIViewController *)setIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey;
+- (UIViewController *)initIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey;
 - (SettingsViewController *)initSettingsViewController;
 - (UINavigationController *)initFavoritesController;
 - (UINavigationController *)initFollowingController;
@@ -38,9 +42,7 @@ typedef enum
 
 @implementation PresenceAppDelegate
 
-@synthesize window;
-@synthesize dataAccessHelper;
-@synthesize openRequests;
+@synthesize window, dataAccessHelper, openRequests, engine;
 
 #pragma mark -
 #pragma mark UIApplicationDelegate
@@ -63,8 +65,8 @@ typedef enum
 		NSLog(@"Error creating database");
 	}
 
-	engine = [self getEngineForDelegate:self];
-	if([engine isAuthorized])
+	self.engine = [self getEngineForDelegate:self];
+	if([self.engine isAuthorized])
 	{
 		[self authSucceededForEngine];
 	}
@@ -199,7 +201,7 @@ typedef enum
 	                                                                                         titleKey:ListViewControllerTitleKey];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	NSString *username = [CredentialHelper retrieveUsername];
-	NSString *connectionId = [engine getFollowedIdsForUsername:username];
+	NSString *connectionId = [self.engine getFollowedIdsForUsername:username];
 	[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionId];
 	return followingNavigationController;
 }
@@ -261,11 +263,11 @@ typedef enum
 	NSLog(@"Authenicated for %@", username);
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-	//tabBarController.selectedIndex = 0;
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	/* tabBarController.selectedIndex = 0; */
 	[self completeLaunchingWithViewControllerIndex:0];
 }
-
 
 - (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
 {
@@ -292,7 +294,7 @@ typedef enum
 	/* initialize the twitter engine and present the modal view controller
 	 * to enter credentials if the engine is not authorized
 	 */
-	SA_OAuthTwitterEngine *anEngine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate:engineDelegate];
+	SA_OAuthTwitterEngine *anEngine = [[[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate:engineDelegate] autorelease];
 	anEngine.consumerKey = kOAuthConsumerKey;
 	anEngine.consumerSecret = kOAuthConsumerSecret;
 
