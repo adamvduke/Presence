@@ -139,11 +139,10 @@
 	{
 		/* start the device's network activity indicator */
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	}
-	/* TODO: should this loop be inside the IsEmpty check? */
-	for(NSString *user_id in userIdArray)
-	{
-		[self synchronousLoadPerson:user_id];
+		for(NSString *user_id in self.userIdArray)
+		{
+			[self synchronousLoadPerson:user_id];
+		}
 	}
 }
 
