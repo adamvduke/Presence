@@ -19,6 +19,7 @@
 
 @protocol SA_OAuthTwitterEngineDelegate
 - (void)authSucceededForEngine;
+- (void)deauthorizeEngine;
 @optional
 
 /* implement these methods to store off the creds returned by Twitter

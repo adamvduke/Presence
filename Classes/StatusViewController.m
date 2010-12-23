@@ -286,6 +286,11 @@
 	[self beginLoadUpdates:NO];
 }
 
+- (void)deauthorizeEngine
+{
+	[self.engine clearAccessToken];
+}
+
 /* These delegate methods are called after all results are parsed from the connection. If
  * the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
  * collection of all results is also returned.

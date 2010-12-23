@@ -313,6 +313,36 @@ typedef enum
 	return anEngine;
 }
 
+/* deauthrorize all engines in the NSArray of delegates
+ * as well as any engines in child view controllers
+ */
+- (void)deauthorizeEngines:(NSArray *)delegates
+{
+	for(id potentialDelegate in delegates)
+	{
+		if([potentialDelegate respondsToSelector:@selector(deauthorizeEngine)])
+		{
+			[potentialDelegate deauthorizeEngine];
+		}
+		if([potentialDelegate respondsToSelector:@selector(viewControllers)])
+		{
+			id viewControllers = [potentialDelegate viewControllers];
+			if([viewControllers isKindOfClass:[NSArray class]])
+			{
+				[self deauthorizeEngines:viewControllers];
+			}
+		}
+	}
+}
+
+/* deauthorize all engines */
+- (void)deauthorizeEngines
+{
+	[self deauthorizeEngine];
+	NSArray *viewControllers = tabBarController.viewControllers;
+	[self deauthorizeEngines:viewControllers];
+}
+
 #pragma mark -
 #pragma mark SA_OAuthTwitterEngineDelegate
 - (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username
@@ -330,6 +360,11 @@ typedef enum
 - (void)authSucceededForEngine
 {
 	[self completeLaunchingWithViewControllerIndex:1];
+}
+
+- (void)deauthorizeEngine
+{
+	[self.engine clearAccessToken];
 }
 
 #pragma mark -

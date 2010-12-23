@@ -25,4 +25,5 @@
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
 - (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate;
+- (void)deauthorizeEngines;
 @end

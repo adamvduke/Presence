@@ -8,6 +8,7 @@
 
 #import "CredentialHelper.h"
 #import "DataAccessHelper.h"
+#import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
 #import "SettingsViewController.h"
 
@@ -23,7 +24,8 @@
 
 - (IBAction)deauthorize
 {
-	[CredentialHelper removeCredentials];
+	PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+	[appDelegate deauthorizeEngines];
 }
 
 - (IBAction)deleteData

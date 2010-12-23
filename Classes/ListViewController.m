@@ -592,6 +592,11 @@
 	}
 }
 
+- (void)deauthorizeEngine
+{
+	[self.engine clearAccessToken];
+}
+
 #pragma mark -
 #pragma mark EngineDelegate
 
