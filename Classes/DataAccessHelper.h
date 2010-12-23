@@ -11,12 +11,10 @@
 #import <Foundation/Foundation.h>
 
 @interface DataAccessHelper : NSObject {
+	@private
 	NSString *databaseName;
 	NSString *documentsDatabasePath;
 }
-
-@property (nonatomic, retain) NSString *databaseName;
-@property (nonatomic, retain) NSString *documentsDatabasePath;
 
 /* copy the default database to the file system */
 - (BOOL)createAndValidateDatabase;

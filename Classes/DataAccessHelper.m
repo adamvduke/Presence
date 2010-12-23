@@ -9,7 +9,10 @@
 #import "DataAccessHelper.h"
 #import "FMDatabase.h"
 
-@interface DataAccessHelper (Private)
+@interface DataAccessHelper ()
+
+@property (nonatomic, retain) NSString *databaseName;
+@property (nonatomic, retain) NSString *documentsDatabasePath;
 
 - (FMDatabase *)openApplicationDatabase;
 - (void)updateSchema;
