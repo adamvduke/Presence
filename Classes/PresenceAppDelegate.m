@@ -285,7 +285,14 @@ typedef enum
 	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:anEngine delegate:self];
 	if(controller)
 	{
-		[tabBarController presentModalViewController:controller animated:NO];
+		if([engineDelegate respondsToSelector:@selector(presentModalViewController:animated:)])
+		{
+			[engineDelegate presentModalViewController:controller animated:NO];
+		}
+		else
+		{
+			[tabBarController presentModalViewController:controller animated:NO];
+		}
 	}
 	return anEngine;
 }

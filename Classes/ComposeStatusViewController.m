@@ -15,6 +15,8 @@
 
 - (void)keyboardWillShow:(NSNotification *)note;
 - (void)setCharactersEntered:(NSUInteger)characters;
+- (void)setTweetButtonStatus;
+- (BOOL)textViewHasText;
 
 @end
 
@@ -75,13 +77,36 @@
 	return NO;
 }
 
+/* Determines if the text view has any text to display */
+- (BOOL)textViewHasText
+{
+	NSString *text = self.textView.text;
+	BOOL hasText = [text length] > 0;
+	return hasText;
+}
+
 /* Sets the text for the label that displays the current character count */
 - (void)setCharactersEntered:(NSUInteger)characters
 {
+	[self setTweetButtonStatus];
+
 	/* update the countLabel's text with the current length of the text */
 	NSString *localizedText = NSLocalizedString(CharactersLabelKey, @"");
 	NSString *charactersLabelText = [NSString stringWithFormat:@"%@:%u/140", localizedText, characters];
 	self.charactersLabel.text = charactersLabelText;
+}
+
+/* Sets the "Tweet" button to enabled or disabled depeding
+ * on the current state of the engine and text view
+ */
+- (void)setTweetButtonStatus
+{
+	BOOL authorized = [engine isAuthorized];
+	BOOL hasText = [self textViewHasText];
+	BOOL enabled = (authorized && hasText);
+	UINavigationItem *navBar = self.aNavigationItem;
+	UIBarButtonItem *rightBarButton = navBar.rightBarButtonItem;
+	rightBarButton.enabled = enabled;
 }
 
 /* executes any logic that should happen when the text
@@ -103,9 +128,6 @@
 	/* set the navigation item's title to the localized value */
 	self.aNavigationItem.title = NSLocalizedString(ComposeViewTitleKey, @"");
 
-	/* set the character count */
-	[self setCharactersEntered:0];
-
 	/* get any previous text out of NSUserDefaults, if the content has length set the
 	 * UITextView's text to that content */
 	NSString *previousText = [[NSUserDefaults standardUserDefaults] objectForKey:TweetContentKey];
@@ -114,19 +136,24 @@
 		self.textView.text = previousText;
 	}
 
+	/* set the character count */
+	[self setCharactersEntered:[previousText length]];
+
 	/* tell the UITextView to becomeFirstResponder, this brings up the keyboard */
 	[self.textView becomeFirstResponder];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-	/* TODO: if the engine is not authorized, disable the
-	 * tweet button until the engine is authorized
-	 */
 	if(![engine isAuthorized])
 	{
+		[self setTweetButtonStatus];
 		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
 		engine = [appDelegate getEngineForDelegate:self];
+	}
+	if([engine isAuthorized])
+	{
+		[self authSucceededForEngine];
 	}
 }
 
@@ -235,7 +262,7 @@
 
 - (void)authSucceededForEngine
 {
-	/* TODO: if the engine was not authorized, enable the tweet button */
+	[self setTweetButtonStatus];
 }
 
 /* These delegate methods are called after all results are parsed from the connection. If
