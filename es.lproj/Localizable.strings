@@ -43,5 +43,11 @@
 // Spanish localization for "The status update failed. Please check your network settings and try again."
 "UpdateFailedMessageKey" = "es_The status update failed. Please check your network settings and try again.";
 
+// English localization for "Authorization Failed"
+"AuthorizationFailedTitleKey" = "es_Authorization Failed";
+
+// English localization for "The authorization failed. Please check your credentials and try again. If the problem persists, the twitter service may be down"
+"AuthorizationFailedMessageKey" = "es_The authorization failed. Please check your credentials and try again. If the problem persists, the twitter service may be down";
+
 // Spanish localization for the word "Success!"
 "SuccessTitleKey" = "es_Success!";

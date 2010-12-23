@@ -38,10 +38,16 @@
 "LoadingKey" = "Loading...";
 
 // Enlish localization for "Update failed"
-"UpdateFailedTitleKey" = "Update failed!";
+"UpdateFailedTitleKey" = "Update Failed";
 
 // English localization for "The status update failed. Please check your network settings and try again."
 "UpdateFailedMessageKey" = "The status update failed. Please check your network settings and try again.";
+
+// English localization for "Authorization Failed"
+"AuthorizationFailedTitleKey" = "Authorization Failed";
+
+// English localization for "The authorization failed. Please check your credentials and try again. If the problem persists, the twitter service may be down"
+"AuthorizationFailedMessageKey" = "The authorization failed. Please check your credentials and try again. If the problem persists, the twitter service may be down";
 
 // English localization for the word "Success!"
 "SuccessTitleKey" = "Success!";

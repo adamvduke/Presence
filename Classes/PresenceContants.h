@@ -52,6 +52,12 @@ extern NSString *const UpdateFailedTitleKey;
 /* key for finding the localized message for the update failed alert */
 extern NSString *const UpdateFailedMessageKey;
 
+/* key for finding the localized button title for the authorization failed alert */
+extern NSString *const AuthFailedTitleKey;
+
+/* key for finding the localized message for the authorization failed alert */
+extern NSString *const AuthFailedMessageKey;
+
 /*
  * Centrally defined Nib names to avoid misspelling
  */

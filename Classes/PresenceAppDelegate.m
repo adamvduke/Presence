@@ -23,7 +23,7 @@ typedef enum
 
 @interface PresenceAppDelegate (Private)
 
-- (void)completeLaunching;
+- (void)completeLaunchingWithViewControllerIndex:(NSUInteger)index;
 - (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId;
 - (UIViewController *)setIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey;
 - (SettingsViewController *)initSettingsViewController;
@@ -104,7 +104,7 @@ typedef enum
 	}
 }
 
-- (void)completeLaunching
+- (void)completeLaunchingWithViewControllerIndex:(NSUInteger)index
 {
 	/* initialize the viewControllerArray */
 	NSMutableArray *aViewControllerArray = [self initViewControllers];
@@ -115,7 +115,7 @@ typedef enum
 	tabBarController.viewControllers = aViewControllerArray;
 	[aViewControllerArray release];
 
-	tabBarController.selectedIndex = 1;
+	tabBarController.selectedIndex = index;
 }
 
 #pragma mark -
@@ -261,10 +261,22 @@ typedef enum
 	NSLog(@"Authenicated for %@", username);
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+	//tabBarController.selectedIndex = 0;
+	[self completeLaunchingWithViewControllerIndex:0];
+}
+
+
 - (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
 {
-	/* TODO: Handle failed authentication */
-	NSLog(@"Authentication Failed!");
+	tabBarController.selectedIndex = 0;
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(AuthFailedTitleKey, @"")
+	                                                message:NSLocalizedString(AuthFailedMessageKey, @"")
+	                                               delegate:self
+	                                      cancelButtonTitle:NSLocalizedString(DismissKey, @"")
+	                                      otherButtonTitles:nil];
+	[alert show];
+	[alert release];
 }
 
 - (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
@@ -315,7 +327,7 @@ typedef enum
 
 - (void)authSucceededForEngine
 {
-	[self completeLaunching];
+	[self completeLaunchingWithViewControllerIndex:1];
 }
 
 #pragma mark -
