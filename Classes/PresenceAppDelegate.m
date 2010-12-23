@@ -269,8 +269,10 @@ typedef enum
 
 - (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
 {
-	/* TODO: Handle canceled authentication */
-	NSLog(@"Authentication Canceled.");
+	if(tabBarController.modalViewController)
+	{
+		[tabBarController dismissModalViewControllerAnimated:YES];
+	}
 }
 
 - (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate
