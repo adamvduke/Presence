@@ -26,6 +26,7 @@
 @property (nonatomic, retain) UIBarButtonItem *composeBarButton;
 @property (nonatomic, retain) NSMutableArray *userIdArray;
 @property (nonatomic, retain) NSMutableArray *people;
+@property (nonatomic, retain) NSMutableArray *pendingFavorites;
 @property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
 @property int finishedThreads;
 
@@ -38,7 +39,8 @@
 
 @implementation ListViewController
 
-@synthesize engine, addBarButton, composeBarButton, userIdArray, people, imageDownloadsInProgress, finishedThreads, dataAccessHelper;
+@synthesize engine, addBarButton, composeBarButton, userIdArray, people;
+@synthesize imageDownloadsInProgress, finishedThreads, dataAccessHelper, pendingFavorites;
 
 - (void)dealloc
 {
@@ -265,8 +267,11 @@
 			{
 				UITextField *textField = (UITextField *)subview;
 				NSString *username = textField.text;
-				[self.userIdArray addObject:username];
-				[FavoritesHelper saveFavorites:userIdArray];
+				if(!pendingFavorites)
+				{
+					self.pendingFavorites = [[NSMutableArray alloc] init];
+				}
+				[pendingFavorites addObject:username];
 				[self synchronousLoadPerson:username];
 			}
 		}
@@ -611,12 +616,23 @@
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
 }
 
+- (void)updateFavoritesWithPerson:(Person *)person
+{
+	if([pendingFavorites containsObject:person.screen_name])
+	{
+		[userIdArray addObject:person.user_id];
+		[FavoritesHelper saveFavorites:userIdArray];
+		[pendingFavorites removeObject:person.screen_name];
+	}
+}
+
 - (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
 {
 	Person *person = [[Person alloc] initPersonWithInfo:[userInfo objectAtIndex:0]];
 	/* this person is not yet in the database */
 	if([person isValid])
 	{
+		[self updateFavoritesWithPerson:person];
 		[dataAccessHelper saveOrUpdatePerson:person];
 		[self.people addObject:person];
 	}

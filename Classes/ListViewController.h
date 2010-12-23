@@ -28,6 +28,7 @@
 	UIBarButtonItem *composeBarButton;
 	NSMutableArray *userIdArray;
 	NSMutableArray *people;
+	NSMutableArray *pendingFavorites;
 	NSMutableDictionary *imageDownloadsInProgress;
 	int finishedThreads;
 }
