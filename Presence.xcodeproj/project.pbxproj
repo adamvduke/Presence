@@ -284,7 +284,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				56C5E732123E6E520099F48D /* Twitter+OAuth */,
+				56C5E732123E6E520099F48D /* TwitterEngine */,
 				56DEC91A126D4643002E4825 /* External */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -391,12 +391,13 @@
 			name = Database;
 			sourceTree = "<group>";
 		};
-		56C5E732123E6E520099F48D /* Twitter+OAuth */ = {
+		56C5E732123E6E520099F48D /* TwitterEngine */ = {
 			isa = PBXGroup;
 			children = (
 				56C5E747123E6E520099F48D /* MGTwitterEngine */,
 				56C5E768123E6E520099F48D /* SAOAuthTwitterEngine */,
 			);
+			name = TwitterEngine;
 			path = "Twitter+OAuth";
 			sourceTree = "<group>";
 		};
