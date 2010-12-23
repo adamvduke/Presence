@@ -13,6 +13,7 @@
 
 #import "SA_OAuthTwitterController.h"
 #import "SA_OAuthTwitterEngine.h"
+#import "ValidationHelper.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
@@ -137,7 +138,6 @@ static NSString *const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 
 /*
  *
- ***=============================================================================================================================
  */
 #pragma mark Actions
 - (void)denied
@@ -167,7 +167,6 @@ static NSString *const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 
 /*
  *
- ***=============================================================================================================================
  */
 #pragma mark View Controller Stuff
 - (void)loadView
@@ -244,7 +243,6 @@ static NSString *const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 
 /*
  *
- ***=============================================================================================================================
  */
 #pragma mark Notifications
 - (void)pasteboardChanged:(NSNotification *)note
@@ -265,7 +263,6 @@ static NSString *const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 
 /*
  *
- ***=============================================================================================================================
  */
 #pragma mark Webview Delegate stuff
 - (void)webViewDidFinishLoad:(UIWebView *)webView
@@ -319,55 +316,21 @@ static NSString *const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 	[UIView commitAnimations];
 }
 
-/*********************************************************************************************************
-*  I am fully aware that this code is chock full 'o flunk. That said:
-*
-*  - first we check, using standard DOM-diving, for the pin, looking at both the old and new tags
-* for it.
-*  - if not found, we try a regex for it. This did not work for me (though it did work in test web
-* pages).
-*  - if STILL not found, we iterate the entire HTML and look for an all-numeric 'word', 7 characters
-* in length
-*
-*  Ugly. I apologize for its inelegance. Bleah.
-*
-*********************************************************************************************************/
-
 - (NSString *)locateAuthPinInWebView:(UIWebView *)webView
 {
-	NSString *js = @"var d = document.getElementById('oauth-pin'); if (d == null) d = document.getElementById('oauth_pin'); if (d) d = d.innerHTML; if (d == null) {var r = new RegExp('\\\\s[0-9]+\\\\s'); d = r.exec(document.body.innerHTML); if (d.length > 0) d = d[0];} d.replace(/^\\s*/, '').replace(/\\s*$/, ''); d;";
-	NSString *pin = [webView stringByEvaluatingJavaScriptFromString:js];
+	/* if the web view doesn't have any content
+	 * return nil
+	 */
 	NSString *html = [webView stringByEvaluatingJavaScriptFromString:@"document.body.innerText"];
-	if(html.length == 0)
+	if( IsEmpty(html) )
 	{
 		return nil;
 	}
 
-	const char *rawHTML = (const char *) [html UTF8String];
-	int length = strlen(rawHTML), chunkLength = 0;
-	for(int i = 0; i < length; i++){
-		if(rawHTML[i] < '0' || rawHTML[i] > '9')
-		{
-			if(chunkLength == 7)
-			{
-				char *buffer = (char *) malloc(chunkLength + 1);
-
-				memmove(buffer, &rawHTML[i - chunkLength], chunkLength);
-				buffer[chunkLength] = 0;
-
-				pin = [NSString stringWithUTF8String:buffer];
-				free(buffer);
-				return pin;
-			}
-			chunkLength = 0;
-		}
-		else
-		{
-			chunkLength++;
-		}
-	}
-
-	return nil;
+	/* use javascript to get the value of the 'oauth_pin' element */
+	NSString *js = @"var d = document.getElementById('oauth_pin'); if (d) d = d.innerHTML;";
+	NSString *pin = [webView stringByEvaluatingJavaScriptFromString:js];
+	return pin;
 }
 
 - (UIToolbar *)pinCopyPromptBar
@@ -381,12 +344,16 @@ static NSString *const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 		_pinCopyPromptBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 
 		_pinCopyPromptBar.items = [NSArray arrayWithObjects:
-		                           [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
+		                           [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+		                                                                          target:nil
+		                                                                          action:nil] autorelease],
 		                           [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Select and Copy the PIN", @"Select and Copy the PIN")
 		                                                             style:UIBarButtonItemStylePlain
 		                                                            target:nil
 		                                                            action:nil] autorelease],
-		                           [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
+		                           [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+		                                                                          target:nil
+		                                                                          action:nil] autorelease],
 		                           nil];
 	}
 
