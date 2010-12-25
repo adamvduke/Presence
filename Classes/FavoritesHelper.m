@@ -56,7 +56,7 @@
 + (NSMutableArray *)retrieveFavorites
 {
 	NSString *path = [self favoritesPath];
-	NSMutableArray *favoriteUsersArray = [NSArray arrayWithContentsOfFile:path];
+	NSMutableArray *favoriteUsersArray = [NSMutableArray arrayWithContentsOfFile:path];
 	return favoriteUsersArray;
 }
 

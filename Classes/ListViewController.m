@@ -15,36 +15,50 @@
 #import "StatusViewController.h"
 #import "ValidationHelper.h"
 
-#define kCustomRowCount 7  /* enough rows to fill the table if there is no data */
 #define kCustomRowHeight 48  /* height of each row */
 #define kThreadBatchCount 5 /* number of rows to create before re-drawing the table view */
 
 @interface ListViewController ()
 
-@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
-@property (nonatomic, retain) UIBarButtonItem *addBarButton;
-@property (nonatomic, retain) UIBarButtonItem *composeBarButton;
-@property (nonatomic, retain) NSMutableArray *userIdArray;
-@property (nonatomic, retain) NSMutableArray *people;
-@property (nonatomic, retain) NSMutableArray *pendingFavorites;
-@property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
-@property int finishedThreads;
-
 - (void)startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
 - (void)synchronousLoadTwitterData;
-- (void)synchronousLoadPerson:(NSString *)user_id;
-- (void)didFinishLoadingPerson;
 
 @end
 
 @implementation ListViewController
 
-@synthesize engine, addBarButton, composeBarButton, userIdArray, people;
-@synthesize imageDownloadsInProgress, finishedThreads, dataAccessHelper, pendingFavorites;
+@synthesize engine, composeBarButton, userIdArray, people;
+@synthesize imageDownloadsInProgress, finishedThreads, dataAccessHelper;
+
+#pragma mark -
+#pragma mark custom init method
+
+- (id)initWithUserIdArray:(NSMutableArray *)userIds
+{
+	if(self == [super initWithStyle:UITableViewStylePlain])
+	{
+		/* set the list of users to load */
+		self.userIdArray = userIds;
+
+		/* allocate the memory for the NSMutableArray of people on this ViewController */
+		self.people = [[NSMutableArray alloc] init];
+
+		/* create a UIBarButtonItem for the right side using the Compose style, this will
+		 * present the ComposeStatusViewController modally */
+		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+		                                                                                target:self
+		                                                                                action:@selector(presentUpdateStatusController)];
+		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
+		[rightBarButton release];
+	}
+	return self;
+}
+
+#pragma mark -
+#pragma mark dealloc
 
 - (void)dealloc
 {
-	[addBarButton release];
 	[composeBarButton release];
 	[userIdArray release];
 	[people release];
@@ -87,6 +101,9 @@
 {
 	[super viewDidAppear:animated];
 }
+
+#pragma mark -
+#pragma mark Memory management
 
 - (void)didReceiveMemoryWarning
 {
@@ -219,181 +236,13 @@
 	[self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)presentAddToFavoritesController
-{
-	/* TODO: localize the alert message labels
-	 * TODO: Decide if the alertview with a text field is appropriate
-	 * or if a modal view should be used, or if the favorites should be
-	 * added to from the status views with a "Favorite" button
-	 * open a alert with text field,  OK and cancel button
-	 */
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add to Favorites"
-	                                                message:@"Enter a username."
-	                                               delegate:self
-	                                      cancelButtonTitle:@"Cancel"
-	                                      otherButtonTitles:@"OK", nil];
-	UITextView *alertTextField = nil;
-	CGRect frame = CGRectMake(14, 45, 255, 23);
-	if(!alertTextField)
-	{
-		alertTextField = [[UITextField alloc] initWithFrame:frame];
-		alertTextField.layer.cornerRadius = 8;
-		alertTextField.textColor = [UIColor blackColor];
-		alertTextField.textAlignment = UITextAlignmentCenter;
-		alertTextField.font = [UIFont systemFontOfSize:14.0];
-		alertTextField.backgroundColor = [UIColor whiteColor];
-
-		/* no auto correction */
-		alertTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-		alertTextField.delegate = self;
-	}
-
-	CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 45.0);
-	[alert setTransform:myTransform];
-	[alert addSubview:alertTextField];
-	[alert show];
-	[alertTextField becomeFirstResponder];
-	[alertTextField release];
-	[alert release];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	if(buttonIndex == 1)
-	{
-		for(UIView *subview in alertView.subviews)
-		{
-			if([subview isKindOfClass:[UITextField class]])
-			{
-				UITextField *textField = (UITextField *)subview;
-				NSString *username = textField.text;
-				if(!pendingFavorites)
-				{
-					self.pendingFavorites = [[NSMutableArray alloc] init];
-				}
-				[pendingFavorites addObject:username];
-				[self synchronousLoadPerson:username];
-			}
-		}
-	}
-}
-
-#pragma mark -
-#pragma mark custom init method
-- (id)initAsEditable:(BOOL)isEditable userIdArray:(NSMutableArray *)userIds
-{
-	if(self == [super initWithStyle:UITableViewStylePlain])
-	{
-		if(isEditable)
-		{
-			self.navigationItem.leftBarButtonItem = self.editButtonItem;
-		}
-
-		/* set the list of users to load */
-		self.userIdArray = userIds;
-
-		/* allocate the memory for the NSMutableArray of people on this ViewController */
-		self.people = [[NSMutableArray alloc] init];
-
-		/* create a UIBarButtonItem for the right side using the Compose style, this will
-		 * present the ComposeStatusViewController modally */
-		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-		                                                                                target:self
-		                                                                                action:@selector(presentUpdateStatusController)];
-		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
-		[rightBarButton release];
-	}
-	return self;
-}
-
 #pragma mark -
 #pragma mark Table view methods
-
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated
-{
-	[super setEditing:editing animated:animated];
-	[self.tableView setEditing:editing animated:YES];
-	if(editing)
-	{
-		if(!self.addBarButton)
-		{
-			UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-			                                                                           target:self
-			                                                                           action:@selector(presentAddToFavoritesController)];
-			self.addBarButton = addButton;
-			[addButton release];
-		}
-
-		/* hold onto the current right bar button (compose) so it can
-		 * be put back after editing
-		 */
-		self.composeBarButton = self.navigationItem.rightBarButtonItem;
-
-		/* set the right bar button to the add bar button */
-		self.navigationItem.rightBarButtonItem = self.addBarButton;
-	}
-	else
-	{
-		/* set the right bar button to the compose bar button */
-		self.navigationItem.rightBarButtonItem = self.composeBarButton;
-	}
-}
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	/* if the indexPath.row is the first empty row, the editing style is insert
-	 * else it's delete
-	 */
-	if(indexPath.row == [self.people count])
-	{
-		return UITableViewCellEditingStyleInsert;
-	}
-	else
-	{
-		return UITableViewCellEditingStyleDelete;
-	}
-}
-
-- (BOOL)tableview:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return YES;
-}
-
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
-	NSUInteger sourceRow = sourceIndexPath.row;
-	NSUInteger destinationRow = destinationIndexPath.row;
-	Person *person = [[self.people objectAtIndex:sourceRow] retain];
-	NSString *userId = [[self.userIdArray objectAtIndex:sourceRow] retain];
-	[self.people removeObjectAtIndex:sourceRow];
-	[self.userIdArray removeObjectAtIndex:sourceRow];
-	[self.people insertObject:person atIndex:destinationRow];
-	[self.userIdArray insertObject:userId atIndex:destinationRow];
-	[person release];
-	[userId release];
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	/* If row is deleted, remove it from the list. */
-	if(editingStyle == UITableViewCellEditingStyleDelete)
-	{
-		[self.people removeObjectAtIndex:indexPath.row];
-		[self.userIdArray removeObjectAtIndex:indexPath.row];
-		[FavoritesHelper saveFavorites:self.userIdArray];
-		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-	}
-}
 
 /* Customize the number of rows per section */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	int count = [self.people count];
-	/* if there's no data yet, return enough rows to fill the screen */
-	if(count == 0)
-	{
-		return kCustomRowCount;
-	}
 	return count;
 }
 
@@ -616,14 +465,10 @@
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
 }
 
-- (void)updateFavoritesWithPerson:(Person *)person
+- (void)infoRecievedForPerson:(Person *)person
 {
-	if([pendingFavorites containsObject:person.screen_name])
-	{
-		[userIdArray addObject:person.user_id];
-		[FavoritesHelper saveFavorites:userIdArray];
-		[pendingFavorites removeObject:person.screen_name];
-	}
+	[dataAccessHelper saveOrUpdatePerson:person];
+	[self.people addObject:person];
 }
 
 - (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
@@ -632,12 +477,10 @@
 	/* this person is not yet in the database */
 	if([person isValid])
 	{
-		[self updateFavoritesWithPerson:person];
-		[dataAccessHelper saveOrUpdatePerson:person];
-		[self.people addObject:person];
+		[self infoRecievedForPerson:person];
 	}
-	[person release];
 	[self didFinishLoadingPerson];
+	[person release];
 }
 
 - (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier

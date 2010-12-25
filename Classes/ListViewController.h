@@ -22,20 +22,28 @@
 {
 	DataAccessHelper *dataAccessHelper;
 
-	@private
+	@protected
 	SA_OAuthTwitterEngine *engine;
-	UIBarButtonItem *addBarButton;
 	UIBarButtonItem *composeBarButton;
 	NSMutableArray *userIdArray;
 	NSMutableArray *people;
-	NSMutableArray *pendingFavorites;
 	NSMutableDictionary *imageDownloadsInProgress;
 	int finishedThreads;
 }
 
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
+@property (nonatomic, retain) UIBarButtonItem *composeBarButton;
+@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
+@property (nonatomic, retain) NSMutableArray *userIdArray;
+@property (nonatomic, retain) NSMutableArray *people;
+@property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
+@property int finishedThreads;
 
-- (id)initAsEditable:(BOOL)isEditable userIdArray:(NSArray *)userIds;
+- (id)initWithUserIdArray:(NSMutableArray *)userIds;
+- (void)synchronousLoadPerson:(NSString *)user_id;
+- (void)infoRecievedForPerson:(Person *)person;
+- (void)didFinishLoadingPerson;
+- (void)synchronousLoadTwitterData;
 
 /* IconDownloader delegate protocol */
 - (void)imageDidLoad:(NSIndexPath *)indexPath;

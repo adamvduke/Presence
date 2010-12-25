@@ -26,6 +26,7 @@
 		566ADEE811B8BFBF00931CFD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* Person.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
 		566C53C8127778CD0097A858 /* Schema_Version_3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 566C53C7127778CD0097A858 /* Schema_Version_3.plist */; };
+		5683AF2312C4088F00F4908E /* EditableListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5683AF2212C4088F00F4908E /* EditableListViewController.m */; };
 		568C749212B7437400C0130C /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C748D12B7437400C0130C /* FMDatabase.m */; };
 		568C749312B7437400C0130C /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C748F12B7437400C0130C /* FMDatabaseAdditions.m */; };
 		568C749412B7437400C0130C /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C749112B7437400C0130C /* FMResultSet.m */; };
@@ -123,6 +124,8 @@
 		566ADEE611B8BFBF00931CFD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		566ADEE711B8BFBF00931CFD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		566C53C7127778CD0097A858 /* Schema_Version_3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Schema_Version_3.plist; path = Resources/Database/Schema_Version_3.plist; sourceTree = "<group>"; };
+		5683AF2112C4088F00F4908E /* EditableListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableListViewController.h; sourceTree = "<group>"; };
+		5683AF2212C4088F00F4908E /* EditableListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableListViewController.m; sourceTree = "<group>"; };
 		568C748C12B7437400C0130C /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = External/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
 		568C748D12B7437400C0130C /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = External/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
 		568C748E12B7437400C0130C /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = External/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -335,6 +338,8 @@
 			children = (
 				5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */,
 				5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */,
+				5683AF2112C4088F00F4908E /* EditableListViewController.h */,
+				5683AF2212C4088F00F4908E /* EditableListViewController.m */,
 				560315A610ABA79A005F649A /* ListViewController.h */,
 				560315A710ABA79A005F649A /* ListViewController.m */,
 				566ADEE611B8BFBF00931CFD /* SettingsViewController.h */,
@@ -726,6 +731,7 @@
 				56E82A2F12B74CFA00F5E9C8 /* OAServiceTicket.m in Sources */,
 				56E82A3112B74CFA00F5E9C8 /* OAToken.m in Sources */,
 				56E82A3212B74CFA00F5E9C8 /* OATokenManager.m in Sources */,
+				5683AF2312C4088F00F4908E /* EditableListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

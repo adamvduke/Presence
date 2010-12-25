@@ -8,12 +8,12 @@
 
 #import "CredentialHelper.h"
 #import "DataAccessHelper.h"
+#import "EditableListViewController.h"
 #import "FavoritesHelper.h"
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceContants.h"
 #import "ValidationHelper.h"
-#import <dispatch/dispatch.h>
 
 typedef enum
 {
@@ -179,7 +179,7 @@ typedef enum
 	NSMutableArray *favoriteUsersArray = [FavoritesHelper retrieveFavorites];
 
 	/* initialize a ListViewController with the favoriteUsersArray */
-	ListViewController *favoritesListViewController = [[ListViewController alloc] initAsEditable:YES userIdArray:favoriteUsersArray];
+	ListViewController *favoritesListViewController = [[EditableListViewController alloc] initWithUserIdArray:favoriteUsersArray];
 	favoritesListViewController.dataAccessHelper = self.dataAccessHelper;
 	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 
@@ -229,7 +229,7 @@ typedef enum
  */
 - (void)updateFollowingControllerWithArray:(NSMutableArray *)idsArray
 {
-	ListViewController *followingListViewController = [[ListViewController alloc] initAsEditable:NO userIdArray:idsArray];
+	ListViewController *followingListViewController = [[ListViewController alloc] initWithUserIdArray:idsArray];
 	followingListViewController.dataAccessHelper = self.dataAccessHelper;
 	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
 
