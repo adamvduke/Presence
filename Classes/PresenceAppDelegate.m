@@ -29,7 +29,7 @@ typedef enum
 
 - (void)completeLaunchingWithViewControllerIndex:(NSUInteger)index;
 - (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId;
-- (UIViewController *)initIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey;
+- (void)setIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey;
 - (SettingsViewController *)initSettingsViewController;
 - (UINavigationController *)initFavoritesController;
 - (UINavigationController *)initFollowingController;
@@ -78,7 +78,7 @@ typedef enum
 /*
  * Helper method to set the image and title for a view controller
  */
-- (UIViewController *)initIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey
+- (void)setIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey
 {
 	/* icon image loading */
 	NSString *iconPath = [[NSBundle mainBundle] pathForResource:iconName ofType:@"png"];
@@ -86,8 +86,6 @@ typedef enum
 	viewController.tabBarItem.image = image;
 	[image release];
 	viewController.title = NSLocalizedString(titleKey, @"");
-
-	return viewController;
 }
 
 /*
@@ -156,11 +154,8 @@ typedef enum
 - (SettingsViewController *)initSettingsViewController
 {
 	NSBundle *mainBundle = [NSBundle mainBundle];
-	SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:SettingsViewControllerNibName
-	                                                                                          bundle:mainBundle];
-	settingsViewController = (SettingsViewController *)[self initIconAndTitleForViewController:settingsViewController
-	                                                                                  iconName:@"SettingsIcon"
-	                                                                                  titleKey:SettingsViewTitleKey];
+	SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:SettingsViewControllerNibName bundle:mainBundle];
+	[self setIconAndTitleForViewController:settingsViewController iconName:@"SettingsIcon" titleKey:SettingsViewTitleKey];
 	settingsViewController.dataAccessHelper = self.dataAccessHelper;
 	return settingsViewController;
 }
@@ -170,9 +165,7 @@ typedef enum
 {
 	/* create a navigation controller and set it's title and tabBar icon */
 	UINavigationController *favoritesNavigationController = [[UINavigationController alloc] init];
-	favoritesNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:favoritesNavigationController
-	                                                                                         iconName:@"FavoritesIcon"
-	                                                                                         titleKey:FavoritesViewControllerTitleKey];
+	[self setIconAndTitleForViewController:favoritesNavigationController iconName:@"FavoritesIcon" titleKey:FavoritesViewControllerTitleKey];
 	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 
 	/* get the list of favorites */
@@ -196,9 +189,7 @@ typedef enum
 {
 	/* create a navigation controller and set it's title and tabBar icon */
 	UINavigationController *followingNavigationController = [[UINavigationController alloc] init];
-	followingNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:followingNavigationController
-	                                                                                         iconName:@"PeopleIcon"
-	                                                                                         titleKey:ListViewControllerTitleKey];
+	[self setIconAndTitleForViewController:followingNavigationController iconName:@"PeopleIcon" titleKey:ListViewControllerTitleKey];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 	NSString *username = [CredentialHelper retrieveUsername];
 	NSString *connectionId = [self.engine getFollowedIdsForUsername:username];
@@ -242,9 +233,7 @@ typedef enum
 - (UINavigationController *)initSearchController
 {
 	UINavigationController *searchNavigationController = [[UINavigationController alloc] init];
-	searchNavigationController = (UINavigationController *)[self initIconAndTitleForViewController:searchNavigationController
-	                                                                                      iconName:@"SearchIcon"
-	                                                                                      titleKey:SearchViewControllerTitleKey];
+	[self setIconAndTitleForViewController:searchNavigationController iconName:@"SearchIcon" titleKey:SearchViewControllerTitleKey];
 
 	/* TODO: push a UIViewController with the ability to search the twitter api */
 	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
