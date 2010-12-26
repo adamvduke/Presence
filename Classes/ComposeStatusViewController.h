@@ -10,6 +10,7 @@
 #import "SA_OAuthTwitterEngine.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+
 @protocol ComposeStatusViewControllerDelegate;
 
 @interface ComposeStatusViewController : UIViewController <UITextViewDelegate, SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>

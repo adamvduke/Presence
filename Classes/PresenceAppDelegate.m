@@ -191,6 +191,7 @@ typedef enum
 	UINavigationController *followingNavigationController = [[UINavigationController alloc] init];
 	[self setIconAndTitleForViewController:followingNavigationController iconName:@"PeopleIcon" titleKey:ListViewControllerTitleKey];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+
 	NSString *username = [CredentialHelper retrieveUsername];
 	NSString *connectionId = [self.engine getFollowedIdsForUsername:username];
 	[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionId];
