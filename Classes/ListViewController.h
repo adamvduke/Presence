@@ -7,12 +7,13 @@
  */
 
 #import "ComposeStatusViewController.h"
-#import "DataAccessHelper.h"
 #import "IconDownloader.h"
 #import "SA_OAuthTwitterController.h"
 #import "SA_OAuthTwitterEngine.h"
 #import "SettingsViewController.h"
 #import <UIKit/UIKit.h>
+
+@class DataAccessHelper;
 
 @interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate,
 	                                               UIScrollViewDelegate,

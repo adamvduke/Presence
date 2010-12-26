@@ -6,11 +6,10 @@
  *
  */
 
-#import "DataAccessHelper.h"
-#import "SA_OAuthTwitterController.h"
 #import "SA_OAuthTwitterEngine.h"
 #import <UIKit/UIKit.h>
 
+@class DataAccessHelper;
 @class Person;
 
 @interface StatusViewController : UITableViewController <SA_OAuthTwitterEngineDelegate>

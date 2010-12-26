@@ -7,11 +7,12 @@
  */
 
 #import "CredentialHelper.h"
+#import "DataAccessHelper.h"
 #import "FavoritesHelper.h"
 #import "ListViewController.h"
 #import "Person.h"
 #import "PresenceAppDelegate.h"
-#import "PresenceContants.h"
+#import "PresenceConstants.h"
 #import "StatusViewController.h"
 #import "ValidationHelper.h"
 

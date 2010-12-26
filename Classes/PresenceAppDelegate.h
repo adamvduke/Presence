@@ -6,10 +6,11 @@
  *
  */
 
-#import "DataAccessHelper.h"
 #import "SA_OAuthTwitterController.h"
 #import "SA_OAuthTwitterEngine.h"
 #import <UIKit/UIKit.h>
+
+@class DataAccessHelper;
 
 @interface PresenceAppDelegate : NSObject <UIApplicationDelegate, SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>
 {

@@ -6,10 +6,9 @@
  *
  */
 
-#import "DataAccessHelper.h"
 #import <UIKit/UIKit.h>
 
-@protocol SettingsViewControllerDelegate;
+@class DataAccessHelper;
 
 @interface SettingsViewController : UIViewController
 {

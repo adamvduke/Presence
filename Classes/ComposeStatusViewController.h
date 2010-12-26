@@ -6,14 +6,13 @@
  *
  */
 
-#import "SA_OAuthTwitterController.h"
 #import "SA_OAuthTwitterEngine.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
 @protocol ComposeStatusViewControllerDelegate;
 
-@interface ComposeStatusViewController : UIViewController <UITextViewDelegate, SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>
+@interface ComposeStatusViewController : UIViewController <UITextViewDelegate, SA_OAuthTwitterEngineDelegate>
 {
 	/* IBOutlet for the navigationItem */
 	IBOutlet UINavigationItem *aNavigationItem;

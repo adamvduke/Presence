@@ -9,7 +9,8 @@
 #import "CredentialHelper.h"
 #import "Person.h"
 #import "PresenceAppDelegate.h"
-#import "PresenceContants.h"
+#import "PresenceConstants.h"
+#import "Status.h"
 #import "StatusViewController.h"
 
 @interface StatusViewController ()

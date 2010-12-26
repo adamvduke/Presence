@@ -6,7 +6,7 @@
  *
  */
 
-#import "PresenceContants.h"
+#import "PresenceConstants.h"
 
 /*
  * Keys for finding localizable strings

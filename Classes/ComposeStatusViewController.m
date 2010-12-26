@@ -9,7 +9,7 @@
 #import "ComposeStatusViewController.h"
 #import "CredentialHelper.h"
 #import "PresenceAppDelegate.h"
-#import "PresenceContants.h"
+#import "PresenceConstants.h"
 
 @interface ComposeStatusViewController ()
 

@@ -9,7 +9,7 @@
 #import "CredentialHelper.h"
 #import "DataAccessHelper.h"
 #import "PresenceAppDelegate.h"
-#import "PresenceContants.h"
+#import "PresenceConstants.h"
 #import "SettingsViewController.h"
 
 @implementation SettingsViewController

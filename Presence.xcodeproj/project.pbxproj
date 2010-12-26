@@ -110,7 +110,7 @@
 		563329F911B761BF00BF4184 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeStatusViewController.h; sourceTree = "<group>"; };
 		5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeStatusViewController.m; sourceTree = "<group>"; };
-		563C65ED11B89639001430C9 /* PresenceContants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresenceContants.h; sourceTree = "<group>"; };
+		563C65ED11B89639001430C9 /* PresenceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresenceConstants.h; sourceTree = "<group>"; };
 		563C65EE11B89639001430C9 /* PresenceContants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresenceContants.m; sourceTree = "<group>"; };
 		563C7BFB1206138A002A9F1E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		563C7C4F120624BE002A9F1E /* DataAccessHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAccessHelper.h; sourceTree = "<group>"; };
@@ -380,7 +380,7 @@
 		562BCB6911CAA287001E4BA2 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				563C65ED11B89639001430C9 /* PresenceContants.h */,
+				563C65ED11B89639001430C9 /* PresenceConstants.h */,
 				563C65EE11B89639001430C9 /* PresenceContants.m */,
 			);
 			name = Constants;

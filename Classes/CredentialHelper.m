@@ -7,7 +7,7 @@
  */
 
 #import "CredentialHelper.h"
-#import "PresenceContants.h"
+#import "PresenceConstants.h"
 
 @interface CredentialHelper (Private)
 

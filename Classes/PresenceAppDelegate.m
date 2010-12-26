@@ -12,7 +12,7 @@
 #import "FavoritesHelper.h"
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
-#import "PresenceContants.h"
+#import "PresenceConstants.h"
 #import "ValidationHelper.h"
 
 typedef enum

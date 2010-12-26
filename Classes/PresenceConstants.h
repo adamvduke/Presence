@@ -1,4 +1,4 @@
-/*  PresenceContants.h
+/*  PresenceConstants.h
  *  Presence
  *
  *  Created by Adam Duke on 6/3/10.
