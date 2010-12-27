@@ -402,8 +402,7 @@
 				56C5E747123E6E520099F48D /* MGTwitterEngine */,
 				56C5E768123E6E520099F48D /* SAOAuthTwitterEngine */,
 			);
-			name = TwitterEngine;
-			path = "Twitter+OAuth";
+			path = TwitterEngine;
 			sourceTree = "<group>";
 		};
 		56C5E747123E6E520099F48D /* MGTwitterEngine */ = {
