@@ -55,6 +55,14 @@
 	return self;
 }
 
+- (void)setUserIdArray:(NSMutableArray *)newIdArray
+{
+	[userIdArray autorelease];
+	userIdArray = [newIdArray retain];
+	[self.people removeAllObjects];
+	[self synchronousLoadTwitterData];
+}
+
 #pragma mark -
 #pragma mark dealloc
 
@@ -434,13 +442,6 @@
 
 - (void)authSucceededForEngine
 {
-	NSString *screenName = [CredentialHelper retrieveUsername];
-	/* check the userIdArray, because it may have been set already */
-	if( !IsEmpty(screenName) && IsEmpty(userIdArray) )
-	{
-		[self.engine getFollowedIdsForUsername:screenName];
-	}
-	else
 	if( IsEmpty(people) )
 	{
 		[self synchronousLoadTwitterData];

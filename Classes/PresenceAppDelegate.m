@@ -192,9 +192,18 @@ typedef enum
 	[self setIconAndTitleForViewController:followingNavigationController iconName:@"PeopleIcon" titleKey:ListViewControllerTitleKey];
 	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 
+	NSMutableArray *followingUsersArray = nil;
+	ListViewController *followingListViewController = [[ListViewController alloc] initWithUserIdArray:followingUsersArray];
+	followingListViewController.dataAccessHelper = self.dataAccessHelper;
+	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
+
+	[followingNavigationController pushViewController:followingListViewController animated:NO];
+	[followingListViewController release];
+
 	NSString *username = [CredentialHelper retrieveUsername];
 	NSString *connectionId = [self.engine getFollowedIdsForUsername:username];
 	[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionId];
+
 	return followingNavigationController;
 }
 
@@ -216,18 +225,14 @@ typedef enum
 }
 
 /*
- * Initialize a ListViewController with the ids and set it push it
- * onto the stack of UIViewControllers on the followingNavigationController
+ * Initialize a ListViewController with the ids and set it. This will cause the ListViewController
+ * to refresh it's content
  */
 - (void)updateFollowingControllerWithArray:(NSMutableArray *)idsArray
 {
-	ListViewController *followingListViewController = [[ListViewController alloc] initWithUserIdArray:idsArray];
-	followingListViewController.dataAccessHelper = self.dataAccessHelper;
-	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
-
 	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];
-	[followingController pushViewController:followingListViewController animated:NO];
-	[followingListViewController release];
+	ListViewController *listViewController = (ListViewController *)followingController.topViewController;
+	listViewController.userIdArray = idsArray;
 }
 
 /* initialize the search navigation controller */

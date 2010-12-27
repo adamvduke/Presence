@@ -22,11 +22,11 @@
 	                                               SA_OAuthTwitterEngineDelegate>
 {
 	DataAccessHelper *dataAccessHelper;
+	NSMutableArray *userIdArray;
 
 	@protected
 	SA_OAuthTwitterEngine *engine;
 	UIBarButtonItem *composeBarButton;
-	NSMutableArray *userIdArray;
 	NSMutableArray *people;
 	NSMutableDictionary *imageDownloadsInProgress;
 	int finishedThreads;
