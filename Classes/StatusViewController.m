@@ -310,6 +310,8 @@
 
 - (void)dealloc
 {
+	[engine release];
+	[dataAccessHelper release];
 	[person release];
 	[spinner release];
 	[super dealloc];

@@ -49,7 +49,9 @@
 
 - (void)dealloc
 {
-	[self.dataAccessHelper release];
+	[aNavigationItem release];
+	[deauthorizeButton release];
+	[dataAccessHelper release];
 	[super dealloc];
 }
 

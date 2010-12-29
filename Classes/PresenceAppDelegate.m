@@ -42,7 +42,7 @@ typedef enum
 
 @implementation PresenceAppDelegate
 
-@synthesize window, dataAccessHelper, openRequests, engine;
+@synthesize window, dataAccessHelper, openRequests, engine, tabBarController;
 
 #pragma mark -
 #pragma mark UIApplicationDelegate
@@ -393,9 +393,11 @@ typedef enum
 #pragma mark NSObject
 - (void)dealloc
 {
-	[tabBarController release];
 	[window release];
 	[dataAccessHelper release];
+	[openRequests release];
+	[engine release];
+	[tabBarController release];
 	[super dealloc];
 }
 

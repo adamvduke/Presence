@@ -68,12 +68,12 @@
 
 - (void)dealloc
 {
+	[engine release];
 	[composeBarButton release];
 	[userIdArray release];
 	[people release];
 	[imageDownloadsInProgress release];
-
-	/* always call the dealloc of the super class */
+	[dataAccessHelper release];
 	[super dealloc];
 }
 

@@ -24,6 +24,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
 - (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate;
 - (void)deauthorizeEngines;
