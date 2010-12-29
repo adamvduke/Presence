@@ -6,9 +6,10 @@
  *
  */
 
-#import "Person.h"
-#import "Status.h"
 #import <Foundation/Foundation.h>
+
+@class Person;
+@class Status;
 
 @interface DataAccessHelper : NSObject {
 	@private

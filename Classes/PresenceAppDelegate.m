@@ -13,6 +13,7 @@
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
+#import "SettingsViewController.h"
 #import "ValidationHelper.h"
 
 typedef enum
