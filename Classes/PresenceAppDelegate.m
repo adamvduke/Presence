@@ -214,12 +214,9 @@ typedef enum
 - (void)recievedFollowingIdsResponse:(NSArray *)response
 {
 	NSMutableArray *idsArray = [NSMutableArray array];
-	for(NSDictionary *dictionary in response)
+	for(NSNumber *anId in response)
 	{
-		for(NSString *key in [dictionary allKeys])
-		{
-			[idsArray addObject:[dictionary objectForKey:key]];
-		}
+		[idsArray addObject:[NSString stringWithFormat:@"%d", [anId intValue]]];
 	}
 	[self updateFollowingControllerWithArray:idsArray];
 }

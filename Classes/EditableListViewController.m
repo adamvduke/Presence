@@ -210,9 +210,9 @@
 	}
 }
 
-- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
+- (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
 {
-	Person *person = [[Person alloc] initPersonWithInfo:[userInfo objectAtIndex:0]];
+	Person *person = [[Person alloc] initPersonWithInfo:userInfo];
 	/* this person is not yet in the database */
 	if([person isValid])
 	{
