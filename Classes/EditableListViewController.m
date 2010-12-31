@@ -37,7 +37,7 @@
 
 - (id)initWithUserIdArray:(NSMutableArray *)userIds
 {
-	if(self == [super initWithUserIdArray:userIds])
+	if(self = [super initWithUserIdArray:userIds])
 	{
 		self.navigationItem.leftBarButtonItem = self.editButtonItem;
 	}

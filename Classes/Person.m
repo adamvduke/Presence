@@ -17,7 +17,7 @@
  */
 - (Person *)initPersonWithInfo:(NSDictionary *)userInfo
 {
-	if(self == [super init])
+	if(self = [super init])
 	{
 		/* get the values out of the userInfo dictionary */
 		NSNumber *rawId = [userInfo valueForKey:@"id"];

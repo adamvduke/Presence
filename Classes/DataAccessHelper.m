@@ -50,7 +50,7 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
  */
 - (DataAccessHelper *)init
 {
-	if(self == [super init])
+	if(self = [super init])
 	{
 		/* Hold on to the path to the documents directory */
 		NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

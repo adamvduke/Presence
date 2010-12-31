@@ -36,7 +36,7 @@
 
 - (id)initWithUserIdArray:(NSMutableArray *)userIds
 {
-	if(self == [super initWithStyle:UITableViewStylePlain])
+	if(self = [super initWithStyle:UITableViewStylePlain])
 	{
 		/* set the list of users to load */
 		self.userIdArray = userIds;
