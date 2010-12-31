@@ -39,6 +39,21 @@ extern NSString *const DismissKey;
 /* key for finding the localized value for the word "Loading..." */
 extern NSString *const LoadingKey;
 
+/* key for finding the localized value for the string "Add to Favorites" */
+extern NSString *const AddToFavoritesKey;
+
+/* key for finding the localized value for the string "Enter a Twitter ID" */
+extern NSString *const EnterTwitterIDKey;
+
+/* key for finding the localized value for the word "Cancel" */
+extern NSString *const CancelKey;
+
+/* key for finding the localized value for the word "OK" */
+extern NSString *const OKKey;
+
+/* key for finding the localized value for the string "Twitter ID" */
+extern NSString *const TwitterIDKey;
+
 /*
  * Keys for finding localized alert messages
  */

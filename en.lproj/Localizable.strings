@@ -51,3 +51,18 @@
 
 // English localization for the word "Success!"
 "SuccessTitleKey" = "Success!";
+
+// English localization for "Add to Favorites"
+"AddToFavoritesKey" = "Add to Favorites";
+
+// English localization for "Enter a Twitter ID"
+"EnterTwitterIDKey" = "Enter a Twitter ID";
+
+// English localization for the word "Cancel"
+"CancelKey" = "Cancel";
+
+// English localization for the word "OK"
+"OKKey" = "OK";
+
+// English localization for "Twitter ID"
+"TwitterIDKey" = "Twitter ID";

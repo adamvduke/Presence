@@ -51,3 +51,18 @@
 
 // Spanish localization for the word "Success!"
 "SuccessTitleKey" = "es_Success!";
+
+// Spanish localization for "Add to Favorites"
+"AddToFavoritesKey" = "es_Add to Favorites";
+
+// Spanish localization for "Enter a Twitter ID"
+"EnterTwitterIDKey" = "es_Enter a Twitter ID";
+
+// Spanish localization for the word "Cancel"
+"CancelKey" = "es_Cancel";
+
+// Spanish localization for the word "OK"
+"OKKey" = "es_OK";
+
+// Spanish localization for "Twitter ID"
+"TwitterIDKey" = "es_Twitter ID";

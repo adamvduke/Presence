@@ -1,5 +1,3 @@
-/* */
-
 /*  SA_OAuthTwitterController.m
  *
  *  Created by Ben Gottlieb on 24 July 2009.
@@ -8,7 +6,6 @@
  *  Some code and concepts taken from examples provided by
  *  Matt Gemmell, Chris Kimpton, and Isaiah Carew
  *  See ReadMe for further attributions, copyrights and license info.
- *
  */
 
 #import "SA_OAuthTwitterController.h"

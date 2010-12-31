@@ -286,9 +286,12 @@
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[engine release];
+	[spinner release];
 	[aNavigationItem release];
 	[charactersLabel release];
 	[textView release];
+	[delegate release];
 	[super dealloc];
 }
 

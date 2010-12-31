@@ -13,6 +13,7 @@
 #import "ListViewController.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
+#import "SettingsViewController.h"
 #import "ValidationHelper.h"
 
 typedef enum
@@ -42,7 +43,7 @@ typedef enum
 
 @implementation PresenceAppDelegate
 
-@synthesize window, dataAccessHelper, openRequests, engine;
+@synthesize window, dataAccessHelper, openRequests, engine, tabBarController;
 
 #pragma mark -
 #pragma mark UIApplicationDelegate
@@ -214,12 +215,9 @@ typedef enum
 - (void)recievedFollowingIdsResponse:(NSArray *)response
 {
 	NSMutableArray *idsArray = [NSMutableArray array];
-	for(NSDictionary *dictionary in response)
+	for(NSNumber *anId in response)
 	{
-		for(NSString *key in [dictionary allKeys])
-		{
-			[idsArray addObject:[dictionary objectForKey:key]];
-		}
+		[idsArray addObject:[NSString stringWithFormat:@"%d", [anId intValue]]];
 	}
 	[self updateFollowingControllerWithArray:idsArray];
 }
@@ -396,9 +394,11 @@ typedef enum
 #pragma mark NSObject
 - (void)dealloc
 {
-	[tabBarController release];
 	[window release];
 	[dataAccessHelper release];
+	[openRequests release];
+	[engine release];
+	[tabBarController release];
 	[super dealloc];
 }
 

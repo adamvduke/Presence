@@ -9,6 +9,7 @@
 #import "EditableListViewController.h"
 #import "FavoritesHelper.h"
 #import "Person.h"
+#import "PresenceConstants.h"
 #import "ValidationHelper.h"
 
 @interface EditableListViewController ()
@@ -16,6 +17,15 @@
 @property (nonatomic, retain) UIBarButtonItem *addBarButton;
 @property (nonatomic, retain) NSMutableArray *pendingFavorites;
 
+@end
+
+/* adding these private methods to the UIAlertView API to avoid
+ * compiler warning about possibly not responding to the selector
+ */
+@interface UIAlertView ()
+
+- (id)addTextFieldWithValue:(id)arg1 label:(id)arg2;
+- (id)textFieldAtIndex:(int)arg1;
 @end
 
 @implementation EditableListViewController
@@ -115,60 +125,28 @@
 
 - (void)presentAddToFavoritesAlert
 {
-	/* TODO: localize the alert message labels
-	 * TODO: Decide if the alertview with a text field is appropriate
-	 * or if a modal view should be used, or if the favorites should be
-	 * added to from the status views with a "Favorite" button
-	 * open a alert with text field,  OK and cancel button
-	 */
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add to Favorites"
-	                                                message:@"Enter a username."
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(AddToFavoritesKey, @"")
+	                                                message:NSLocalizedString(EnterTwitterIDKey, @"")
 	                                               delegate:self
-	                                      cancelButtonTitle:@"Cancel"
-	                                      otherButtonTitles:@"OK", nil];
-	UITextView *alertTextField = nil;
-	CGRect frame = CGRectMake(14, 45, 255, 23);
-	if(!alertTextField)
-	{
-		alertTextField = [[UITextField alloc] initWithFrame:frame];
-		alertTextField.layer.cornerRadius = 8;
-		alertTextField.textColor = [UIColor blackColor];
-		alertTextField.textAlignment = UITextAlignmentCenter;
-		alertTextField.font = [UIFont systemFontOfSize:14.0];
-		alertTextField.backgroundColor = [UIColor whiteColor];
-
-		/* no auto correction */
-		alertTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-		alertTextField.delegate = self;
-	}
-
-	CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 45.0);
-	[alert setTransform:myTransform];
-	[alert addSubview:alertTextField];
+	                                      cancelButtonTitle:NSLocalizedString(CancelKey, @"")
+	                                      otherButtonTitles:NSLocalizedString(OKKey, @""), nil];
+	[alert addTextFieldWithValue:@"" label:NSLocalizedString(TwitterIDKey, @"")];
 	[alert show];
-	[alertTextField becomeFirstResponder];
-	[alertTextField release];
 	[alert release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-	if(buttonIndex == 1)
+	UITextField *textField = [alertView textFieldAtIndex:0];
+	NSString *upperCaseUsername = [textField.text uppercaseString];
+	if(upperCaseUsername)
 	{
-		for(UIView *subview in alertView.subviews)
+		if(!pendingFavorites)
 		{
-			if([subview isKindOfClass:[UITextField class]])
-			{
-				UITextField *textField = (UITextField *)subview;
-				NSString *upperCaseUsername = [textField.text uppercaseString];
-				if(!pendingFavorites)
-				{
-					self.pendingFavorites = [[NSMutableArray alloc] init];
-				}
-				[pendingFavorites addObject:upperCaseUsername];
-				[super synchronousLoadPerson:upperCaseUsername];
-			}
+			self.pendingFavorites = [[NSMutableArray alloc] init];
 		}
+		[pendingFavorites addObject:upperCaseUsername];
+		[super synchronousLoadPerson:upperCaseUsername];
 	}
 }
 
@@ -210,9 +188,9 @@
 	}
 }
 
-- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
+- (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
 {
-	Person *person = [[Person alloc] initPersonWithInfo:[userInfo objectAtIndex:0]];
+	Person *person = [[Person alloc] initPersonWithInfo:userInfo];
 	/* this person is not yet in the database */
 	if([person isValid])
 	{

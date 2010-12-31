@@ -68,12 +68,12 @@
 
 - (void)dealloc
 {
+	[engine release];
 	[composeBarButton release];
 	[userIdArray release];
 	[people release];
 	[imageDownloadsInProgress release];
-
-	/* always call the dealloc of the super class */
+	[dataAccessHelper release];
 	[super dealloc];
 }
 
@@ -473,9 +473,9 @@
 	[self.people addObject:person];
 }
 
-- (void)userInfoReceived:(NSArray *)userInfo forRequest:(NSString *)connectionIdentifier
+- (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
 {
-	Person *person = [[Person alloc] initPersonWithInfo:[userInfo objectAtIndex:0]];
+	Person *person = [[Person alloc] initPersonWithInfo:userInfo];
 	/* this person is not yet in the database */
 	if([person isValid])
 	{
@@ -483,20 +483,6 @@
 	}
 	[self didFinishLoadingPerson];
 	[person release];
-}
-
-- (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
-{
-	NSMutableArray *idsArray = [NSMutableArray array];
-	for(NSDictionary *dictionary in miscInfo)
-	{
-		for(NSString *key in [dictionary allKeys])
-		{
-			[idsArray addObject:[dictionary objectForKey:key]];
-		}
-	}
-	self.userIdArray = idsArray;
-	[self synchronousLoadTwitterData];
 }
 
 @end

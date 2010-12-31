@@ -8,6 +8,8 @@
 
 #import "DataAccessHelper.h"
 #import "FMDatabase.h"
+#import "Person.h"
+#import "Status.h"
 
 @interface DataAccessHelper ()
 
