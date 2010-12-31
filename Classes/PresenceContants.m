@@ -39,6 +39,21 @@ NSString *const DismissKey = @"DismissKey";
 /* key for finding the localized value for the word "Loading..." */
 NSString *const LoadingKey = @"LoadingKey";
 
+/* key for finding the localized value for the string "Add to Favorites" */
+NSString *const AddToFavoritesKey = @"AddToFavoritesKey";
+
+/* key for finding the localized value for the string "Enter a Twitter ID" */
+NSString *const EnterTwitterIDKey = @"EnterTwitterIDKey";
+
+/* key for finding the localized value for the word "Cancel" */
+NSString *const CancelKey = @"CancelKey";
+
+/* key for finding the localized value for the word "OK" */
+NSString *const OKKey = @"OKKey";
+
+/* key for finding the localized value for the string "Twitter ID" */
+NSString *const TwitterIDKey = @"TwitterIDKey";
+
 /*
  * Keys for finding localized alert messages
  */
