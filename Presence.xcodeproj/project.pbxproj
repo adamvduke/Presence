@@ -66,7 +66,6 @@
 		56E82A2D12B74CFA00F5E9C8 /* OAProblem.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E82A1512B74CFA00F5E9C8 /* OAProblem.m */; };
 		56E82A2E12B74CFA00F5E9C8 /* OARequestParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E82A1712B74CFA00F5E9C8 /* OARequestParameter.m */; };
 		56E82A2F12B74CFA00F5E9C8 /* OAServiceTicket.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E82A1912B74CFA00F5E9C8 /* OAServiceTicket.m */; };
-		56E82A3012B74CFA00F5E9C8 /* OATestServer.rb in Resources */ = {isa = PBXBuildFile; fileRef = 56E82A1B12B74CFA00F5E9C8 /* OATestServer.rb */; };
 		56E82A3112B74CFA00F5E9C8 /* OAToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E82A1D12B74CFA00F5E9C8 /* OAToken.m */; };
 		56E82A3212B74CFA00F5E9C8 /* OATokenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E82A1F12B74CFA00F5E9C8 /* OATokenManager.m */; };
 		56F2A4B612B73FCB008E3E4D /* NSObject+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F2A4A512B73FCB008E3E4D /* NSObject+JSON.m */; };
@@ -185,7 +184,6 @@
 		56E82A1812B74CFA00F5E9C8 /* OAServiceTicket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAServiceTicket.h; path = External/OAuth/OAServiceTicket.h; sourceTree = "<group>"; };
 		56E82A1912B74CFA00F5E9C8 /* OAServiceTicket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAServiceTicket.m; path = External/OAuth/OAServiceTicket.m; sourceTree = "<group>"; };
 		56E82A1A12B74CFA00F5E9C8 /* OASignatureProviding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASignatureProviding.h; path = External/OAuth/OASignatureProviding.h; sourceTree = "<group>"; };
-		56E82A1B12B74CFA00F5E9C8 /* OATestServer.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = OATestServer.rb; path = External/OAuth/OATestServer.rb; sourceTree = "<group>"; };
 		56E82A1C12B74CFA00F5E9C8 /* OAToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAToken.h; path = External/OAuth/OAToken.h; sourceTree = "<group>"; };
 		56E82A1D12B74CFA00F5E9C8 /* OAToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAToken.m; path = External/OAuth/OAToken.m; sourceTree = "<group>"; };
 		56E82A1E12B74CFA00F5E9C8 /* OATokenManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATokenManager.h; path = External/OAuth/OATokenManager.h; sourceTree = "<group>"; };
@@ -471,7 +469,6 @@
 				56E82A1812B74CFA00F5E9C8 /* OAServiceTicket.h */,
 				56E82A1912B74CFA00F5E9C8 /* OAServiceTicket.m */,
 				56E82A1A12B74CFA00F5E9C8 /* OASignatureProviding.h */,
-				56E82A1B12B74CFA00F5E9C8 /* OATestServer.rb */,
 				56E82A1C12B74CFA00F5E9C8 /* OAToken.h */,
 				56E82A1D12B74CFA00F5E9C8 /* OAToken.m */,
 				56E82A1E12B74CFA00F5E9C8 /* OATokenManager.h */,
@@ -606,7 +603,6 @@
 				56AA6D931207D18C001A31E9 /* Schema_Version_2.plist in Resources */,
 				56C5E781123E6E520099F48D /* twitter_load.png in Resources */,
 				566C53C8127778CD0097A858 /* Schema_Version_3.plist in Resources */,
-				56E82A3012B74CFA00F5E9C8 /* OATestServer.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
