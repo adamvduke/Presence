@@ -20,9 +20,7 @@
 	if(self = [super init])
 	{
 		/* get the values out of the userInfo dictionary */
-		NSNumber *rawId = [userInfo valueForKey:@"id"];
-		NSString *string_id = [NSString stringWithFormat:@"%qi", [rawId longLongValue]];
-		self.user_id = string_id;
+		self.user_id = [userInfo valueForKey:@"id_str"];
 		self.screen_name = [userInfo valueForKey:@"screen_name"];
 		self.display_name = [userInfo valueForKey:@"name"];
 		self.display_location = [userInfo valueForKey:@"location"];
