@@ -6,21 +6,21 @@
  *
  */
 
-#import "Person.h"
 #import "Status.h"
+#import "User.h"
 
 @implementation Status
 
 @synthesize text;
 @synthesize createdDate;
-@synthesize creator;
+@synthesize user;
 
 - (void)dealloc
 {
 	[super dealloc];
 	[text release];
 	[createdDate release];
-	[creator release];
+	[user release];
 }
 
 - (Status *)initWithTimelineEntry:(NSDictionary *)timelineEntry
@@ -29,7 +29,7 @@
 	{
 		self.text = [timelineEntry valueForKey:@"text"];
 		self.createdDate = [timelineEntry valueForKey:@"created_at"];
-		self.creator = [[[Person alloc] initWithInfo:[timelineEntry valueForKey:@"user"]] autorelease];
+		self.user = [[[User alloc] initWithInfo:[timelineEntry valueForKey:@"user"]] autorelease];
 	}
 	return self;
 }

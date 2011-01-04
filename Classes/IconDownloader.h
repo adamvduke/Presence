@@ -10,14 +10,14 @@
  *
  */
 
-@class Person;
+@class User;
 @class ListViewController;
 
 @protocol IconDownloaderDelegate;
 
 @interface IconDownloader : NSObject
 {
-	Person *person;
+	User *user;
 	NSIndexPath *indexPathInTableView;
 	id <IconDownloaderDelegate> delegate;
 
@@ -25,7 +25,7 @@
 	NSURLConnection *imageConnection;
 }
 
-@property (nonatomic, retain) Person *person;
+@property (nonatomic, retain) User *user;
 @property (nonatomic, retain) NSIndexPath *indexPathInTableView;
 @property (nonatomic, assign) id <IconDownloaderDelegate> delegate;
 

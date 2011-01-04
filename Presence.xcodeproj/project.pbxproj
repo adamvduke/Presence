@@ -23,7 +23,7 @@
 		563C7C54120625E3002A9F1E /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 563C7C53120625E3002A9F1E /* Status.m */; };
 		5640027311B8C13100355A74 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5640027211B8C13100355A74 /* main.m */; };
 		564EF07112076FAD00ED4523 /* Schema_Version_1.plist in Resources */ = {isa = PBXBuildFile; fileRef = 564EF07012076FAD00ED4523 /* Schema_Version_1.plist */; };
-		566ADEE811B8BFBF00931CFD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* Person.m */; };
+		566ADEE811B8BFBF00931CFD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* User.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
 		566C53C8127778CD0097A858 /* Schema_Version_3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 566C53C7127778CD0097A858 /* Schema_Version_3.plist */; };
 		5683AF2312C4088F00F4908E /* EditableListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5683AF2212C4088F00F4908E /* EditableListViewController.m */; };
@@ -107,8 +107,8 @@
 		563C7C53120625E3002A9F1E /* Status.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Status.m; sourceTree = "<group>"; };
 		5640027211B8C13100355A74 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/main.m; sourceTree = "<group>"; };
 		564EF07012076FAD00ED4523 /* Schema_Version_1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Schema_Version_1.plist; path = Resources/Database/Schema_Version_1.plist; sourceTree = "<group>"; };
-		566ADEE411B8BFBF00931CFD /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
-		566ADEE511B8BFBF00931CFD /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		566ADEE411B8BFBF00931CFD /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		566ADEE511B8BFBF00931CFD /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		566ADEE611B8BFBF00931CFD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		566ADEE711B8BFBF00931CFD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		566C53C7127778CD0097A858 /* Schema_Version_3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Schema_Version_3.plist; path = Resources/Database/Schema_Version_3.plist; sourceTree = "<group>"; };
@@ -316,8 +316,8 @@
 		562BCB6711CAA25A001E4BA2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				566ADEE411B8BFBF00931CFD /* Person.h */,
-				566ADEE511B8BFBF00931CFD /* Person.m */,
+				566ADEE411B8BFBF00931CFD /* User.h */,
+				566ADEE511B8BFBF00931CFD /* User.m */,
 				563C7C52120625E3002A9F1E /* Status.h */,
 				563C7C53120625E3002A9F1E /* Status.m */,
 			);
@@ -634,7 +634,7 @@
 				56B897BD10B34DB400C7C5FF /* StatusViewController.m in Sources */,
 				5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */,
 				563C65EF11B89639001430C9 /* PresenceContants.m in Sources */,
-				566ADEE811B8BFBF00931CFD /* Person.m in Sources */,
+				566ADEE811B8BFBF00931CFD /* User.m in Sources */,
 				566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */,
 				5640027311B8C13100355A74 /* main.m in Sources */,
 				562BCB0611CA7CD7001E4BA2 /* IconDownloader.m in Sources */,

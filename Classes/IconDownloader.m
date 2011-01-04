@@ -11,13 +11,13 @@
  */
 
 #import "IconDownloader.h"
-#import "Person.h"
+#import "User.h"
 
 #define kAppIconHeight 48
 
 @implementation IconDownloader
 
-@synthesize person;
+@synthesize user;
 @synthesize indexPathInTableView;
 @synthesize delegate;
 @synthesize activeDownload;
@@ -27,7 +27,7 @@
 
 - (void)dealloc
 {
-	[person release];
+	[user release];
 	[indexPathInTableView release];
 	[activeDownload release];
 	[imageConnection cancel];
@@ -40,7 +40,7 @@
 	self.activeDownload = [NSMutableData data];
 
 	/* alloc+init and start an NSURLConnection; release on completion/failure */
-	NSURL *url = [NSURL URLWithString:self.person.profile_image_url];
+	NSURL *url = [NSURL URLWithString:self.user.profile_image_url];
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	self.imageConnection = conn;
@@ -81,12 +81,12 @@
 		UIGraphicsBeginImageContext(itemSize);
 		CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
 		[image drawInRect:imageRect];
-		self.person.image = UIGraphicsGetImageFromCurrentImageContext();
+		self.user.image = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
 	}
 	else
 	{
-		self.person.image = image;
+		self.user.image = image;
 	}
 
 	self.activeDownload = nil;

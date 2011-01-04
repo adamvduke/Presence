@@ -1,4 +1,4 @@
-/*  Person.h
+/*  User.h
  *  Presence
  *
  *  Created by Adam Duke on 11/12/09.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Person : NSObject
+@interface User : NSObject
 {
 	/* Twitter API user/id */
 	NSString *user_id;
@@ -48,12 +48,12 @@
 @property (nonatomic, retain) NSArray *statusUpdates;
 @property (nonatomic, retain) UIImage *image;
 
-/* Returns a Person object initialized with an NSDictionary of information retrieved
+/* Returns a User object initialized with an NSDictionary of information retrieved
  * using the TwitterHelper
  */
-- (Person *)initWithInfo:(NSDictionary *)userInfo;
+- (User *)initWithInfo:(NSDictionary *)userInfo;
 
-/* Returns a boolean value indicating that the a person object has all of the necessary data */
+/* Returns a boolean value indicating that the a user object has all of the necessary data */
 - (BOOL)isValid;
 
 @end

@@ -10,18 +10,18 @@
 #import <UIKit/UIKit.h>
 
 @class DataAccessHelper;
-@class Person;
+@class User;
 
 @interface StatusViewController : UITableViewController <SA_OAuthTwitterEngineDelegate>
 {
 	@private
 	UIActivityIndicatorView *spinner;
 	SA_OAuthTwitterEngine *engine;
-	Person *person;
+	User *user;
 	DataAccessHelper *dataAccessHelper;
 }
 
-/* initialize an instance with a UITableViewStyle and Person object */
-- (id)initWithPerson:(Person *)aPerson dataAccessHelper:(DataAccessHelper *)accessHelper;
+/* initialize an instance with a UITableViewStyle and User object */
+- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper;
 
 @end

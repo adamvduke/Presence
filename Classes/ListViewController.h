@@ -1,4 +1,4 @@
-/*  PersonListViewController.h
+/*  ListViewController.h
  *  Presence
  *
  *  Created by Adam Duke on 11/11/09.
@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 
 @class DataAccessHelper;
+@class User;
 
 @interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate,
 	                                               UIScrollViewDelegate,
@@ -26,7 +27,7 @@
 	@protected
 	SA_OAuthTwitterEngine *engine;
 	UIBarButtonItem *composeBarButton;
-	NSMutableArray *people;
+	NSMutableArray *users;
 	NSMutableDictionary *imageDownloadsInProgress;
 	int finishedThreads;
 }
@@ -35,14 +36,14 @@
 @property (nonatomic, retain) UIBarButtonItem *composeBarButton;
 @property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
 @property (nonatomic, retain) NSMutableArray *userIdArray;
-@property (nonatomic, retain) NSMutableArray *people;
+@property (nonatomic, retain) NSMutableArray *users;
 @property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
 @property int finishedThreads;
 
 - (id)initWithUserIdArray:(NSMutableArray *)userIds;
-- (void)synchronousLoadPerson:(NSString *)user_id;
-- (void)infoRecievedForPerson:(Person *)person;
-- (void)didFinishLoadingPerson;
+- (void)synchronousLoadUser:(NSString *)user_id;
+- (void)infoRecievedForUser:(User *)user;
+- (void)didFinishLoadingUser;
 - (void)synchronousLoadTwitterData;
 
 /* IconDownloader delegate protocol */

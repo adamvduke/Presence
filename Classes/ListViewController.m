@@ -1,4 +1,4 @@
-/*  PersonListViewController.m
+/*  ListViewController.m
  *  Presence
  *
  *  Created by Adam Duke on 11/11/09.
@@ -10,10 +10,10 @@
 #import "DataAccessHelper.h"
 #import "FavoritesHelper.h"
 #import "ListViewController.h"
-#import "Person.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
 #import "StatusViewController.h"
+#import "User.h"
 #import "ValidationHelper.h"
 
 #define kCustomRowHeight 48  /* height of each row */
@@ -21,14 +21,14 @@
 
 @interface ListViewController ()
 
-- (void)startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath;
+- (void)startIconDownload:(User *)aUser forIndexPath:(NSIndexPath *)indexPath;
 - (void)synchronousLoadTwitterData;
 
 @end
 
 @implementation ListViewController
 
-@synthesize engine, composeBarButton, userIdArray, people;
+@synthesize engine, composeBarButton, userIdArray, users;
 @synthesize imageDownloadsInProgress, finishedThreads, dataAccessHelper;
 
 #pragma mark -
@@ -42,7 +42,7 @@
 		self.userIdArray = userIds;
 
 		/* allocate the memory for the NSMutableArray of people on this ViewController */
-		self.people = [[NSMutableArray alloc] init];
+		self.users = [[NSMutableArray alloc] init];
 
 		/* create a UIBarButtonItem for the right side using the Compose style, this will
 		 * present the ComposeStatusViewController modally */
@@ -59,7 +59,7 @@
 {
 	[userIdArray autorelease];
 	userIdArray = [newIdArray retain];
-	[self.people removeAllObjects];
+	[self.users removeAllObjects];
 	[self synchronousLoadTwitterData];
 }
 
@@ -71,7 +71,7 @@
 	[engine release];
 	[composeBarButton release];
 	[userIdArray release];
-	[people release];
+	[users release];
 	[imageDownloadsInProgress release];
 	[dataAccessHelper release];
 	[super dealloc];
@@ -124,10 +124,10 @@
 	[allDownloads makeObjectsPerformSelector:@selector(cancelDownload)];
 
 	NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
-	/* for each person, determine if the person is visible
-	 * if not, set the person's statusUpdate and image properties to nil
+	/* for each user, determine if the user is visible
+	 * if not, set the user's statusUpdate and image properties to nil
 	 */
-	for(int i = 0; i < [people count]; i++)
+	for(int i = 0; i < [users count]; i++)
 	{
 		BOOL visible = NO;
 		for(NSIndexPath *path in visiblePaths)
@@ -140,11 +140,11 @@
 		}
 		if(!visible)
 		{
-			Person *person = [people objectAtIndex:i];
-			if(person)
+			User *user = [users objectAtIndex:i];
+			if(user)
 			{
-				person.statusUpdates = nil;
-				person.image = nil;
+				user.statusUpdates = nil;
+				user.image = nil;
 			}
 		}
 	}
@@ -160,7 +160,7 @@
 #pragma mark -
 #pragma mark Data loading
 
-/* synchronously get the usernames and call beginLoadPerson for each username */
+/* synchronously get the usernames and call beginLoadUser for each username */
 - (void)synchronousLoadTwitterData
 {
 	if( !IsEmpty(self.userIdArray) )
@@ -169,40 +169,40 @@
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 		for(NSString *user_id in self.userIdArray)
 		{
-			[self synchronousLoadPerson:user_id];
+			[self synchronousLoadUser:user_id];
 		}
 	}
 }
 
-/* synchronously fetch data, initialize a person object, and add it to the list of people
+/* synchronously fetch data, initialize a user object, and add it to the list of people
  * call the main thread when finished
  */
-- (void)synchronousLoadPerson:(NSString *)user_id
+- (void)synchronousLoadUser:(NSString *)user_id
 {
-	Person *person = [dataAccessHelper initPersonByUserId:user_id];
-	if(![person isValid])
+	User *user = [dataAccessHelper initUserByUserId:user_id];
+	if(![user isValid])
 	{
-		[person release];
-		person = nil;
+		[user release];
+		user = nil;
 
 		/* get the user's information from Twitter */
 		[self.engine getUserInformationFor:user_id];
 	}
 	else
 	{
-		[self.people addObject:person];
-		[person release];
-		[self didFinishLoadingPerson];
+		[self.users addObject:user];
+		[user release];
+		[self didFinishLoadingUser];
 	}
 }
 
 - (BOOL)dataLoadComplete
 {
-	return [self.userIdArray count] == [self.people count];
+	return [self.userIdArray count] == [self.users count];
 }
 
-/* called by synchronousLoadPerson when the load has finished */
-- (void)didFinishLoadingPerson
+/* called by synchronousLoadUser when the load has finished */
+- (void)didFinishLoadingUser
 {
 	/* in order to save redrawing the UI after every load, redraw after ever kThreadBatchCount
 	 * loads or redraw in the case that the queue is on it's last operation
@@ -251,7 +251,7 @@
 /* Customize the number of rows per section */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	int count = [self.people count];
+	int count = [self.users count];
 	return count;
 }
 
@@ -279,7 +279,7 @@
 {
 	static NSString *CellIdentifier = @"ListCell";
 
-	int peopleCount = [self.people count];
+	int peopleCount = [self.users count];
 	int idCount = [self.userIdArray count];
 	/* if this is the first row and there are no people to display yet
 	 * but there should be, display a cell that indicates data is loading
@@ -299,14 +299,14 @@
 	if(peopleCount > 0 && indexPath.row < peopleCount)
 	{
 		/* Set up the cell... */
-		Person *person = [self.people objectAtIndex:indexPath.row];
+		User *user = [self.users objectAtIndex:indexPath.row];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.textLabel.text = person.screen_name;
+		cell.textLabel.text = user.screen_name;
 		/* Only load cached images; defer new downloads until scrolling ends */
-		if(!person.image)
+		if(!user.image)
 		{
 			/* first check the database */
-			UIImage *anImage = [dataAccessHelper initImageForUserId:person.user_id];
+			UIImage *anImage = [dataAccessHelper initImageForUserId:user.user_id];
 			if(!anImage)
 			{
 				if(self.tableView.dragging == NO && self.tableView.decelerating == NO)
@@ -315,7 +315,7 @@
 					 * and the tableview is not dragging or decelerating
 					 * start to download the image
 					 */
-					[self startIconDownload:person forIndexPath:indexPath];
+					[self startIconDownload:user forIndexPath:indexPath];
 				}
 
 				/* if a download is deferred or in progress, return a placeholder
@@ -324,14 +324,14 @@
 			}
 			else
 			{
-				person.image = anImage;
+				user.image = anImage;
 				[anImage release];
-				cell.imageView.image = person.image;
+				cell.imageView.image = user.image;
 			}
 		}
 		else
 		{
-			cell.imageView.image = person.image;
+			cell.imageView.image = user.image;
 		}
 	}
 	return cell;
@@ -341,12 +341,12 @@
  * row is selected */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if(!IsEmpty(self.people) > 0)
+	if(!IsEmpty(self.users) > 0)
 	{
-		/* get the correct person out of the people array and initialize the status view
-		 * controller for that person */
-		Person *person = [people objectAtIndex:indexPath.row];
-		StatusViewController *statusViewController = [[StatusViewController alloc] initWithPerson:person dataAccessHelper:dataAccessHelper];
+		/* get the correct user out of the people array and initialize the status view
+		 * controller for that user */
+		User *user = [users objectAtIndex:indexPath.row];
+		StatusViewController *statusViewController = [[StatusViewController alloc] initWithUser:user dataAccessHelper:dataAccessHelper];
 
 		/* push the new view controller onto the navigation stack */
 		[self.navigationController pushViewController:statusViewController animated:YES];
@@ -357,7 +357,7 @@
 #pragma mark -
 #pragma mark Table cell image support
 
-- (void)startIconDownload:(Person *)aPerson forIndexPath:(NSIndexPath *)indexPath
+- (void)startIconDownload:(User *)aUser forIndexPath:(NSIndexPath *)indexPath
 {
 	/* check for a download in progress for the indexPath
 	 * if there isn't one, create one and start the download
@@ -366,7 +366,7 @@
 	if(iconDownloader == nil)
 	{
 		iconDownloader = [[IconDownloader alloc] init];
-		iconDownloader.person = aPerson;
+		iconDownloader.user = aUser;
 		iconDownloader.indexPathInTableView = indexPath;
 		iconDownloader.delegate = self;
 		[imageDownloadsInProgress setObject:iconDownloader forKey:indexPath];
@@ -384,11 +384,11 @@
 		NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
 		for(NSIndexPath *indexPath in visiblePaths)
 		{
-			Person *person = [self.people objectAtIndex:indexPath.row];
-			if(!person.image)
+			User *user = [self.users objectAtIndex:indexPath.row];
+			if(!user.image)
 			{
 				/* avoid the app icon download if the app already has an icon */
-				[self startIconDownload:person forIndexPath:indexPath];
+				[self startIconDownload:user forIndexPath:indexPath];
 			}
 		}
 	}
@@ -403,9 +403,9 @@
 		UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:iconDownloader.indexPathInTableView];
 
 		/* Display the newly loaded image */
-		Person *person = iconDownloader.person;
-		[dataAccessHelper saveOrUpdatePerson:person];
-		cell.imageView.image = person.image;
+		User *user = iconDownloader.user;
+		[dataAccessHelper saveOrUpdateUser:user];
+		cell.imageView.image = user.image;
 	}
 	[imageDownloadsInProgress removeObjectForKey:indexPath];
 }
@@ -442,7 +442,7 @@
 
 - (void)authSucceededForEngine
 {
-	if( IsEmpty(people) )
+	if( IsEmpty(users) )
 	{
 		[self synchronousLoadTwitterData];
 	}
@@ -467,22 +467,22 @@
 	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
 }
 
-- (void)infoRecievedForPerson:(Person *)person
+- (void)infoRecievedForUser:(User *)user
 {
-	[dataAccessHelper saveOrUpdatePerson:person];
-	[self.people addObject:person];
+	[dataAccessHelper saveOrUpdateUser:user];
+	[self.users addObject:user];
 }
 
 - (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
 {
-	Person *person = [[Person alloc] initWithInfo:userInfo];
-	/* this person is not yet in the database */
-	if([person isValid])
+	User *user = [[User alloc] initWithInfo:userInfo];
+	/* this user is not yet in the database */
+	if([user isValid])
 	{
-		[self infoRecievedForPerson:person];
+		[self infoRecievedForUser:user];
 	}
-	[self didFinishLoadingPerson];
-	[person release];
+	[self didFinishLoadingUser];
+	[user release];
 }
 
 @end

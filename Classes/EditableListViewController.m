@@ -8,8 +8,8 @@
 
 #import "EditableListViewController.h"
 #import "FavoritesHelper.h"
-#import "Person.h"
 #import "PresenceConstants.h"
+#import "User.h"
 #import "ValidationHelper.h"
 
 @interface EditableListViewController ()
@@ -101,13 +101,13 @@
 {
 	NSUInteger sourceRow = sourceIndexPath.row;
 	NSUInteger destinationRow = destinationIndexPath.row;
-	Person *person = [[self.people objectAtIndex:sourceRow] retain];
+	User *user = [[self.users objectAtIndex:sourceRow] retain];
 	NSString *userId = [[self.userIdArray objectAtIndex:sourceRow] retain];
-	[self.people removeObjectAtIndex:sourceRow];
+	[self.users removeObjectAtIndex:sourceRow];
 	[self.userIdArray removeObjectAtIndex:sourceRow];
-	[self.people insertObject:person atIndex:destinationRow];
+	[self.users insertObject:user atIndex:destinationRow];
 	[self.userIdArray insertObject:userId atIndex:destinationRow];
-	[person release];
+	[user release];
 	[userId release];
 }
 
@@ -116,7 +116,7 @@
 	/* If row is deleted, remove it from the list. */
 	if(editingStyle == UITableViewCellEditingStyleDelete)
 	{
-		[self.people removeObjectAtIndex:indexPath.row];
+		[self.users removeObjectAtIndex:indexPath.row];
 		[self.userIdArray removeObjectAtIndex:indexPath.row];
 		[FavoritesHelper saveFavorites:self.userIdArray];
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -146,7 +146,7 @@
 			self.pendingFavorites = [[NSMutableArray alloc] init];
 		}
 		[pendingFavorites addObject:upperCaseUsername];
-		[super synchronousLoadPerson:upperCaseUsername];
+		[super synchronousLoadUser:upperCaseUsername];
 	}
 }
 
@@ -171,18 +171,18 @@
 
 - (void)authSucceededForEngine
 {
-	if( IsEmpty(people) )
+	if( IsEmpty(users) )
 	{
 		[super synchronousLoadTwitterData];
 	}
 }
 
-- (void)updateFavoritesWithPerson:(Person *)person
+- (void)updateFavoritesWithUser:(User *)user
 {
-	NSString *upperCaseUsername = [person.screen_name uppercaseString];
+	NSString *upperCaseUsername = [user.screen_name uppercaseString];
 	if([pendingFavorites containsObject:upperCaseUsername])
 	{
-		[userIdArray addObject:person.user_id];
+		[userIdArray addObject:user.user_id];
 		[FavoritesHelper saveFavorites:userIdArray];
 		[pendingFavorites removeObject:upperCaseUsername];
 	}
@@ -190,15 +190,15 @@
 
 - (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
 {
-	Person *person = [[Person alloc] initWithInfo:userInfo];
-	/* this person is not yet in the database */
-	if([person isValid])
+	User *user = [[User alloc] initWithInfo:userInfo];
+	/* this user is not yet in the database */
+	if([user isValid])
 	{
-		[super infoRecievedForPerson:person];
-		[self updateFavoritesWithPerson:person];
+		[super infoRecievedForUser:user];
+		[self updateFavoritesWithUser:user];
 	}
-	[super didFinishLoadingPerson];
-	[person release];
+	[super didFinishLoadingUser];
+	[user release];
 }
 
 @end

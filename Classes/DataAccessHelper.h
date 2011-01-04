@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class Person;
+@class User;
 @class Status;
 
 @interface DataAccessHelper : NSObject {
@@ -20,16 +20,16 @@
 /* copy the default database to the file system */
 - (BOOL)createAndValidateDatabase;
 
-/* save a person record in the database */
-- (BOOL)saveOrUpdatePerson:(Person *)person;
+/* save a user record in the database */
+- (BOOL)saveOrUpdateUser:(User *)user;
 
-/* retrieve a Person's details from the database and
- * construct a person object from the results by their
+/* retrieve a User's details from the database and
+ * construct a user object from the results by their
  * numeric userId
  */
-- (Person *)initPersonByUserId:(NSString *)user_id;
+- (User *)initUserByUserId:(NSString *)user_id;
 
-/* retrieve a Person's image from the database */
+/* retrieve a user's image from the database */
 - (UIImage *)initImageForUserId:(NSString *)user_id;
 
 /* Delete all information in the database */

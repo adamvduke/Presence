@@ -7,17 +7,17 @@
  */
 
 #import "CredentialHelper.h"
-#import "Person.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
 #import "Status.h"
 #import "StatusViewController.h"
+#import "User.h"
 
 @interface StatusViewController ()
 
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
 @property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
-@property (nonatomic, retain) Person *person;
+@property (nonatomic, retain) User *user;
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
 
 - (NSArray *)initStatusUpdatesFromTimeline:(NSArray *)userTimeline;
@@ -26,7 +26,7 @@
 
 @implementation StatusViewController
 
-@synthesize spinner, engine, person, dataAccessHelper;
+@synthesize spinner, engine, user, dataAccessHelper;
 
 /* override shouldAutorotateToInterfaceOrientation to return YES for all interface orientations */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -69,7 +69,7 @@
 /* begin loading the updates asynchronously */
 - (void)beginLoadUpdates:(BOOL)refresh
 {
-	if(!refresh && self.person && self.person.statusUpdates)
+	if(!refresh && self.user && self.user.statusUpdates)
 	{
 		/* avoid doing any un-needed work */
 		return;
@@ -82,7 +82,7 @@
 	[self.spinner startAnimating];
 
 	/* get the user's timeline */
-	[self.engine getUserTimelineFor:self.person.user_id sinceID:0 startingAtPage:1 count:20];
+	[self.engine getUserTimelineFor:self.user.user_id sinceID:0 startingAtPage:1 count:20];
 }
 
 - (void)refresh
@@ -90,16 +90,16 @@
 	[self beginLoadUpdates:YES];
 }
 
-/* initialize with a UITableViewStyle and Person object */
-- (id)initWithPerson:(Person *)aPerson dataAccessHelper:(DataAccessHelper *)accessHelper
+/* initialize with a UITableViewStyle and user object */
+- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper
 {
 	if(self = [super initWithStyle:UITableViewStyleGrouped])
 	{
 		/* this is the text displayed at the top */
 		self.title = NSLocalizedString(StatusViewTitleKey, @"");
 
-		/* set the person reference on the view */
-		self.person = aPerson;
+		/* set the user reference on the view */
+		self.user = aUser;
 
 		self.dataAccessHelper = accessHelper;
 
@@ -163,13 +163,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	/* section 1 will have 1 row, section 2 will have however many rows exist in the
-	 * statusUpdates array on the person object
+	 * statusUpdates array on the user object
 	 */
 	if(section == 0)
 	{
 		return 1;
 	}
-	return [self.person.statusUpdates count];
+	return [self.user.statusUpdates count];
 }
 
 /* Customize the content of table view cells. */
@@ -195,10 +195,10 @@
 		}
 
 		/* set only the text and image properties on the cell */
-		cell.textLabel.text = self.person.screen_name;
-		if(self.person.image)
+		cell.textLabel.text = self.user.screen_name;
+		if(self.user.image)
 		{
-			cell.imageView.image = self.person.image;
+			cell.imageView.image = self.user.image;
 		}
 		else
 		{
@@ -221,7 +221,7 @@
 		/* set the numberOfLines, font, and text properties on the cell's text label */
 		cell.textLabel.numberOfLines = 0;
 		cell.textLabel.font = [UIFont systemFontOfSize:14];
-		Status *status = [self.person.statusUpdates objectAtIndex:indexPath.row];
+		Status *status = [self.user.statusUpdates objectAtIndex:indexPath.row];
 		cell.textLabel.text = status.text;
 
 		/* cell.detailTextLabel.text = status.createdDate; */
@@ -246,7 +246,7 @@
 	}
 
 	/* if the index path represents a "Status cell" calculate the height based on the text */
-	Status *status = [person.statusUpdates objectAtIndex:indexPath.row];
+	Status *status = [user.statusUpdates objectAtIndex:indexPath.row];
 	NSString *someText = status.text;
 	UIFont *font = [UIFont systemFontOfSize:14 ];
 	CGSize withinSize = CGSizeMake( 350, 150);
@@ -301,9 +301,9 @@
 	/* parse the individual statuses out of the timeline */
 	NSArray *statusArray = [self initStatusUpdatesFromTimeline:statuses];
 
-	/* set the statusUpdates array on the person object so that they don't need to be fetched
+	/* set the statusUpdates array on the user object so that they don't need to be fetched
 	 * again */
-	self.person.statusUpdates = statusArray;
+	self.user.statusUpdates = statusArray;
 
 	[self didFinishLoadingUpdates];
 }
@@ -312,7 +312,7 @@
 {
 	[engine release];
 	[dataAccessHelper release];
-	[person release];
+	[user release];
 	[spinner release];
 	[super dealloc];
 }

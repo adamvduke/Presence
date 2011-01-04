@@ -1,21 +1,21 @@
-/*  Person.m
+/*  User.m
  *  Presence
  *
  *  Created by Adam Duke on 11/12/09.
  *  Copyright 2009 Adam Duke. All rights reserved.
  */
 
-#import "Person.h"
+#import "User.h"
 #import "ValidationHelper.h"
 
-@implementation Person
+@implementation User
 
 @synthesize user_id, screen_name, display_name, display_location, display_description, display_url, profile_image_url, statusUpdates, image;
 
-/* Returns a Person object initialized with an NSDictionary of information retrieved
+/* Returns a User object initialized with an NSDictionary of information retrieved
  * using the TwitterHelper, for a particular user name
  */
-- (Person *)initWithInfo:(NSDictionary *)userInfo
+- (User *)initWithInfo:(NSDictionary *)userInfo
 {
 	if(self = [super init])
 	{
