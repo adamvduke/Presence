@@ -6,26 +6,21 @@
  *
  */
 
+#import "Person.h"
 #import "Status.h"
-
-@interface Status (Private)
-
-- (NSString *)retrieveCreaterIdFromDictionary:(NSDictionary *)dictionary;
-
-@end
 
 @implementation Status
 
 @synthesize text;
 @synthesize createdDate;
-@synthesize createrId;
+@synthesize creator;
 
 - (void)dealloc
 {
 	[super dealloc];
 	[text release];
 	[createdDate release];
-	[createrId release];
+	[creator release];
 }
 
 - (Status *)initWithTimelineEntry:(NSDictionary *)timelineEntry
@@ -34,16 +29,9 @@
 	{
 		self.text = [timelineEntry valueForKey:@"text"];
 		self.createdDate = [timelineEntry valueForKey:@"created_at"];
-		self.createrId = [self retrieveCreaterIdFromDictionary:[timelineEntry valueForKey:@"user"]];
+		self.creator = [[[Person alloc] initPersonWithInfo:[timelineEntry valueForKey:@"user"]] autorelease];
 	}
 	return self;
-}
-
-- (NSString *)retrieveCreaterIdFromDictionary:(NSDictionary *)dictionary
-{
-	NSNumber *rawId = [dictionary valueForKey:@"id"];
-	NSString *stringId = [NSString stringWithFormat:@"%d", [rawId integerValue]];
-	return stringId;
 }
 
 @end

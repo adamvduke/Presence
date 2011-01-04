@@ -8,16 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+@class Person;
+
 @interface Status : NSObject
 {
 	NSString *text;
 	NSString *createdDate;
-	NSString *createrId;
+	Person *creator;
 }
 
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) NSString *createdDate;
-@property (nonatomic, retain) NSString *createrId;
+@property (nonatomic, retain) Person *creator;
 
 - (Status *)initWithTimelineEntry:(NSDictionary *)timelineEntry;
 
