@@ -15,7 +15,7 @@
 /* Returns a Person object initialized with an NSDictionary of information retrieved
  * using the TwitterHelper, for a particular user name
  */
-- (Person *)initPersonWithInfo:(NSDictionary *)userInfo
+- (Person *)initWithInfo:(NSDictionary *)userInfo
 {
 	if(self = [super init])
 	{

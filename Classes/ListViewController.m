@@ -475,7 +475,7 @@
 
 - (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
 {
-	Person *person = [[Person alloc] initPersonWithInfo:userInfo];
+	Person *person = [[Person alloc] initWithInfo:userInfo];
 	/* this person is not yet in the database */
 	if([person isValid])
 	{

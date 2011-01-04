@@ -29,7 +29,7 @@
 	{
 		self.text = [timelineEntry valueForKey:@"text"];
 		self.createdDate = [timelineEntry valueForKey:@"created_at"];
-		self.creator = [[[Person alloc] initPersonWithInfo:[timelineEntry valueForKey:@"user"]] autorelease];
+		self.creator = [[[Person alloc] initWithInfo:[timelineEntry valueForKey:@"user"]] autorelease];
 	}
 	return self;
 }
