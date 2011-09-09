@@ -14,7 +14,7 @@
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
 #import "SettingsViewController.h"
-#import "ValidationHelper.h"
+#import "ADSharedMacros.h"
 
 typedef enum
 {

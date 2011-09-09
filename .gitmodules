@@ -7,3 +7,6 @@
 [submodule "External/OAuth"]
 	path = External/OAuth
 	url = git@github.com:adamvduke/OAuthConsumer.git
+[submodule "External/ObjCMacros"]
+	path = External/ObjCMacros
+	url = git@github.com:adamvduke/ObjCMacros.git

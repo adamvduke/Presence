@@ -6,7 +6,7 @@
  */
 
 #import "User.h"
-#import "ValidationHelper.h"
+#import "ADSharedMacros.h"
 
 @implementation User
 

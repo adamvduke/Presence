@@ -10,7 +10,7 @@
 
 #import "SA_OAuthTwitterController.h"
 #import "SA_OAuthTwitterEngine.h"
-#import "ValidationHelper.h"
+#import "ADSharedMacros.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 

@@ -10,7 +10,7 @@
 #import "FavoritesHelper.h"
 #import "PresenceConstants.h"
 #import "User.h"
-#import "ValidationHelper.h"
+#import "ADSharedMacros.h"
 
 @interface EditableListViewController ()
 

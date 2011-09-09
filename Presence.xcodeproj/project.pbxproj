@@ -89,10 +89,12 @@
 		32CA4F630368D1EE00C91783 /* Presence_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Presence_Prefix.pch; sourceTree = "<group>"; };
 		560315A610ABA79A005F649A /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
 		560315A710ABA79A005F649A /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		56117973141AA8A2001BEA5C /* ADSharedMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADSharedMacros.h; path = External/ObjCMacros/ADSharedMacros.h; sourceTree = "<group>"; };
+		56117974141AA8A2001BEA5C /* SynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SynthesizeSingleton.h; path = External/ObjCMacros/SynthesizeSingleton.h; sourceTree = "<group>"; };
+		56117975141AA8A2001BEA5C /* TTMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTMacros.h; path = External/ObjCMacros/TTMacros.h; sourceTree = "<group>"; };
 		5616967211C5634300C07DEF /* FavoriteUsers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = FavoriteUsers.plist; path = Resources/FavoriteUsers.plist; sourceTree = "<group>"; };
 		561E9B6111BAE59F005A6BC8 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		561E9B6311BAE5AC005A6BC8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		5623066911CC5C5D006F4713 /* ValidationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValidationHelper.h; sourceTree = "<group>"; };
 		562BCB0411CA7CD7001E4BA2 /* IconDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconDownloader.h; sourceTree = "<group>"; };
 		562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IconDownloader.m; sourceTree = "<group>"; };
 		563329F911B761BF00BF4184 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -296,6 +298,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		56117972141AA872001BEA5C /* ObjCMacros */ = {
+			isa = PBXGroup;
+			children = (
+				56117973141AA8A2001BEA5C /* ADSharedMacros.h */,
+				56117974141AA8A2001BEA5C /* SynthesizeSingleton.h */,
+				56117975141AA8A2001BEA5C /* TTMacros.h */,
+			);
+			name = ObjCMacros;
+			sourceTree = "<group>";
+		};
 		562BCB6611CAA223001E4BA2 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,7 +341,6 @@
 			children = (
 				562BCB0411CA7CD7001E4BA2 /* IconDownloader.h */,
 				562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */,
-				5623066911CC5C5D006F4713 /* ValidationHelper.h */,
 				56A8D21511CEEC4400BF541D /* FavoritesHelper.h */,
 				56A8D21611CEEC4400BF541D /* FavoritesHelper.m */,
 				56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */,
@@ -428,6 +439,7 @@
 				56DEC91B126D464D002E4825 /* fmdb */,
 				56F2A4A212B73FAD008E3E4D /* JSON */,
 				56E829F912B74CB500F5E9C8 /* OAuth */,
+				56117972141AA872001BEA5C /* ObjCMacros */,
 			);
 			name = External;
 			sourceTree = "<group>";

@@ -14,7 +14,7 @@
 #import "PresenceConstants.h"
 #import "StatusViewController.h"
 #import "User.h"
-#import "ValidationHelper.h"
+#import "ADSharedMacros.h"
 
 #define kCustomRowHeight 48  /* height of each row */
 #define kThreadBatchCount 5 /* number of rows to create before re-drawing the table view */
