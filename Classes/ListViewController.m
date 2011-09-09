@@ -97,7 +97,7 @@
 	[super viewWillAppear:animated];
 	if(![self.engine isAuthorized])
 	{
-		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+		PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
 		self.engine = [appDelegate getEngineForDelegate:self];
 	}
 	if([self.engine isAuthorized])

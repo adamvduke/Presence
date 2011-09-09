@@ -24,7 +24,7 @@
 
 - (IBAction)deauthorize
 {
-	PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+	PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
 	[appDelegate deauthorizeEngines];
 }
 

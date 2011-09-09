@@ -147,7 +147,7 @@
 	if(![self.engine isAuthorized])
 	{
 		[self setTweetButtonStatus];
-		PresenceAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+		PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
 		self.engine = [appDelegate getEngineForDelegate:self];
 	}
 	if([self.engine isAuthorized])
