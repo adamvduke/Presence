@@ -6,6 +6,7 @@
  *
  */
 
+#import "ADSharedMacros.h"
 #import "CredentialHelper.h"
 #import "DataAccessHelper.h"
 #import "EditableListViewController.h"
@@ -14,7 +15,6 @@
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
 #import "SettingsViewController.h"
-#import "ADSharedMacros.h"
 
 typedef enum
 {

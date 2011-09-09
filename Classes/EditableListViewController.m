@@ -6,11 +6,11 @@
  *
  */
 
+#import "ADSharedMacros.h"
 #import "EditableListViewController.h"
 #import "FavoritesHelper.h"
 #import "PresenceConstants.h"
 #import "User.h"
-#import "ADSharedMacros.h"
 
 @interface EditableListViewController ()
 

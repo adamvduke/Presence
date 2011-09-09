@@ -5,8 +5,8 @@
  *  Copyright 2009 Adam Duke. All rights reserved.
  */
 
-#import "User.h"
 #import "ADSharedMacros.h"
+#import "User.h"
 
 @implementation User
 
