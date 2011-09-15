@@ -27,9 +27,6 @@
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
 		566C53C8127778CD0097A858 /* Schema_Version_3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 566C53C7127778CD0097A858 /* Schema_Version_3.plist */; };
 		5683AF2312C4088F00F4908E /* EditableListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5683AF2212C4088F00F4908E /* EditableListViewController.m */; };
-		568C749212B7437400C0130C /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C748D12B7437400C0130C /* FMDatabase.m */; };
-		568C749312B7437400C0130C /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C748F12B7437400C0130C /* FMDatabaseAdditions.m */; };
-		568C749412B7437400C0130C /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C749112B7437400C0130C /* FMResultSet.m */; };
 		56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D21611CEEC4400BF541D /* FavoritesHelper.m */; };
 		56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D2FB11CEFF4400BF541D /* CredentialHelper.m */; };
 		56AA6D931207D18C001A31E9 /* Schema_Version_2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56AA6D921207D18C001A31E9 /* Schema_Version_2.plist */; };
@@ -77,7 +74,32 @@
 		56F2A4BC12B73FCB008E3E4D /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F2A4B112B73FCB008E3E4D /* SBJsonStreamWriterState.m */; };
 		56F2A4BD12B73FCB008E3E4D /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F2A4B312B73FCB008E3E4D /* SBJsonTokeniser.m */; };
 		56F2A4BE12B73FCB008E3E4D /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F2A4B512B73FCB008E3E4D /* SBJsonWriter.m */; };
+		56F47EC71422C31900EAD70B /* libFMDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F47EC51422C2F900EAD70B /* libFMDB.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		56F47EC21422C2F900EAD70B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56F47EB91422C2F800EAD70B /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76FA10486AA7600D96B5E;
+			remoteInfo = fmdb;
+		};
+		56F47EC41422C2F900EAD70B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56F47EB91422C2F800EAD70B /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EE4290EF12B42F870088BD94;
+			remoteInfo = FMDB;
+		};
+		56F47EC81422C32300EAD70B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56F47EB91422C2F800EAD70B /* fmdb.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = EE4290EE12B42F870088BD94;
+			remoteInfo = FMDB;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -116,12 +138,6 @@
 		566C53C7127778CD0097A858 /* Schema_Version_3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Schema_Version_3.plist; path = Resources/Database/Schema_Version_3.plist; sourceTree = "<group>"; };
 		5683AF2112C4088F00F4908E /* EditableListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableListViewController.h; sourceTree = "<group>"; };
 		5683AF2212C4088F00F4908E /* EditableListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableListViewController.m; sourceTree = "<group>"; };
-		568C748C12B7437400C0130C /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = External/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
-		568C748D12B7437400C0130C /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = External/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
-		568C748E12B7437400C0130C /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = External/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
-		568C748F12B7437400C0130C /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = External/fmdb/src/FMDatabaseAdditions.m; sourceTree = "<group>"; };
-		568C749012B7437400C0130C /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = External/fmdb/src/FMResultSet.h; sourceTree = "<group>"; };
-		568C749112B7437400C0130C /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = External/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
 		56A8D21511CEEC4400BF541D /* FavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesHelper.h; sourceTree = "<group>"; };
 		56A8D21611CEEC4400BF541D /* FavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesHelper.m; sourceTree = "<group>"; };
 		56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialHelper.h; sourceTree = "<group>"; };
@@ -210,6 +226,7 @@
 		56F2A4B312B73FCB008E3E4D /* SBJsonTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBJsonTokeniser.m; path = External/JSON/Classes/SBJsonTokeniser.m; sourceTree = "<group>"; };
 		56F2A4B412B73FCB008E3E4D /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBJsonWriter.h; path = External/JSON/Classes/SBJsonWriter.h; sourceTree = "<group>"; };
 		56F2A4B512B73FCB008E3E4D /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBJsonWriter.m; path = External/JSON/Classes/SBJsonWriter.m; sourceTree = "<group>"; };
+		56F47EB91422C2F800EAD70B /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = External/fmdb/fmdb.xcodeproj; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Presence-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Presence-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -218,6 +235,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56F47EC71422C31900EAD70B /* libFMDB.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -447,12 +465,7 @@
 		56DEC91B126D464D002E4825 /* fmdb */ = {
 			isa = PBXGroup;
 			children = (
-				568C748C12B7437400C0130C /* FMDatabase.h */,
-				568C748D12B7437400C0130C /* FMDatabase.m */,
-				568C748E12B7437400C0130C /* FMDatabaseAdditions.h */,
-				568C748F12B7437400C0130C /* FMDatabaseAdditions.m */,
-				568C749012B7437400C0130C /* FMResultSet.h */,
-				568C749112B7437400C0130C /* FMResultSet.m */,
+				56F47EB91422C2F800EAD70B /* fmdb.xcodeproj */,
 			);
 			name = fmdb;
 			sourceTree = "<group>";
@@ -544,6 +557,15 @@
 			name = JSON;
 			sourceTree = "<group>";
 		};
+		56F47EBA1422C2F800EAD70B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56F47EC31422C2F900EAD70B /* fmdb */,
+				56F47EC51422C2F900EAD70B /* libFMDB.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -559,6 +581,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				56F47EC91422C32300EAD70B /* PBXTargetDependency */,
 			);
 			name = Presence;
 			productName = Presence;
@@ -588,12 +611,35 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 56F47EBA1422C2F800EAD70B /* Products */;
+					ProjectRef = 56F47EB91422C2F800EAD70B /* fmdb.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* Presence */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		56F47EC31422C2F900EAD70B /* fmdb */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = fmdb;
+			remoteRef = 56F47EC21422C2F900EAD70B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		56F47EC51422C2F900EAD70B /* libFMDB.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFMDB.a;
+			remoteRef = 56F47EC41422C2F900EAD70B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1D60588D0D05DD3D006BFB54 /* Resources */ = {
@@ -670,9 +716,6 @@
 				56F2A4BC12B73FCB008E3E4D /* SBJsonStreamWriterState.m in Sources */,
 				56F2A4BD12B73FCB008E3E4D /* SBJsonTokeniser.m in Sources */,
 				56F2A4BE12B73FCB008E3E4D /* SBJsonWriter.m in Sources */,
-				568C749212B7437400C0130C /* FMDatabase.m in Sources */,
-				568C749312B7437400C0130C /* FMDatabaseAdditions.m in Sources */,
-				568C749412B7437400C0130C /* FMResultSet.m in Sources */,
 				56E82A2112B74CFA00F5E9C8 /* NSMutableURLRequest+Parameters.m in Sources */,
 				56E82A2212B74CFA00F5E9C8 /* NSString+URLEncoding.m in Sources */,
 				56E82A2312B74CFA00F5E9C8 /* NSURL+Base.m in Sources */,
@@ -696,6 +739,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		56F47EC91422C32300EAD70B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FMDB;
+			targetProxy = 56F47EC81422C32300EAD70B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		561E9B6011BAE59F005A6BC8 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -718,7 +769,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Presence_Prefix.pch;
-				HEADER_SEARCH_PATHS = $SDKROOT/usr/include/libxml2;
+				HEADER_SEARCH_PATHS = (
+					$SDKROOT/usr/include/libxml2,
+					"$(CONFIGURATION_BUILD_DIR)/usr/local/include",
+				);
 				INFOPLIST_FILE = "Presence-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Presence;
@@ -733,7 +787,10 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Presence_Prefix.pch;
-				HEADER_SEARCH_PATHS = $SDKROOT/usr/include/libxml2;
+				HEADER_SEARCH_PATHS = (
+					$SDKROOT/usr/include/libxml2,
+					"$(CONFIGURATION_BUILD_DIR)/usr/local/include",
+				);
 				INFOPLIST_FILE = "Presence-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Presence;
