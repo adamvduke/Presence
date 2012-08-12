@@ -25,7 +25,8 @@
 @interface UIAlertView ()
 
 - (id)addTextFieldWithValue:(id)arg1 label:(id)arg2;
-- (id)textFieldAtIndex:(int)arg1;
+
+/* - (id)textFieldAtIndex:(int)arg1; */
 @end
 
 @implementation EditableListViewController
@@ -191,6 +192,7 @@
 - (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
 {
 	User *user = [[User alloc] initWithInfo:userInfo];
+
 	/* this user is not yet in the database */
 	if([user isValid])
 	{

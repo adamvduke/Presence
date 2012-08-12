@@ -16,7 +16,6 @@
 @interface StatusViewController ()
 
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
-@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
 @property (nonatomic, retain) User *user;
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
 
@@ -26,7 +25,7 @@
 
 @implementation StatusViewController
 
-@synthesize spinner, engine, user, dataAccessHelper;
+@synthesize spinner, user, dataAccessHelper;
 
 /* override shouldAutorotateToInterfaceOrientation to return YES for all interface orientations */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -81,8 +80,7 @@
 	/* start animating the spinner */
 	[self.spinner startAnimating];
 
-	/* get the user's timeline */
-	[self.engine getUserTimelineFor:self.user.user_id sinceID:0 startingAtPage:1 count:20];
+	/* TODO: get the user's timeline */
 }
 
 - (void)refresh
@@ -122,15 +120,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	if(![self.engine isAuthorized])
-	{
-		PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
-		self.engine = [appDelegate getEngineForDelegate:self];
-	}
-	if([self.engine isAuthorized])
-	{
-		[self authSucceededForEngine];
-	}
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -182,6 +171,7 @@
 
 	/* declare the cell early so that either code path can initialize it */
 	UITableViewCell *cell;
+
 	/* if the section variable is zero, the requested cell is for the title section of the view
 	 */
 	if(section == 0)
@@ -289,7 +279,7 @@
 
 - (void)deauthorizeEngine
 {
-	[self.engine clearAccessToken];
+	/* TODO: clear the access token */
 }
 
 /* These delegate methods are called after all results are parsed from the connection. If
@@ -310,7 +300,6 @@
 
 - (void)dealloc
 {
-	[engine release];
 	[dataAccessHelper release];
 	[user release];
 	[spinner release];

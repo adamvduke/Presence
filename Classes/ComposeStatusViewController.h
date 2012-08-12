@@ -6,13 +6,12 @@
  *
  */
 
-#import "SA_OAuthTwitterEngine.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
 @protocol ComposeStatusViewControllerDelegate;
 
-@interface ComposeStatusViewController : UIViewController <UITextViewDelegate, SA_OAuthTwitterEngineDelegate>
+@interface ComposeStatusViewController : UIViewController <UITextViewDelegate>
 {
 	/* IBOutlet for the navigationItem */
 	IBOutlet UINavigationItem *aNavigationItem;
@@ -27,7 +26,6 @@
 	id<ComposeStatusViewControllerDelegate> delegate;
 
 	@private
-	SA_OAuthTwitterEngine *engine;
 	UIActivityIndicatorView *spinner;
 	BOOL isEditable;
 }

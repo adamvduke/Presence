@@ -6,17 +6,15 @@
  *
  */
 
-#import "SA_OAuthTwitterEngine.h"
 #import <UIKit/UIKit.h>
 
 @class DataAccessHelper;
 @class User;
 
-@interface StatusViewController : UITableViewController <SA_OAuthTwitterEngineDelegate>
+@interface StatusViewController : UITableViewController
 {
 	@private
 	UIActivityIndicatorView *spinner;
-	SA_OAuthTwitterEngine *engine;
 	User *user;
 	DataAccessHelper *dataAccessHelper;
 }

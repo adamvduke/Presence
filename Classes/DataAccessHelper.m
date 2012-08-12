@@ -96,6 +96,7 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	FMResultSet *resultSet = [database executeQuery:@"SELECT id "
 	                                                " FROM   User "
 	                                                " WHERE  user_id = ?", user.user_id];
+
 	/* if the resultset contains a record this is an update */
 	if([resultSet next])
 	{
@@ -205,6 +206,7 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 	                                                " JOIN   Image image_table "
 	                                                "   ON   image_table.user_id = user.user_id "
 	                                                "WHERE   user.user_id = ?", user_id];
+
 	/* if the resultset contains data, construct a user object from it */
 	while([resultSet next])
 	{
@@ -286,6 +288,7 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 
 		/* open the database */
 		FMDatabase *database = [self openApplicationDatabase];
+
 		/* execute the statements */
 		for(NSString *statement in sqlStatements)
 		{
@@ -303,6 +306,7 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 		fileName = [NSString stringWithFormat:SchemaVersionFormatString, currentVersion + 1];
 		path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"plist"];
 	}
+
 	/* if the schemaUpdated flag has flipped, we'll want to write out the NSUserDefaults
 	 * because the CurrentSchemaVersion will have been updated
 	 */

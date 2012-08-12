@@ -13,7 +13,6 @@
 
 @interface ComposeStatusViewController ()
 
-@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
 @property BOOL isEditable;
 
@@ -26,7 +25,7 @@
 
 @implementation ComposeStatusViewController
 
-@synthesize engine, spinner, aNavigationItem, charactersLabel, textView, isEditable, delegate;
+@synthesize spinner, aNavigationItem, charactersLabel, textView, isEditable, delegate;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -56,7 +55,8 @@
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	self.isEditable = NO;
-	[self.engine sendUpdate:textView.text];
+
+	/* TODO: send the update[self.engine sendUpdate:textView.text]; */
 }
 
 /* UITextViewDelegate method */
@@ -66,6 +66,7 @@
 	{
 		return NO;
 	}
+
 	/* if the length of the current text plus the length of the requested text is less than 140
 	 * characters, return YES else NO
 	 */
@@ -100,12 +101,15 @@
  */
 - (void)setTweetButtonStatus
 {
-	BOOL authorized = [self.engine isAuthorized];
-	BOOL hasText = [self textViewHasText];
-	BOOL enabled = (authorized && hasText);
-	UINavigationItem *navBar = self.aNavigationItem;
-	UIBarButtonItem *rightBarButton = navBar.rightBarButtonItem;
-	rightBarButton.enabled = enabled;
+	/* TODO: set the button status */
+
+/* BOOL authorized = [self.engine isAuthorized];
+ * BOOL hasText = [self textViewHasText];
+ * BOOL enabled = (authorized && hasText);
+ * UINavigationItem *navBar = self.aNavigationItem;
+ * UIBarButtonItem *rightBarButton = navBar.rightBarButtonItem;
+ * rightBarButton.enabled = enabled;
+ */
 }
 
 /* executes any logic that should happen when the text
@@ -144,16 +148,20 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-	if(![self.engine isAuthorized])
-	{
-		[self setTweetButtonStatus];
-		PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
-		self.engine = [appDelegate getEngineForDelegate:self];
-	}
-	if([self.engine isAuthorized])
-	{
-		[self authSucceededForEngine];
-	}
+	/* TODO: something */
+
+/* if(![self.engine isAuthorized])
+ * {
+ *      [self setTweetButtonStatus];
+ *      PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication
+ * sharedApplication].delegate;
+ *      self.engine = [appDelegate getEngineForDelegate:self];
+ * }
+ * if([self.engine isAuthorized])
+ * {
+ *      [self authSucceededForEngine];
+ * }
+ */
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -266,7 +274,9 @@
 
 - (void)deauthorizeEngine
 {
-	[self.engine clearAccessToken];
+	/* TODO: clear the token */
+
+	/* [self.engine clearAccessToken]; */
 }
 
 /* These delegate methods are called after all results are parsed from the connection. If
@@ -286,7 +296,6 @@
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[engine release];
 	[spinner release];
 	[aNavigationItem release];
 	[charactersLabel release];

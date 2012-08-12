@@ -16,26 +16,15 @@
 #import "PresenceConstants.h"
 #import "SettingsViewController.h"
 
-typedef enum
-{
-	RateLimitRequest,
-	FollowedIdsRequest
-} RequestType;
-
 @interface PresenceAppDelegate ()
 
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
-@property (nonatomic, retain) NSMutableDictionary *openRequests;
-@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
 
 - (void)completeLaunchingWithViewControllerIndex:(NSUInteger)index;
-- (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId;
 - (void)setIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey;
 - (SettingsViewController *)initSettingsViewController;
 - (UINavigationController *)initFavoritesController;
 - (UINavigationController *)initFollowingController;
-- (void)recievedFollowingIdsResponse:(NSArray *)response;
-- (void)updateFollowingControllerWithArray:(NSMutableArray *)idsArray;
 - (UINavigationController *)initSearchController;
 - (NSMutableArray *)initViewControllers;
 
@@ -43,7 +32,7 @@ typedef enum
 
 @implementation PresenceAppDelegate
 
-@synthesize window, dataAccessHelper, openRequests, engine, tabBarController;
+@synthesize window, dataAccessHelper, tabBarController;
 
 #pragma mark -
 #pragma mark UIApplicationDelegate
@@ -65,12 +54,6 @@ typedef enum
 	{
 		NSLog(@"Error creating database");
 	}
-
-	self.engine = [self getEngineForDelegate:self];
-	if([self.engine isAuthorized])
-	{
-		[self authSucceededForEngine];
-	}
 }
 
 #pragma mark -
@@ -87,22 +70,6 @@ typedef enum
 	viewController.tabBarItem.image = image;
 	[image release];
 	viewController.title = NSLocalizedString(titleKey, @"");
-}
-
-/*
- * Cache the RequestType for a particular connectionId so that a decision can be made
- * later about how to handle the response.
- */
-- (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId
-{
-	if(!openRequests)
-	{
-		openRequests = [[NSMutableDictionary alloc] init];
-	}
-	if(connectionId)
-	{
-		[openRequests setObject:requestType forKey:connectionId];
-	}
 }
 
 - (void)completeLaunchingWithViewControllerIndex:(NSUInteger)index
@@ -202,35 +169,8 @@ typedef enum
 	[followingListViewController release];
 
 	NSString *username = [CredentialHelper retrieveUsername];
-	NSString *connectionId = [self.engine getFollowedIdsForUsername:username];
-	[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionId];
 
 	return followingNavigationController;
-}
-
-/*
- * Parse the ids out of the response and call to update the
- * followingNavigationController
- */
-- (void)recievedFollowingIdsResponse:(NSArray *)response
-{
-	NSMutableArray *idsArray = [NSMutableArray array];
-	for(NSNumber *anId in response)
-	{
-		[idsArray addObject:[NSString stringWithFormat:@"%d", [anId intValue]]];
-	}
-	[self updateFollowingControllerWithArray:idsArray];
-}
-
-/*
- * Initialize a ListViewController with the ids and set it. This will cause the ListViewController
- * to refresh it's content
- */
-- (void)updateFollowingControllerWithArray:(NSMutableArray *)idsArray
-{
-	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];
-	ListViewController *listViewController = (ListViewController *)followingController.topViewController;
-	listViewController.userIdArray = idsArray;
 }
 
 /* initialize the search navigation controller */
@@ -245,159 +185,11 @@ typedef enum
 }
 
 #pragma mark -
-#pragma mark SA_OAuthTwitterControllerDelegate
-
-- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username
-{
-	/* save the username */
-	[CredentialHelper saveUsername:username];
-
-	/* log the username for debug purposes */
-	NSLog(@"Authenicated for %@", username);
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	/* tabBarController.selectedIndex = 0; */
-	[self completeLaunchingWithViewControllerIndex:0];
-}
-
-- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
-{
-	tabBarController.selectedIndex = 0;
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(AuthFailedTitleKey, @"")
-	                                                message:NSLocalizedString(AuthFailedMessageKey, @"")
-	                                               delegate:self
-	                                      cancelButtonTitle:NSLocalizedString(DismissKey, @"")
-	                                      otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-}
-
-- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
-{
-	if(tabBarController.modalViewController)
-	{
-		[tabBarController dismissModalViewControllerAnimated:YES];
-	}
-}
-
-- (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate
-{
-	/* initialize the twitter engine and present the modal view controller
-	 * to enter credentials if the engine is not authorized
-	 */
-	SA_OAuthTwitterEngine *anEngine = [[[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate:engineDelegate] autorelease];
-	anEngine.consumerKey = kOAuthConsumerKey;
-	anEngine.consumerSecret = kOAuthConsumerSecret;
-
-	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:anEngine delegate:self];
-	if(controller)
-	{
-		if([engineDelegate respondsToSelector:@selector(presentModalViewController:animated:)])
-		{
-			[engineDelegate presentModalViewController:controller animated:NO];
-		}
-		else
-		{
-			[tabBarController presentModalViewController:controller animated:NO];
-		}
-	}
-	return anEngine;
-}
-
-/* deauthrorize all engines in the NSArray of delegates
- * as well as any engines in child view controllers
- */
-- (void)deauthorizeEngines:(NSArray *)delegates
-{
-	for(id potentialDelegate in delegates)
-	{
-		if([potentialDelegate respondsToSelector:@selector(deauthorizeEngine)])
-		{
-			[potentialDelegate deauthorizeEngine];
-		}
-		if([potentialDelegate respondsToSelector:@selector(viewControllers)])
-		{
-			id viewControllers = [potentialDelegate viewControllers];
-			if([viewControllers isKindOfClass:[NSArray class]])
-			{
-				[self deauthorizeEngines:viewControllers];
-			}
-		}
-	}
-}
-
-/* deauthorize all engines */
-- (void)deauthorizeEngines
-{
-	[self deauthorizeEngine];
-	NSArray *viewControllers = tabBarController.viewControllers;
-	[self deauthorizeEngines:viewControllers];
-}
-
-#pragma mark -
-#pragma mark SA_OAuthTwitterEngineDelegate
-- (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username
-{
-	[CredentialHelper saveAuthData:data];
-	[CredentialHelper saveUsername:username];
-}
-
-- (NSString *)cachedTwitterOAuthDataForUsername:(NSString *)username
-{
-	NSString *authData = [CredentialHelper retrieveAuthData];
-	return authData;
-}
-
-- (void)authSucceededForEngine
-{
-	[self completeLaunchingWithViewControllerIndex:1];
-}
-
-- (void)deauthorizeEngine
-{
-	[self.engine clearAccessToken];
-}
-
-#pragma mark -
-#pragma mark EngineDelegate
-
-/* These delegate methods are called after a connection has been established */
-- (void)requestSucceeded:(NSString *)connectionIdentifier
-{
-	NSLog(@"Request succeeded %@, response pending.\n", connectionIdentifier);
-}
-
-- (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
-{
-	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
-}
-
-- (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
-{
-	NSNumber *requestType = [openRequests objectForKey:connectionIdentifier];
-	switch([requestType intValue])
-	{
-	case RateLimitRequest:
-		break;
-	case FollowedIdsRequest:
-		[self recievedFollowingIdsResponse:miscInfo];
-		break;
-	default:
-		break;
-	}
-	[openRequests removeObjectForKey:connectionIdentifier];
-}
-
-#pragma mark -
 #pragma mark NSObject
 - (void)dealloc
 {
 	[window release];
 	[dataAccessHelper release];
-	[openRequests release];
-	[engine release];
 	[tabBarController release];
 	[super dealloc];
 }

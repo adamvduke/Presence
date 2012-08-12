@@ -28,7 +28,7 @@
 
 @implementation ListViewController
 
-@synthesize engine, composeBarButton, userIdArray, users;
+@synthesize composeBarButton, userIdArray, users;
 @synthesize imageDownloadsInProgress, finishedThreads, dataAccessHelper;
 
 #pragma mark -
@@ -68,7 +68,6 @@
 
 - (void)dealloc
 {
-	[engine release];
 	[composeBarButton release];
 	[userIdArray release];
 	[users release];
@@ -95,15 +94,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	if(![self.engine isAuthorized])
-	{
-		PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
-		self.engine = [appDelegate getEngineForDelegate:self];
-	}
-	if([self.engine isAuthorized])
-	{
-		[self authSucceededForEngine];
-	}
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -124,6 +114,7 @@
 	[allDownloads makeObjectsPerformSelector:@selector(cancelDownload)];
 
 	NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
+
 	/* for each user, determine if the user is visible
 	 * if not, set the user's statusUpdate and image properties to nil
 	 */
@@ -185,8 +176,7 @@
 		[user release];
 		user = nil;
 
-		/* get the user's information from Twitter */
-		[self.engine getUserInformationFor:user_id];
+		/* TODO: get the user's information from Twitter */
 	}
 	else
 	{
@@ -281,6 +271,7 @@
 
 	int peopleCount = [self.users count];
 	int idCount = [self.userIdArray count];
+
 	/* if this is the first row and there are no people to display yet
 	 * but there should be, display a cell that indicates data is loading
 	 */
@@ -295,6 +286,7 @@
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 	}
+
 	/* Leave cells empty if there's no data yet */
 	if(peopleCount > 0 && indexPath.row < peopleCount)
 	{
@@ -302,6 +294,7 @@
 		User *user = [self.users objectAtIndex:indexPath.row];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.textLabel.text = user.screen_name;
+
 		/* Only load cached images; defer new downloads until scrolling ends */
 		if(!user.image)
 		{
@@ -450,7 +443,7 @@
 
 - (void)deauthorizeEngine
 {
-	[self.engine clearAccessToken];
+	/* TODO: clear the access token */
 }
 
 #pragma mark -
@@ -476,6 +469,7 @@
 - (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
 {
 	User *user = [[User alloc] initWithInfo:userInfo];
+
 	/* this user is not yet in the database */
 	if([user isValid])
 	{

@@ -8,8 +8,6 @@
 
 #import "ComposeStatusViewController.h"
 #import "IconDownloader.h"
-#import "SA_OAuthTwitterController.h"
-#import "SA_OAuthTwitterEngine.h"
 #import <UIKit/UIKit.h>
 
 @class DataAccessHelper;
@@ -18,14 +16,12 @@
 @interface ListViewController : UITableViewController <ComposeStatusViewControllerDelegate,
 	                                               UIScrollViewDelegate,
 	                                               IconDownloaderDelegate,
-	                                               UITextViewDelegate,
-	                                               SA_OAuthTwitterEngineDelegate>
+	                                               UITextViewDelegate>
 {
 	DataAccessHelper *dataAccessHelper;
 	NSMutableArray *userIdArray;
 
 	@protected
-	SA_OAuthTwitterEngine *engine;
 	UIBarButtonItem *composeBarButton;
 	NSMutableArray *users;
 	NSMutableDictionary *imageDownloadsInProgress;
@@ -34,7 +30,6 @@
 
 @property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
 @property (nonatomic, retain) UIBarButtonItem *composeBarButton;
-@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
 @property (nonatomic, retain) NSMutableArray *userIdArray;
 @property (nonatomic, retain) NSMutableArray *users;
 @property (nonatomic, retain) NSMutableDictionary *imageDownloadsInProgress;
