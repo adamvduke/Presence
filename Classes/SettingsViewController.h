@@ -11,17 +11,9 @@
 @class DataAccessHelper;
 
 @interface SettingsViewController : UIViewController
-{
-    /* navigation item */
-    IBOutlet UINavigationItem *aNavigationItem;
-    IBOutlet UIButton *deauthorizeButton;
 
-    /* Data access helper */
-    DataAccessHelper *dataAccessHelper;
-}
-
-@property (nonatomic, strong) UINavigationItem *aNavigationItem;
-@property (nonatomic, strong) UIButton *deauthorizeButton;
+@property (nonatomic, strong) IBOutlet UINavigationItem *aNavigationItem;
+@property (nonatomic, strong) IBOutlet UIButton *deauthorizeButton;
 @property (nonatomic, strong) DataAccessHelper *dataAccessHelper;
 
 /* Provide an implementation to remove the user's saved authorization credentials */
