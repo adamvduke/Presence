@@ -12,6 +12,7 @@
 #import "DataAccessHelper.h"
 #import "FavoritesHelper.h"
 #import "FavoritesListViewController.h"
+#import "FollowingListViewController.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
 #import "SettingsViewController.h"
@@ -64,7 +65,7 @@
         return;
     }
     self.engineBlock = [self engineForAuthData:authData];
-    [self completeLaunchingWithViewControllerIndex:1];
+    [self completeLaunchingWithViewControllerIndex:0];
 }
 
 #pragma mark -
@@ -109,10 +110,10 @@
 
     /* add the view controllers to an Array */
     NSMutableArray *aViewControllerArray = [[NSMutableArray alloc] init];
-    [aViewControllerArray addObject:settingsViewController];
     [aViewControllerArray addObject:favoritesNavigationController];
     [aViewControllerArray addObject:followingNavigationController];
     [aViewControllerArray addObject:searchNavigationController];
+    [aViewControllerArray addObject:settingsViewController];
 
     return aViewControllerArray;
 }
@@ -159,10 +160,22 @@
     [self setIconAndTitleForViewController:followingNavigationController iconName:@"PeopleIcon" titleKey:ListViewControllerTitleKey];
     followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 
-    UITableViewController *followingListViewController = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+    FollowingListViewController *followingListViewController = [[FollowingListViewController alloc] initWithUserIdArray:nil];
+    followingListViewController.engineBlock = self.engineBlock;
+    followingListViewController.dataAccessHelper = self.dataAccessHelper;
     followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
-
     [followingNavigationController pushViewController:followingListViewController animated:NO];
+    [self.engineBlock getFriendIdsWithHandler:^(NSDictionary *result, NSError *error)
+     {
+         NSArray *numericIds = [result objectForKey:@"ids"];
+         NSMutableArray *stringIds = [NSMutableArray arrayWithCapacity:[numericIds count]];
+         [numericIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+          {
+              NSString *anId = [obj description];
+              [stringIds addObject:anId];
+          }];
+         followingListViewController.userIdArray = stringIds;
+     }];
     return followingNavigationController;
 }
 
@@ -186,13 +199,13 @@
 {
     [CredentialHelper saveAuthData:authData];
     self.engineBlock = [self engineForAuthData:authData];
-    [self completeLaunchingWithViewControllerIndex:1];
+    [self completeLaunchingWithViewControllerIndex:0];
     [self.tabBarController dismissModalViewControllerAnimated:YES];
 }
 
 - (void)authCancelled
 {
-    [self completeLaunchingWithViewControllerIndex:1];
+    [self completeLaunchingWithViewControllerIndex:0];
     [self.tabBarController dismissModalViewControllerAnimated:YES];
 }
 
