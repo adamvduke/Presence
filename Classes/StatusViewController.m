@@ -129,12 +129,6 @@
     return self;
 }
 
-/* override viewWillAppear to load the data if it hasn't been already */
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -241,32 +235,6 @@
     CGSize withinSize = CGSizeMake( 350, 150);
     CGSize size = [someText sizeWithFont:font constrainedToSize:withinSize lineBreakMode:UILineBreakModeWordWrap];
     return size.height + 35;
-}
-
-- (void)authSucceededForEngine
-{
-    [self beginLoadUpdates:NO];
-}
-
-- (void)deauthorizeEngine
-{
-    /* TODO: clear the access token */
-}
-
-/* These delegate methods are called after all results are parsed from the connection. If
- * the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
- * collection of all results is also returned.
- */
-- (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
-{
-    /* parse the individual statuses out of the timeline */
-    NSArray *statusArray = [self statusUpdatesFromTimeline:statuses];
-
-    /* set the statusUpdates array on the user object so that they don't need to be fetched
-     * again */
-    self.user.statusUpdates = statusArray;
-
-    [self didFinishLoadingUpdates];
 }
 
 @end
