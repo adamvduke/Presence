@@ -29,6 +29,34 @@
 
 @synthesize engineBlock, spinner, user, dataAccessHelper;
 
+/* initialize with a UITableViewStyle and user object */
+- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper engine:(ADEngineBlock *)engine
+{
+    if(self = [super initWithStyle:UITableViewStyleGrouped])
+    {
+        /* this is the text displayed at the top */
+        self.title = NSLocalizedString(StatusViewTitleKey, @"");
+
+        /* set the user reference on the view */
+        self.user = aUser;
+
+        self.dataAccessHelper = accessHelper;
+        self.engineBlock = engine;
+
+        /* initialize the UIActivityIndicatorView for this view controller */
+        self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.spinner setCenter:self.view.center];
+        [self.view addSubview:spinner];
+
+        /* set the right bar button for reloading the data with the Refresh style */
+        UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                                        target:self
+                                                                                        action:@selector(refresh)];
+        [self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
+    }
+    return self;
+}
+
 /* override shouldAutorotateToInterfaceOrientation to return YES for all interface orientations */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -99,34 +127,6 @@
 - (void)refresh
 {
     [self beginLoadUpdates:YES];
-}
-
-/* initialize with a UITableViewStyle and user object */
-- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper engine:(ADEngineBlock *)engine
-{
-    if(self = [super initWithStyle:UITableViewStyleGrouped])
-    {
-        /* this is the text displayed at the top */
-        self.title = NSLocalizedString(StatusViewTitleKey, @"");
-
-        /* set the user reference on the view */
-        self.user = aUser;
-
-        self.dataAccessHelper = accessHelper;
-        self.engineBlock = engine;
-
-        /* initialize the UIActivityIndicatorView for this view controller */
-        self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self.spinner setCenter:self.view.center];
-        [self.view addSubview:spinner];
-
-        /* set the right bar button for reloading the data with the Refresh style */
-        UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                                                                        target:self
-                                                                                        action:@selector(refresh)];
-        [self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
-    }
-    return self;
 }
 
 - (void)viewDidAppear:(BOOL)animated
