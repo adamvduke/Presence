@@ -7,17 +7,16 @@
  */
 
 #import "ComposeStatusViewController.h"
+#import "FollowingListViewController.h"
 #import "IconDownloader.h"
 #import <UIKit/UIKit.h>
 
 @class ADEngineBlock;
 @class DataAccessHelper;
 
-@interface FavoritesListViewController : UITableViewController <ComposeStatusViewControllerDelegate, UIScrollViewDelegate, IconDownloaderDelegate, UITextViewDelegate>
+@interface FavoritesListViewController : FollowingListViewController
 
 @property (nonatomic, strong) ADEngineBlock *engineBlock;
 @property (nonatomic, strong) DataAccessHelper *dataAccessHelper;
-
-- (id)initWithUserIdArray:(NSMutableArray *)userIds;
 
 @end

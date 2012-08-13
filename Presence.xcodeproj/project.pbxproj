@@ -40,6 +40,7 @@
 		56C8E7C511D023A600B21D38 /* ComposeStatusViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56C8E7C211D023A600B21D38 /* ComposeStatusViewController.xib */; };
 		56C8E7C611D023A600B21D38 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56C8E7C311D023A600B21D38 /* MainWindow.xib */; };
 		56C8E7C711D023A600B21D38 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56C8E7C411D023A600B21D38 /* SettingsViewController.xib */; };
+		56F4E1A815D9985D003EE07C /* FollowingListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F4E1A715D9985D003EE07C /* FollowingListViewController.m */; };
 		87445423F0D3454898C38F46 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A765651F11B431DA512F4A1 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +93,8 @@
 		56C8E7C211D023A600B21D38 /* ComposeStatusViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ComposeStatusViewController.xib; path = Resources/Nibs/ComposeStatusViewController.xib; sourceTree = "<group>"; };
 		56C8E7C311D023A600B21D38 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = Resources/Nibs/MainWindow.xib; sourceTree = "<group>"; };
 		56C8E7C411D023A600B21D38 /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = Resources/Nibs/SettingsViewController.xib; sourceTree = "<group>"; };
+		56F4E1A615D9985D003EE07C /* FollowingListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowingListViewController.h; sourceTree = "<group>"; };
+		56F4E1A715D9985D003EE07C /* FollowingListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FollowingListViewController.m; sourceTree = "<group>"; };
 		88CF4C580CE64A90BFE93786 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Presence-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Presence-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9A765651F11B431DA512F4A1 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -190,6 +193,8 @@
 				5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */,
 				560315A610ABA79A005F649A /* FavoritesListViewController.h */,
 				560315A710ABA79A005F649A /* FavoritesListViewController.m */,
+				56F4E1A615D9985D003EE07C /* FollowingListViewController.h */,
+				56F4E1A715D9985D003EE07C /* FollowingListViewController.m */,
 				566ADEE611B8BFBF00931CFD /* SettingsViewController.h */,
 				566ADEE711B8BFBF00931CFD /* SettingsViewController.m */,
 				56B897BB10B34DB400C7C5FF /* StatusViewController.h */,
@@ -392,6 +397,7 @@
 				56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */,
 				563C7C51120624BE002A9F1E /* DataAccessHelper.m in Sources */,
 				563C7C54120625E3002A9F1E /* Status.m in Sources */,
+				56F4E1A815D9985D003EE07C /* FollowingListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
