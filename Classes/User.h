@@ -10,32 +10,32 @@
 
 @interface User : NSObject
 {
-	/* Twitter API user/id */
-	NSString *user_id;
+    /* Twitter API user/id */
+    NSString *user_id;
 
-	/* Twitter API user/screen_name */
-	NSString *screen_name;
+    /* Twitter API user/screen_name */
+    NSString *screen_name;
 
-	/* Twitter API user/name */
-	NSString *display_name;
+    /* Twitter API user/name */
+    NSString *display_name;
 
-	/* Twitter API user/location */
-	NSString *display_location;
+    /* Twitter API user/location */
+    NSString *display_location;
 
-	/* Twitter API user/description */
-	NSString *display_description;
+    /* Twitter API user/description */
+    NSString *display_description;
 
-	/* Twitter API user/url */
-	NSString *display_url;
+    /* Twitter API user/url */
+    NSString *display_url;
 
-	/* Twitter API user/profile_image_url */
-	NSString *profile_image_url;
+    /* Twitter API user/profile_image_url */
+    NSString *profile_image_url;
 
-	/* List of the user's status updates */
-	NSArray *statusUpdates;
+    /* List of the user's status updates */
+    NSArray *statusUpdates;
 
-	/* Instance of the image created from profile_image_url */
-	UIImage *image;
+    /* Instance of the image created from profile_image_url */
+    UIImage *image;
 }
 
 @property (nonatomic, strong) NSString *user_id;

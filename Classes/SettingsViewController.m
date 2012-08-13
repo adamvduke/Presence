@@ -18,34 +18,33 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	/* return YES for all interface orientations */
-	return YES;
+    /* return YES for all interface orientations */
+    return YES;
 }
 
 - (IBAction)deauthorize
 {
-	PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
-	appDelegate.engineBlock = nil;
+    PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.engineBlock = nil;
 }
 
 - (IBAction)deleteData
 {
-	[self.dataAccessHelper deleteAllData];
+    [self.dataAccessHelper deleteAllData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	[super viewWillAppear:animated];
+    [super viewWillAppear:animated];
 
-	/* set the views title */
-	self.aNavigationItem.title = NSLocalizedString(SettingsViewTitleKey, @"");
+    /* set the views title */
+    self.aNavigationItem.title = NSLocalizedString(SettingsViewTitleKey, @"");
 }
 
 - (void)didReceiveMemoryWarning
 {
-	/* Releases the view if it doesn't have a superview. */
-	[super didReceiveMemoryWarning];
+    /* Releases the view if it doesn't have a superview. */
+    [super didReceiveMemoryWarning];
 }
-
 
 @end

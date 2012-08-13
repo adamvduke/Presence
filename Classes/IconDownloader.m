@@ -27,25 +27,25 @@
 
 - (void)dealloc
 {
-	[imageConnection cancel];
+    [imageConnection cancel];
 }
 
 - (void)startDownload
 {
-	self.activeDownload = [NSMutableData data];
+    self.activeDownload = [NSMutableData data];
 
-	/* alloc+init and start an NSURLConnection; release on completion/failure */
-	NSURL *url = [NSURL URLWithString:self.user.profile_image_url];
-	NSURLRequest *request = [NSURLRequest requestWithURL:url];
-	NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	self.imageConnection = conn;
+    /* alloc+init and start an NSURLConnection; release on completion/failure */
+    NSURL *url = [NSURL URLWithString:self.user.profile_image_url];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    self.imageConnection = conn;
 }
 
 - (void)cancelDownload
 {
-	[self.imageConnection cancel];
-	self.imageConnection = nil;
-	self.activeDownload = nil;
+    [self.imageConnection cancel];
+    self.imageConnection = nil;
+    self.activeDownload = nil;
 }
 
 #pragma mark -
@@ -53,43 +53,43 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-	[self.activeDownload appendData:data];
+    [self.activeDownload appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-	/* Clear the activeDownload property to allow later attempts */
-	self.activeDownload = nil;
+    /* Clear the activeDownload property to allow later attempts */
+    self.activeDownload = nil;
 
-	/* Release the connection now that it's finished */
-	self.imageConnection = nil;
+    /* Release the connection now that it's finished */
+    self.imageConnection = nil;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	/* Set appIcon and clear temporary data/image */
-	UIImage *image = [[UIImage alloc] initWithData:self.activeDownload];
-	if(image.size.width != kAppIconHeight && image.size.height != kAppIconHeight)
-	{
-		CGSize itemSize = CGSizeMake(kAppIconHeight, kAppIconHeight);
-		UIGraphicsBeginImageContext(itemSize);
-		CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-		[image drawInRect:imageRect];
-		self.user.image = UIGraphicsGetImageFromCurrentImageContext();
-		UIGraphicsEndImageContext();
-	}
-	else
-	{
-		self.user.image = image;
-	}
+    /* Set appIcon and clear temporary data/image */
+    UIImage *image = [[UIImage alloc] initWithData:self.activeDownload];
+    if(image.size.width != kAppIconHeight && image.size.height != kAppIconHeight)
+    {
+        CGSize itemSize = CGSizeMake(kAppIconHeight, kAppIconHeight);
+        UIGraphicsBeginImageContext(itemSize);
+        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+        [image drawInRect:imageRect];
+        self.user.image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    else
+    {
+        self.user.image = image;
+    }
 
-	self.activeDownload = nil;
+    self.activeDownload = nil;
 
-	/* Release the connection now that it's finished */
-	self.imageConnection = nil;
+    /* Release the connection now that it's finished */
+    self.imageConnection = nil;
 
-	/* call our delegate and tell it that our icon is ready for display */
-	[delegate imageDidLoad:self.indexPathInTableView];
+    /* call our delegate and tell it that our icon is ready for display */
+    [delegate imageDidLoad:self.indexPathInTableView];
 }
 
 @end

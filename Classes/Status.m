@@ -15,16 +15,15 @@
 @synthesize createdDate;
 @synthesize user;
 
-
 - (Status *)initWithTimelineEntry:(NSDictionary *)timelineEntry
 {
-	if(self = [super init])
-	{
-		self.text = [timelineEntry valueForKey:@"text"];
-		self.createdDate = [timelineEntry valueForKey:@"created_at"];
-		self.user = [[User alloc] initWithInfo:[timelineEntry valueForKey:@"user"]];
-	}
-	return self;
+    if(self = [super init])
+    {
+        self.text = [timelineEntry valueForKey:@"text"];
+        self.createdDate = [timelineEntry valueForKey:@"created_at"];
+        self.user = [[User alloc] initWithInfo:[timelineEntry valueForKey:@"user"]];
+    }
+    return self;
 }
 
 @end

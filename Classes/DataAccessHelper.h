@@ -12,9 +12,9 @@
 @class Status;
 
 @interface DataAccessHelper : NSObject {
-	@private
-	NSString *databaseName;
-	NSString *documentsDatabasePath;
+    @private
+    NSString *databaseName;
+    NSString *documentsDatabasePath;
 }
 
 /* copy the default database to the file system */

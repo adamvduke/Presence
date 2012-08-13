@@ -17,12 +17,12 @@
 
 @interface IconDownloader : NSObject
 {
-	User *user;
-	NSIndexPath *indexPathInTableView;
-	id <IconDownloaderDelegate> __unsafe_unretained delegate;
+    User *user;
+    NSIndexPath *indexPathInTableView;
+    id <IconDownloaderDelegate> __unsafe_unretained delegate;
 
-	NSMutableData *activeDownload;
-	NSURLConnection *imageConnection;
+    NSMutableData *activeDownload;
+    NSURLConnection *imageConnection;
 }
 
 @property (nonatomic, strong) User *user;

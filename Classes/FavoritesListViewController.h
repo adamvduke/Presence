@@ -14,9 +14,9 @@
 @class DataAccessHelper;
 
 @interface FavoritesListViewController : UITableViewController <ComposeStatusViewControllerDelegate,
-	                                               UIScrollViewDelegate,
-	                                               IconDownloaderDelegate,
-	                                               UITextViewDelegate>
+                                                                UIScrollViewDelegate,
+                                                                IconDownloaderDelegate,
+                                                                UITextViewDelegate>
 
 @property (nonatomic, strong) ADEngineBlock *engineBlock;
 @property (nonatomic, strong) DataAccessHelper *dataAccessHelper;

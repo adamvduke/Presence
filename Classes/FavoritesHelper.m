@@ -15,13 +15,13 @@
  */
 + (NSString *)favoritesPath
 {
-	/* get the path for the Documents directory */
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsPath = [paths objectAtIndex:0];
+    /* get the path for the Documents directory */
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0];
 
-	/* append the path component for the Favorites.plist */
-	NSString *favoritesPath = [documentsPath stringByAppendingPathComponent:@"Favorites.plist"];
-	return favoritesPath;
+    /* append the path component for the Favorites.plist */
+    NSString *favoritesPath = [documentsPath stringByAppendingPathComponent:@"Favorites.plist"];
+    return favoritesPath;
 }
 
 /* Copies the Favorites.plist file to the Documents directory
@@ -29,25 +29,25 @@
  */
 + (void)moveFavoritesToDocumentsDir
 {
-	/* get the path to save the favorites */
-	NSString *favoritesPath = [self favoritesPath];
+    /* get the path to save the favorites */
+    NSString *favoritesPath = [self favoritesPath];
 
-	/* check to see if there is already a file saved at the favoritesPath
-	 * if not, copy the default FavoriteUsers.plist to the favoritesPath
-	 */
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if(![fileManager fileExistsAtPath:favoritesPath])
-	{
-		NSString *path = [[NSBundle mainBundle] pathForResource:@"FavoriteUsers" ofType:@"plist"];
-		NSArray *favoriteUsersArray = [NSArray arrayWithContentsOfFile:path];
-		[favoriteUsersArray writeToFile:favoritesPath atomically:YES];
-	}
+    /* check to see if there is already a file saved at the favoritesPath
+     * if not, copy the default FavoriteUsers.plist to the favoritesPath
+     */
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:favoritesPath])
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"FavoriteUsers" ofType:@"plist"];
+        NSArray *favoriteUsersArray = [NSArray arrayWithContentsOfFile:path];
+        [favoriteUsersArray writeToFile:favoritesPath atomically:YES];
+    }
 }
 
 /* Saves the values from the favorites array to Favorites.plist */
 + (BOOL)saveFavorites:(NSArray *)favorites
 {
-	return [favorites writeToFile:[self favoritesPath] atomically:YES];
+    return [favorites writeToFile:[self favoritesPath] atomically:YES];
 }
 
 /* Returns an NSMutableArray of strings where each string
@@ -55,9 +55,9 @@
  */
 + (NSMutableArray *)retrieveFavorites
 {
-	NSString *path = [self favoritesPath];
-	NSMutableArray *favoriteUsersArray = [NSMutableArray arrayWithContentsOfFile:path];
-	return favoriteUsersArray;
+    NSString *path = [self favoritesPath];
+    NSMutableArray *favoriteUsersArray = [NSMutableArray arrayWithContentsOfFile:path];
+    return favoriteUsersArray;
 }
 
 @end

@@ -12,9 +12,9 @@
 
 @interface Status : NSObject
 {
-	NSString *text;
-	NSString *createdDate;
-	User *user;
+    NSString *text;
+    NSString *createdDate;
+    User *user;
 }
 
 @property (nonatomic, strong) NSString *text;

@@ -12,12 +12,12 @@
 
 @interface SettingsViewController : UIViewController
 {
-	/* navigation item */
-	IBOutlet UINavigationItem *aNavigationItem;
-	IBOutlet UIButton *deauthorizeButton;
+    /* navigation item */
+    IBOutlet UINavigationItem *aNavigationItem;
+    IBOutlet UIButton *deauthorizeButton;
 
-	/* Data access helper */
-	DataAccessHelper *dataAccessHelper;
+    /* Data access helper */
+    DataAccessHelper *dataAccessHelper;
 }
 
 @property (nonatomic, strong) UINavigationItem *aNavigationItem;
