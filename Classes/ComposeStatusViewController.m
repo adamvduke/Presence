@@ -213,19 +213,6 @@
     self.textView = nil;
 }
 
-- (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
-{
-    /* stop the device's network activity indicator */
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(UpdateFailedTitleKey, @"")
-                                                    message:NSLocalizedString(UpdateFailedMessageKey, @"")
-                                                   delegate:nil
-                                          cancelButtonTitle:NSLocalizedString(DismissKey, @"")
-                                          otherButtonTitles:nil];
-    [alert show];
-}
-
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
