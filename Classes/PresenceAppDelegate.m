@@ -196,7 +196,4 @@
     [self.tabBarController dismissModalViewControllerAnimated:YES];
 }
 
-#pragma mark -
-#pragma mark NSObject
-
 @end
