@@ -12,9 +12,9 @@
 @class Status;
 
 @interface DataAccessHelper : NSObject {
-	@private
-	NSString *databaseName;
-	NSString *documentsDatabasePath;
+    @private
+    NSString *databaseName;
+    NSString *documentsDatabasePath;
 }
 
 /* copy the default database to the file system */
@@ -27,10 +27,10 @@
  * construct a user object from the results by their
  * numeric userId
  */
-- (User *)initUserByUserId:(NSString *)user_id;
+- (User *)userByUserId:(NSString *)user_id;
 
 /* retrieve a user's image from the database */
-- (UIImage *)initImageForUserId:(NSString *)user_id;
+- (UIImage *)imageForUserId:(NSString *)user_id;
 
 /* Delete all information in the database */
 - (void)deleteAllData;

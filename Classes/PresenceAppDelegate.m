@@ -6,71 +6,66 @@
  *
  */
 
+#import "ADEngineBlock.h"
 #import "ADSharedMacros.h"
 #import "CredentialHelper.h"
 #import "DataAccessHelper.h"
-#import "EditableListViewController.h"
 #import "FavoritesHelper.h"
-#import "ListViewController.h"
+#import "FavoritesListViewController.h"
+#import "FollowingListViewController.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
 #import "SettingsViewController.h"
 
-typedef enum
-{
-	RateLimitRequest,
-	FollowedIdsRequest
-} RequestType;
-
 @interface PresenceAppDelegate ()
 
-@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
-@property (nonatomic, retain) NSMutableDictionary *openRequests;
-@property (nonatomic, retain) SA_OAuthTwitterEngine *engine;
+@property (nonatomic, strong) DataAccessHelper *dataAccessHelper;
 
 - (void)completeLaunchingWithViewControllerIndex:(NSUInteger)index;
-- (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId;
 - (void)setIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey;
-- (SettingsViewController *)initSettingsViewController;
-- (UINavigationController *)initFavoritesController;
-- (UINavigationController *)initFollowingController;
-- (void)recievedFollowingIdsResponse:(NSArray *)response;
-- (void)updateFollowingControllerWithArray:(NSMutableArray *)idsArray;
-- (UINavigationController *)initSearchController;
-- (NSMutableArray *)initViewControllers;
+- (id)settingsViewController;
+- (id)favoritesController;
+- (id)followingController;
+- (id)searchController;
+- (id)viewControllers;
+- (ADEngineBlock *)engineForAuthData:(NSString *)authData;
 
 @end
 
 @implementation PresenceAppDelegate
 
-@synthesize window, dataAccessHelper, openRequests, engine, tabBarController;
+@synthesize window, tabBarController, dataAccessHelper, engineBlock;
 
 #pragma mark -
 #pragma mark UIApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
-	/* initialize the tab bar */
-	tabBarController = [[UITabBarController alloc] init];
+    /* initialize the tab bar */
+    tabBarController = [[UITabBarController alloc] init];
 
-	/* add the tabBarController's view to the window */
-	[window addSubview:tabBarController.view];
-	[window makeKeyAndVisible];
+    /* add the tabBarController's view to the window */
+    [window addSubview:tabBarController.view];
+    [window makeKeyAndVisible];
 
-	/* copy the favorites plist to the documents directory */
-	[FavoritesHelper moveFavoritesToDocumentsDir];
+    /* copy the favorites plist to the documents directory */
+    [FavoritesHelper moveFavoritesToDocumentsDir];
 
-	dataAccessHelper = [[DataAccessHelper alloc] init];
-	if(![dataAccessHelper createAndValidateDatabase])
-	{
-		NSLog(@"Error creating database");
-	}
+    dataAccessHelper = [[DataAccessHelper alloc] init];
+    if(![dataAccessHelper createAndValidateDatabase])
+    {
+        NSLog(@"Error creating database");
+    }
 
-	self.engine = [self getEngineForDelegate:self];
-	if([self.engine isAuthorized])
-	{
-		[self authSucceededForEngine];
-	}
+    NSString *authData = [CredentialHelper retrieveAuthData];
+    if( IsEmpty(authData) )
+    {
+        ADTwitterOOBViewController *controller = [[ADTwitterOOBViewController alloc] initWithConsumerKey:kOAuthConsumerKey consumerSecret:kOAuthConsumerSecret delegate:self];
+        [self.tabBarController presentModalViewController:controller animated:YES];
+        return;
+    }
+    self.engineBlock = [self engineForAuthData:authData];
+    [self completeLaunchingWithViewControllerIndex:0];
 }
 
 #pragma mark -
@@ -81,325 +76,137 @@ typedef enum
  */
 - (void)setIconAndTitleForViewController:(UIViewController *)viewController iconName:(NSString *)iconName titleKey:(NSString *)titleKey
 {
-	/* icon image loading */
-	NSString *iconPath = [[NSBundle mainBundle] pathForResource:iconName ofType:@"png"];
-	UIImage *image = [[UIImage alloc] initWithContentsOfFile:iconPath];
-	viewController.tabBarItem.image = image;
-	[image release];
-	viewController.title = NSLocalizedString(titleKey, @"");
-}
-
-/*
- * Cache the RequestType for a particular connectionId so that a decision can be made
- * later about how to handle the response.
- */
-- (void)cacheRequestType:(NSNumber *)requestType forConnectionId:(NSString *)connectionId
-{
-	if(!openRequests)
-	{
-		openRequests = [[NSMutableDictionary alloc] init];
-	}
-	if(connectionId)
-	{
-		[openRequests setObject:requestType forKey:connectionId];
-	}
+    /* icon image loading */
+    NSString *iconPath = [[NSBundle mainBundle] pathForResource:iconName ofType:@"png"];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:iconPath];
+    viewController.tabBarItem.image = image;
+    viewController.title = NSLocalizedString(titleKey, @"");
 }
 
 - (void)completeLaunchingWithViewControllerIndex:(NSUInteger)index
 {
-	/* initialize the viewControllerArray */
-	NSMutableArray *aViewControllerArray = [self initViewControllers];
-
-	/* set the viewControllerArray on the tabBarController
-	 * and the selected index
-	 */
-	tabBarController.viewControllers = aViewControllerArray;
-	[aViewControllerArray release];
-
-	tabBarController.selectedIndex = index;
+    /* set the viewControllerArray on the tabBarController
+     * and the selected index
+     */
+    tabBarController.viewControllers = [self viewControllers];
+    tabBarController.selectedIndex = index;
 }
 
 #pragma mark -
 #pragma mark View Controller initialization
-- (NSMutableArray *)initViewControllers
+- (NSMutableArray *)viewControllers
 {
-	/* create the view controller for the settings tab */
-	SettingsViewController *settingsViewController = [self initSettingsViewController];
+    /* create the view controller for the settings tab */
+    SettingsViewController *settingsViewController = [self settingsViewController];
 
-	/* create the view controller for the favorites tab */
-	UINavigationController *favoritesNavigationController = [self initFavoritesController];
+    /* create the view controller for the favorites tab */
+    UINavigationController *favoritesNavigationController = [self favoritesController];
 
-	/* create view controller for the following tab */
-	UINavigationController *followingNavigationController = [self initFollowingController];
+    /* create view controller for the following tab */
+    UINavigationController *followingNavigationController = [self followingController];
 
-	/* create the view controller for the search tab */
-	UINavigationController *searchNavigationController = [self initSearchController];
+    /* create the view controller for the search tab */
+    UINavigationController *searchNavigationController = [self searchController];
 
-	/* add the view controllers to an Array */
-	NSMutableArray *aViewControllerArray = [[NSMutableArray alloc] init];
-	[aViewControllerArray addObject:settingsViewController];
-	[aViewControllerArray addObject:favoritesNavigationController];
-	[aViewControllerArray addObject:followingNavigationController];
-	[aViewControllerArray addObject:searchNavigationController];
+    /* add the view controllers to an Array */
+    NSMutableArray *aViewControllerArray = [[NSMutableArray alloc] init];
+    [aViewControllerArray addObject:favoritesNavigationController];
+    [aViewControllerArray addObject:followingNavigationController];
+    [aViewControllerArray addObject:searchNavigationController];
+    [aViewControllerArray addObject:settingsViewController];
 
-	/* release the view controllers, memory is managed by the NSMutableArray */
-	[settingsViewController release];
-	[favoritesNavigationController release];
-	[followingNavigationController release];
-	[searchNavigationController release];
-
-	return aViewControllerArray;
+    return aViewControllerArray;
 }
 
 /* initialize the settings view controller from the SettingsViewController.xib */
-- (SettingsViewController *)initSettingsViewController
+- (SettingsViewController *)settingsViewController
 {
-	NSBundle *mainBundle = [NSBundle mainBundle];
-	SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:SettingsViewControllerNibName bundle:mainBundle];
-	[self setIconAndTitleForViewController:settingsViewController iconName:@"SettingsIcon" titleKey:SettingsViewTitleKey];
-	settingsViewController.dataAccessHelper = self.dataAccessHelper;
-	return settingsViewController;
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:SettingsViewControllerNibName bundle:mainBundle];
+    [self setIconAndTitleForViewController:settingsViewController iconName:@"SettingsIcon" titleKey:SettingsViewTitleKey];
+    settingsViewController.dataAccessHelper = self.dataAccessHelper;
+    return settingsViewController;
 }
 
 /* initialize the favorites navigation controller */
-- (UINavigationController *)initFavoritesController
+- (UINavigationController *)favoritesController
 {
-	/* create a navigation controller and set it's title and tabBar icon */
-	UINavigationController *favoritesNavigationController = [[UINavigationController alloc] init];
-	[self setIconAndTitleForViewController:favoritesNavigationController iconName:@"FavoritesIcon" titleKey:FavoritesViewControllerTitleKey];
-	favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+    /* create a navigation controller and set it's title and tabBar icon */
+    UINavigationController *favoritesNavigationController = [[UINavigationController alloc] init];
+    [self setIconAndTitleForViewController:favoritesNavigationController iconName:@"FavoritesIcon" titleKey:FavoritesViewControllerTitleKey];
+    favoritesNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 
-	/* get the list of favorites */
-	NSMutableArray *favoriteUsersArray = [FavoritesHelper retrieveFavorites];
+    /* get the list of favorites */
+    NSMutableArray *favoriteUsersArray = [FavoritesHelper retrieveFavorites];
 
-	/* initialize a ListViewController with the favoriteUsersArray */
-	ListViewController *favoritesListViewController = [[EditableListViewController alloc] initWithUserIdArray:favoriteUsersArray];
-	favoritesListViewController.dataAccessHelper = self.dataAccessHelper;
-	favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
+    /* initialize a ListViewController with the favoriteUsersArray */
+    FavoritesListViewController *favoritesListViewController = [[FavoritesListViewController alloc] initWithUserIdArray:favoriteUsersArray];
+    favoritesListViewController.dataAccessHelper = self.dataAccessHelper;
+    favoritesListViewController.engineBlock = self.engineBlock;
+    favoritesListViewController.title = NSLocalizedString(FavoritesViewControllerTitleKey, @"");
 
-	/* push the followingListViewController onto the following navigation stack and release it
-	**/
-	[favoritesNavigationController pushViewController:favoritesListViewController animated:NO];
-	[favoritesListViewController release];
+    /* push the followingListViewController onto the following navigation stack and release it
+    **/
+    [favoritesNavigationController pushViewController:favoritesListViewController animated:NO];
 
-	return favoritesNavigationController;
+    return favoritesNavigationController;
 }
 
 /* initialize the following navigation controller */
-- (UINavigationController *)initFollowingController
+- (UINavigationController *)followingController
 {
-	/* create a navigation controller and set it's title and tabBar icon */
-	UINavigationController *followingNavigationController = [[UINavigationController alloc] init];
-	[self setIconAndTitleForViewController:followingNavigationController iconName:@"PeopleIcon" titleKey:ListViewControllerTitleKey];
-	followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+    /* create a navigation controller and set it's title and tabBar icon */
+    UINavigationController *followingNavigationController = [[UINavigationController alloc] init];
+    [self setIconAndTitleForViewController:followingNavigationController iconName:@"PeopleIcon" titleKey:ListViewControllerTitleKey];
+    followingNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 
-	NSMutableArray *followingUsersArray = nil;
-	ListViewController *followingListViewController = [[ListViewController alloc] initWithUserIdArray:followingUsersArray];
-	followingListViewController.dataAccessHelper = self.dataAccessHelper;
-	followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
-
-	[followingNavigationController pushViewController:followingListViewController animated:NO];
-	[followingListViewController release];
-
-	NSString *username = [CredentialHelper retrieveUsername];
-	NSString *connectionId = [self.engine getFollowedIdsForUsername:username];
-	[self cacheRequestType:[NSNumber numberWithInt:FollowedIdsRequest] forConnectionId:connectionId];
-
-	return followingNavigationController;
-}
-
-/*
- * Parse the ids out of the response and call to update the
- * followingNavigationController
- */
-- (void)recievedFollowingIdsResponse:(NSArray *)response
-{
-	NSMutableArray *idsArray = [NSMutableArray array];
-	for(NSNumber *anId in response)
-	{
-		[idsArray addObject:[NSString stringWithFormat:@"%d", [anId intValue]]];
-	}
-	[self updateFollowingControllerWithArray:idsArray];
-}
-
-/*
- * Initialize a ListViewController with the ids and set it. This will cause the ListViewController
- * to refresh it's content
- */
-- (void)updateFollowingControllerWithArray:(NSMutableArray *)idsArray
-{
-	UINavigationController *followingController = [tabBarController.viewControllers objectAtIndex:2];
-	ListViewController *listViewController = (ListViewController *)followingController.topViewController;
-	listViewController.userIdArray = idsArray;
+    FollowingListViewController *followingListViewController = [[FollowingListViewController alloc] initWithUserIdArray:nil];
+    followingListViewController.engineBlock = self.engineBlock;
+    followingListViewController.dataAccessHelper = self.dataAccessHelper;
+    followingListViewController.title = NSLocalizedString(ListViewControllerTitleKey, @"");
+    [followingNavigationController pushViewController:followingListViewController animated:NO];
+    [self.engineBlock getFriendIdsWithHandler:^(NSDictionary *result, NSError *error)
+     {
+         NSArray *numericIds = [result objectForKey:@"ids"];
+         NSMutableArray *stringIds = [NSMutableArray arrayWithCapacity:[numericIds count]];
+         [numericIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+          {
+              NSString *anId = [obj description];
+              [stringIds addObject:anId];
+          }];
+         followingListViewController.userIdArray = stringIds;
+     }];
+    return followingNavigationController;
 }
 
 /* initialize the search navigation controller */
-- (UINavigationController *)initSearchController
+- (UINavigationController *)searchController
 {
-	UINavigationController *searchNavigationController = [[UINavigationController alloc] init];
-	[self setIconAndTitleForViewController:searchNavigationController iconName:@"SearchIcon" titleKey:SearchViewControllerTitleKey];
+    UINavigationController *searchNavigationController = [[UINavigationController alloc] init];
+    [self setIconAndTitleForViewController:searchNavigationController iconName:@"SearchIcon" titleKey:SearchViewControllerTitleKey];
 
-	/* TODO: push a UIViewController with the ability to search the twitter api */
-	searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-	return searchNavigationController;
+    /* TODO: push a UIViewController with the ability to search the twitter api */
+    searchNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+    return searchNavigationController;
 }
 
-#pragma mark -
-#pragma mark SA_OAuthTwitterControllerDelegate
-
-- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username
+- (ADEngineBlock *)engineForAuthData:(NSString *)authData
 {
-	/* save the username */
-	[CredentialHelper saveUsername:username];
-
-	/* log the username for debug purposes */
-	NSLog(@"Authenicated for %@", username);
+    return [[ADEngineBlock alloc] initWithAuthData:authData consumerKey:kOAuthConsumerKey consumerSecret:kOAuthConsumerSecret];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)authCompletedWithData:(NSString *)authData orError:(NSError *)error
 {
-	/* tabBarController.selectedIndex = 0; */
-	[self completeLaunchingWithViewControllerIndex:0];
+    [CredentialHelper saveAuthData:authData];
+    self.engineBlock = [self engineForAuthData:authData];
+    [self completeLaunchingWithViewControllerIndex:0];
+    [self.tabBarController dismissModalViewControllerAnimated:YES];
 }
 
-- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller
+- (void)authCancelled
 {
-	tabBarController.selectedIndex = 0;
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(AuthFailedTitleKey, @"")
-	                                                message:NSLocalizedString(AuthFailedMessageKey, @"")
-	                                               delegate:self
-	                                      cancelButtonTitle:NSLocalizedString(DismissKey, @"")
-	                                      otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-}
-
-- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller
-{
-	if(tabBarController.modalViewController)
-	{
-		[tabBarController dismissModalViewControllerAnimated:YES];
-	}
-}
-
-- (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate
-{
-	/* initialize the twitter engine and present the modal view controller
-	 * to enter credentials if the engine is not authorized
-	 */
-	SA_OAuthTwitterEngine *anEngine = [[[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate:engineDelegate] autorelease];
-	anEngine.consumerKey = kOAuthConsumerKey;
-	anEngine.consumerSecret = kOAuthConsumerSecret;
-
-	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:anEngine delegate:self];
-	if(controller)
-	{
-		if([engineDelegate respondsToSelector:@selector(presentModalViewController:animated:)])
-		{
-			[engineDelegate presentModalViewController:controller animated:NO];
-		}
-		else
-		{
-			[tabBarController presentModalViewController:controller animated:NO];
-		}
-	}
-	return anEngine;
-}
-
-/* deauthrorize all engines in the NSArray of delegates
- * as well as any engines in child view controllers
- */
-- (void)deauthorizeEngines:(NSArray *)delegates
-{
-	for(id potentialDelegate in delegates)
-	{
-		if([potentialDelegate respondsToSelector:@selector(deauthorizeEngine)])
-		{
-			[potentialDelegate deauthorizeEngine];
-		}
-		if([potentialDelegate respondsToSelector:@selector(viewControllers)])
-		{
-			id viewControllers = [potentialDelegate viewControllers];
-			if([viewControllers isKindOfClass:[NSArray class]])
-			{
-				[self deauthorizeEngines:viewControllers];
-			}
-		}
-	}
-}
-
-/* deauthorize all engines */
-- (void)deauthorizeEngines
-{
-	[self deauthorizeEngine];
-	NSArray *viewControllers = tabBarController.viewControllers;
-	[self deauthorizeEngines:viewControllers];
-}
-
-#pragma mark -
-#pragma mark SA_OAuthTwitterEngineDelegate
-- (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username
-{
-	[CredentialHelper saveAuthData:data];
-	[CredentialHelper saveUsername:username];
-}
-
-- (NSString *)cachedTwitterOAuthDataForUsername:(NSString *)username
-{
-	NSString *authData = [CredentialHelper retrieveAuthData];
-	return authData;
-}
-
-- (void)authSucceededForEngine
-{
-	[self completeLaunchingWithViewControllerIndex:1];
-}
-
-- (void)deauthorizeEngine
-{
-	[self.engine clearAccessToken];
-}
-
-#pragma mark -
-#pragma mark EngineDelegate
-
-/* These delegate methods are called after a connection has been established */
-- (void)requestSucceeded:(NSString *)connectionIdentifier
-{
-	NSLog(@"Request succeeded %@, response pending.\n", connectionIdentifier);
-}
-
-- (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
-{
-	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
-}
-
-- (void)miscInfoReceived:(NSArray *)miscInfo forRequest:(NSString *)connectionIdentifier
-{
-	NSNumber *requestType = [openRequests objectForKey:connectionIdentifier];
-	switch([requestType intValue])
-	{
-	case RateLimitRequest:
-		break;
-	case FollowedIdsRequest:
-		[self recievedFollowingIdsResponse:miscInfo];
-		break;
-	default:
-		break;
-	}
-	[openRequests removeObjectForKey:connectionIdentifier];
-}
-
-#pragma mark -
-#pragma mark NSObject
-- (void)dealloc
-{
-	[window release];
-	[dataAccessHelper release];
-	[openRequests release];
-	[engine release];
-	[tabBarController release];
-	[super dealloc];
+    [self completeLaunchingWithViewControllerIndex:0];
+    [self.tabBarController dismissModalViewControllerAnimated:YES];
 }
 
 @end

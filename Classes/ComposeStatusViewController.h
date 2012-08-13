@@ -6,36 +6,20 @@
  *
  */
 
-#import "SA_OAuthTwitterEngine.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
+@class ADEngineBlock;
+
 @protocol ComposeStatusViewControllerDelegate;
 
-@interface ComposeStatusViewController : UIViewController <UITextViewDelegate, SA_OAuthTwitterEngineDelegate>
-{
-	/* IBOutlet for the navigationItem */
-	IBOutlet UINavigationItem *aNavigationItem;
+@interface ComposeStatusViewController : UIViewController <UITextViewDelegate>
 
-	/* IBOutlet for the label that displays the word representing Characters */
-	IBOutlet UILabel *charactersLabel;
-
-	/* IBOutlet for the UITextView */
-	IBOutlet UITextView *textView;
-
-	/* the delegate */
-	id<ComposeStatusViewControllerDelegate> delegate;
-
-	@private
-	SA_OAuthTwitterEngine *engine;
-	UIActivityIndicatorView *spinner;
-	BOOL isEditable;
-}
-
-@property (nonatomic, retain) UINavigationItem *aNavigationItem;
-@property (nonatomic, retain) UILabel *charactersLabel;
-@property (nonatomic, retain) UITextView *textView;
-@property (nonatomic, retain) id<ComposeStatusViewControllerDelegate> delegate;
+@property (nonatomic, strong) ADEngineBlock *engineBlock;
+@property (nonatomic, strong) IBOutlet UINavigationItem *aNavigationItem;
+@property (nonatomic, strong) IBOutlet UILabel *charactersLabel;
+@property (nonatomic, strong) IBOutlet UITextView *textView;
+@property (nonatomic, unsafe_unretained) id<ComposeStatusViewControllerDelegate> delegate;
 
 /* action to call to dismiss this view controller when displayed modally */
 - (IBAction)dismiss;

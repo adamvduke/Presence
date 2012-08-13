@@ -15,23 +15,15 @@
 @synthesize createdDate;
 @synthesize user;
 
-- (void)dealloc
-{
-	[super dealloc];
-	[text release];
-	[createdDate release];
-	[user release];
-}
-
 - (Status *)initWithTimelineEntry:(NSDictionary *)timelineEntry
 {
-	if(self = [super init])
-	{
-		self.text = [timelineEntry valueForKey:@"text"];
-		self.createdDate = [timelineEntry valueForKey:@"created_at"];
-		self.user = [[[User alloc] initWithInfo:[timelineEntry valueForKey:@"user"]] autorelease];
-	}
-	return self;
+    if(self = [super init])
+    {
+        self.text = [timelineEntry valueForKey:@"text"];
+        self.createdDate = [timelineEntry valueForKey:@"created_at"];
+        self.user = [[User alloc] initWithInfo:[timelineEntry valueForKey:@"user"]];
+    }
+    return self;
 }
 
 @end

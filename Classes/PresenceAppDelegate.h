@@ -6,26 +6,15 @@
  *
  */
 
-#import "SA_OAuthTwitterController.h"
-#import "SA_OAuthTwitterEngine.h"
+#import "ADTwitterOOBViewController.h"
 #import <UIKit/UIKit.h>
 
-@class DataAccessHelper;
+@class ADEngineBlock;
 
-@interface PresenceAppDelegate : NSObject <UIApplicationDelegate, SA_OAuthTwitterControllerDelegate, SA_OAuthTwitterEngineDelegate>
-{
-	UIWindow *window;
-	IBOutlet UITabBarController *tabBarController;
+@interface PresenceAppDelegate : NSObject <UIApplicationDelegate, ADOAuthOOBViewControllerDelegate>
 
-	@private
-	NSMutableDictionary *openRequests;
-	SA_OAuthTwitterEngine *engine;
-	DataAccessHelper *dataAccessHelper;
-}
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet UITabBarController *tabBarController;
+@property (nonatomic, strong) ADEngineBlock *engineBlock;
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
-
-- (SA_OAuthTwitterEngine *)getEngineForDelegate:(id)engineDelegate;
-- (void)deauthorizeEngines;
 @end

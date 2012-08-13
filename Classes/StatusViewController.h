@@ -6,22 +6,17 @@
  *
  */
 
-#import "SA_OAuthTwitterEngine.h"
 #import <UIKit/UIKit.h>
 
+@class ADEngineBlock;
 @class DataAccessHelper;
 @class User;
 
-@interface StatusViewController : UITableViewController <SA_OAuthTwitterEngineDelegate>
-{
-	@private
-	UIActivityIndicatorView *spinner;
-	SA_OAuthTwitterEngine *engine;
-	User *user;
-	DataAccessHelper *dataAccessHelper;
-}
+@interface StatusViewController : UITableViewController
+
+@property (nonatomic, strong) ADEngineBlock *engineBlock;
 
 /* initialize an instance with a UITableViewStyle and User object */
-- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper;
+- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper engine:(ADEngineBlock *)engine;
 
 @end
