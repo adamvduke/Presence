@@ -183,6 +183,10 @@
 
 - (void)startDataLoad
 {
+    if ([self.users count] > 0)
+    {
+        return;
+    }
     [self.users removeAllObjects];
     if( !IsEmpty(self.userIdArray) )
     {
