@@ -6,6 +6,7 @@
  *
  */
 
+#import "ADEngineBlock.h"
 #import "ComposeStatusViewController.h"
 #import "CredentialHelper.h"
 #import "PresenceAppDelegate.h"
@@ -13,7 +14,7 @@
 
 @interface ComposeStatusViewController ()
 
-@property (nonatomic, retain) UIActivityIndicatorView *spinner;
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property BOOL isEditable;
 
 - (void)keyboardWillShow:(NSNotification *)note;
@@ -25,7 +26,7 @@
 
 @implementation ComposeStatusViewController
 
-@synthesize spinner, aNavigationItem, charactersLabel, textView, isEditable, delegate;
+@synthesize engineBlock, spinner, aNavigationItem, charactersLabel, textView, isEditable, delegate;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -55,8 +56,15 @@
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	self.isEditable = NO;
-
-	/* TODO: send the update[self.engine sendUpdate:textView.text]; */
+    [self.engineBlock sendUpdate:self.textView.text withHandler:^(NSDictionary *result, NSError *error)
+    {
+        /* stop the device's network activity indicator */
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
+        /* if the update was a success, set the text to nil and dismiss the view */
+        self.textView.text = nil;
+        [self dismiss];
+    }];
 }
 
 /* UITextViewDelegate method */
@@ -101,15 +109,10 @@
  */
 - (void)setTweetButtonStatus
 {
-	/* TODO: set the button status */
-
-/* BOOL authorized = [self.engine isAuthorized];
- * BOOL hasText = [self textViewHasText];
- * BOOL enabled = (authorized && hasText);
- * UINavigationItem *navBar = self.aNavigationItem;
- * UIBarButtonItem *rightBarButton = navBar.rightBarButtonItem;
- * rightBarButton.enabled = enabled;
- */
+    BOOL enabled = [self textViewHasText];
+    UINavigationItem *navBar = self.aNavigationItem;
+    UIBarButtonItem *rightBarButton = navBar.rightBarButtonItem;
+    rightBarButton.enabled = enabled;
 }
 
 /* executes any logic that should happen when the text
@@ -148,20 +151,8 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-	/* TODO: something */
-
-/* if(![self.engine isAuthorized])
- * {
- *      [self setTweetButtonStatus];
- *      PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication
- * sharedApplication].delegate;
- *      self.engine = [appDelegate getEngineForDelegate:self];
- * }
- * if([self.engine isAuthorized])
- * {
- *      [self authSucceededForEngine];
- * }
- */
+    [super viewDidAppear:animated];
+    [self setTweetButtonStatus];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -215,42 +206,11 @@
 	[self.textView addSubview:spinner];
 }
 
-- (void)didReceiveMemoryWarning
-{
-	/* Releases the view if it doesn't have a superview. */
-	[super didReceiveMemoryWarning];
-
-	/* Release any cached data, images, etc that aren't in use. */
-}
-
 - (void)viewDidUnload
 {
 	self.aNavigationItem = nil;
 	self.charactersLabel = nil;
 	self.textView = nil;
-}
-
-#pragma mark -
-#pragma mark SA_OAuthTwitterEngineDelegate
-
-- (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username
-{
-	[CredentialHelper saveAuthData:data];
-	[CredentialHelper saveUsername:username];
-}
-
-- (NSString *)cachedTwitterOAuthDataForUsername:(NSString *)username
-{
-	return [CredentialHelper retrieveAuthData];
-}
-
-#pragma mark -
-#pragma mark EngineDelegate
-
-/* These delegate methods are called after a connection has been established */
-- (void)requestSucceeded:(NSString *)connectionIdentifier
-{
-	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
 }
 
 - (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
@@ -264,44 +224,11 @@
 	                                      cancelButtonTitle:NSLocalizedString(DismissKey, @"")
 	                                      otherButtonTitles:nil];
 	[alert show];
-	[alert release];
-}
-
-- (void)authSucceededForEngine
-{
-	[self setTweetButtonStatus];
-}
-
-- (void)deauthorizeEngine
-{
-	/* TODO: clear the token */
-
-	/* [self.engine clearAccessToken]; */
-}
-
-/* These delegate methods are called after all results are parsed from the connection. If
- * the deliveryOption is configured for MGTwitterEngineDeliveryAllResults (the default), a
- * collection of all results is also returned.
- */
-- (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
-{
-	/* stop the device's network activity indicator */
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
-	/* if the update was a success, set the text to nil and dismiss the view */
-	self.textView.text = nil;
-	[self dismiss];
 }
 
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[spinner release];
-	[aNavigationItem release];
-	[charactersLabel release];
-	[textView release];
-	[delegate release];
-	[super dealloc];
 }
 
 @end

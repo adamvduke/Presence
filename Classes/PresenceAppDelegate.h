@@ -6,20 +6,15 @@
  *
  */
 
+#import "ADTwitterOOBViewController.h"
 #import <UIKit/UIKit.h>
 
-@class DataAccessHelper;
+@class ADEngineBlock;
 
-@interface PresenceAppDelegate : NSObject <UIApplicationDelegate>
-{
-	UIWindow *window;
-	IBOutlet UITabBarController *tabBarController;
+@interface PresenceAppDelegate : NSObject <UIApplicationDelegate, ADOAuthOOBViewControllerDelegate>
 
-	@private
-	DataAccessHelper *dataAccessHelper;
-}
-
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet UITabBarController *tabBarController;
+@property (nonatomic, strong) ADEngineBlock *engineBlock;
 
 @end

@@ -6,7 +6,9 @@
  *
  */
 
+#import "ADEngineBlock.h"
 #import "CredentialHelper.h"
+#import "DataAccessHelper.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
 #import "Status.h"
@@ -15,17 +17,17 @@
 
 @interface StatusViewController ()
 
-@property (nonatomic, retain) UIActivityIndicatorView *spinner;
-@property (nonatomic, retain) User *user;
-@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
+@property (nonatomic, strong) User *user;
+@property (nonatomic, strong) DataAccessHelper *dataAccessHelper;
 
-- (NSArray *)initStatusUpdatesFromTimeline:(NSArray *)userTimeline;
+- (NSArray *)statusUpdatesFromTimeline:(NSArray *)userTimeline;
 
 @end
 
 @implementation StatusViewController
 
-@synthesize spinner, user, dataAccessHelper;
+@synthesize engineBlock, spinner, user, dataAccessHelper;
 
 /* override shouldAutorotateToInterfaceOrientation to return YES for all interface orientations */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -50,7 +52,7 @@
 	[self.tableView flashScrollIndicators];
 }
 
-- (NSArray *)initStatusUpdatesFromTimeline:(NSArray *)userTimeline
+- (NSArray *)statusUpdatesFromTimeline:(NSArray *)userTimeline
 {
 	NSMutableArray *statusUpdates = [[NSMutableArray alloc] init];
 	for(NSDictionary *timelineEntry in userTimeline)
@@ -59,7 +61,6 @@
 		{
 			Status *status = [[Status alloc] initWithTimelineEntry:timelineEntry];
 			[statusUpdates addObject:status];
-			[status release];
 		}
 	}
 	return statusUpdates;
@@ -81,6 +82,18 @@
 	[self.spinner startAnimating];
 
 	/* TODO: get the user's timeline */
+    /* parse the individual statuses out of the timeline */
+    
+    [self.engineBlock userTimelineForScreenname:self.user.screen_name userId:0 sinceId:0 maxId:0 count:0 page:0 trimUser:YES includeRts:YES includeEntities:NO withHandler:^(NSArray *result, NSError *error)
+    {
+        NSArray *statusArray = [self statusUpdatesFromTimeline:result];
+        
+        /* set the statusUpdates array on the user object so that they don't need to be fetched
+         * again */
+        self.user.statusUpdates = statusArray;
+        
+        [self didFinishLoadingUpdates];
+    }];
 }
 
 - (void)refresh
@@ -89,7 +102,7 @@
 }
 
 /* initialize with a UITableViewStyle and user object */
-- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper
+- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper engine:(ADEngineBlock *)engine
 {
 	if(self = [super initWithStyle:UITableViewStyleGrouped])
 	{
@@ -100,9 +113,10 @@
 		self.user = aUser;
 
 		self.dataAccessHelper = accessHelper;
+        self.engineBlock = engine;
 
 		/* initialize the UIActivityIndicatorView for this view controller */
-		self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
+		self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 		[self.spinner setCenter:self.view.center];
 		[self.view addSubview:spinner];
 
@@ -111,7 +125,6 @@
 		                                                                                target:self
 		                                                                                action:@selector(refresh)];
 		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
-		[rightBarButton release];
 	}
 	return self;
 }
@@ -125,21 +138,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-}
-
-- (void)didReceiveMemoryWarning
-{
-	/* Releases the view if it doesn't have a superview. */
-	[super didReceiveMemoryWarning];
-
-	/* Release any cached data, images, etc that aren't in use. */
-}
-
-- (void)viewDidUnload
-{
-	/* Release any retained subviews of the main view.
-	 * e.g. self.myOutlet = nil;
-	 */
+    [self beginLoadUpdates:NO];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -181,7 +180,7 @@
 		cell = [tableView dequeueReusableCellWithIdentifier:TitleCellReuseIdentifier];
 		if(cell == nil)
 		{
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:TitleCellReuseIdentifier] autorelease];
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TitleCellReuseIdentifier];
 		}
 
 		/* set only the text and image properties on the cell */
@@ -205,7 +204,7 @@
 		cell = [tableView dequeueReusableCellWithIdentifier:StatusCellReuseIdentifier];
 		if(cell == nil)
 		{
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:StatusCellReuseIdentifier] autorelease];
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:StatusCellReuseIdentifier];
 		}
 
 		/* set the numberOfLines, font, and text properties on the cell's text label */
@@ -244,34 +243,6 @@
 	return size.height + 35;
 }
 
-#pragma mark -
-#pragma mark SA_OAuthTwitterEngineDelegate
-- (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username
-{
-	[CredentialHelper saveAuthData:data];
-	[CredentialHelper saveUsername:username];
-}
-
-- (NSString *)cachedTwitterOAuthDataForUsername:(NSString *)username
-{
-	return [CredentialHelper retrieveAuthData];
-}
-
-#pragma mark -
-#pragma mark EngineDelegate
-
-/* These delegate methods are called after a connection has been established */
-- (void)requestSucceeded:(NSString *)connectionIdentifier
-{
-	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
-}
-
-- (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
-{
-	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
-	[self didFinishLoadingUpdates];
-}
-
 - (void)authSucceededForEngine
 {
 	[self beginLoadUpdates:NO];
@@ -289,7 +260,7 @@
 - (void)statusesReceived:(NSArray *)statuses forRequest:(NSString *)connectionIdentifier
 {
 	/* parse the individual statuses out of the timeline */
-	NSArray *statusArray = [self initStatusUpdatesFromTimeline:statuses];
+	NSArray *statusArray = [self statusUpdatesFromTimeline:statuses];
 
 	/* set the statusUpdates array on the user object so that they don't need to be fetched
 	 * again */
@@ -298,12 +269,5 @@
 	[self didFinishLoadingUpdates];
 }
 
-- (void)dealloc
-{
-	[dataAccessHelper release];
-	[user release];
-	[spinner release];
-	[super dealloc];
-}
 
 @end

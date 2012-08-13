@@ -41,18 +41,5 @@
 	return [NSString stringWithFormat:@"UserID : %@, ScreenName : %@", user_id, screen_name];
 }
 
-- (void)dealloc
-{
-	[user_id release];
-	[screen_name release];
-	[display_name release];
-	[display_location release];
-	[display_description release];
-	[display_url release];
-	[profile_image_url release];
-	[statusUpdates release];
-	[image release];
-	[super dealloc];
-}
 
 @end

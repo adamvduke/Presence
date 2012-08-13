@@ -20,9 +20,9 @@
 	DataAccessHelper *dataAccessHelper;
 }
 
-@property (nonatomic, retain) UINavigationItem *aNavigationItem;
-@property (nonatomic, retain) UIButton *deauthorizeButton;
-@property (nonatomic, retain) DataAccessHelper *dataAccessHelper;
+@property (nonatomic, strong) UINavigationItem *aNavigationItem;
+@property (nonatomic, strong) UIButton *deauthorizeButton;
+@property (nonatomic, strong) DataAccessHelper *dataAccessHelper;
 
 /* Provide an implementation to remove the user's saved authorization credentials */
 - (IBAction)deauthorize;

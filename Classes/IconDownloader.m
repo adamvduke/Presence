@@ -27,12 +27,7 @@
 
 - (void)dealloc
 {
-	[user release];
-	[indexPathInTableView release];
-	[activeDownload release];
 	[imageConnection cancel];
-	[imageConnection release];
-	[super dealloc];
 }
 
 - (void)startDownload
@@ -44,7 +39,6 @@
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	self.imageConnection = conn;
-	[conn release];
 }
 
 - (void)cancelDownload
@@ -90,7 +84,6 @@
 	}
 
 	self.activeDownload = nil;
-	[image release];
 
 	/* Release the connection now that it's finished */
 	self.imageConnection = nil;

@@ -25,7 +25,7 @@
 - (IBAction)deauthorize
 {
 	PresenceAppDelegate *appDelegate = (PresenceAppDelegate *)[UIApplication sharedApplication].delegate;
-	[appDelegate deauthorizeEngines];
+	appDelegate.engineBlock = nil;
 }
 
 - (IBAction)deleteData
@@ -47,12 +47,5 @@
 	[super didReceiveMemoryWarning];
 }
 
-- (void)dealloc
-{
-	[aNavigationItem release];
-	[deauthorizeButton release];
-	[dataAccessHelper release];
-	[super dealloc];
-}
 
 @end

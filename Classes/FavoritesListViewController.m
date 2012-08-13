@@ -6,11 +6,13 @@
  *
  */
 
+#import "ADEngineBlock.h"
 #import "ADSharedMacros.h"
 #import "CredentialHelper.h"
 #import "DataAccessHelper.h"
 #import "FavoritesHelper.h"
-#import "ListViewController.h"
+#import "FavoritesListViewController.h"
+#import "NINetworkActivity.h"
 #import "PresenceAppDelegate.h"
 #import "PresenceConstants.h"
 #import "StatusViewController.h"
@@ -19,17 +21,36 @@
 #define kCustomRowHeight 48  /* height of each row */
 #define kThreadBatchCount 5 /* number of rows to create before re-drawing the table view */
 
-@interface ListViewController ()
+@interface FavoritesListViewController ()
+
+@property (nonatomic, strong) UIBarButtonItem *addBarButton;
+@property (nonatomic, strong) NSMutableArray *pendingFavorites;
+@property (nonatomic, strong) UIBarButtonItem *composeBarButton;
+@property (nonatomic, strong) NSMutableArray *userIdArray;
+@property (nonatomic, strong) NSMutableArray *users;
+@property (nonatomic, strong) NSMutableDictionary *imageDownloadsInProgress;
+@property int finishedThreads;
 
 - (void)startIconDownload:(User *)aUser forIndexPath:(NSIndexPath *)indexPath;
-- (void)synchronousLoadTwitterData;
+- (void)startDataLoad;
+- (void)startUserLoad:(NSString *)user_id;
+- (void)infoRecievedForUser:(User *)user;
+- (void)didFinishLoadingUser;
 
+/* IconDownloader delegate protocol */
+- (void)imageDidLoad:(NSIndexPath *)indexPath;
 @end
 
-@implementation ListViewController
+@implementation FavoritesListViewController
 
-@synthesize composeBarButton, userIdArray, users;
-@synthesize imageDownloadsInProgress, finishedThreads, dataAccessHelper;
+@synthesize composeBarButton;
+@synthesize userIdArray;
+@synthesize users;
+@synthesize imageDownloadsInProgress;
+@synthesize finishedThreads;
+@synthesize dataAccessHelper;
+@synthesize addBarButton;
+@synthesize pendingFavorites;
 
 #pragma mark -
 #pragma mark custom init method
@@ -40,40 +61,50 @@
 	{
 		/* set the list of users to load */
 		self.userIdArray = userIds;
-
-		/* allocate the memory for the NSMutableArray of people on this ViewController */
-		self.users = [[NSMutableArray alloc] init];
-
-		/* create a UIBarButtonItem for the right side using the Compose style, this will
-		 * present the ComposeStatusViewController modally */
-		UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-		                                                                                target:self
-		                                                                                action:@selector(presentUpdateStatusController)];
-		[self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
-		[rightBarButton release];
 	}
 	return self;
-}
-
-- (void)setUserIdArray:(NSMutableArray *)newIdArray
-{
-	[userIdArray autorelease];
-	userIdArray = [newIdArray retain];
-	[self.users removeAllObjects];
-	[self synchronousLoadTwitterData];
 }
 
 #pragma mark -
 #pragma mark dealloc
 
-- (void)dealloc
+
+- (void)presentAddToFavoritesAlert
 {
-	[composeBarButton release];
-	[userIdArray release];
-	[users release];
-	[imageDownloadsInProgress release];
-	[dataAccessHelper release];
-	[super dealloc];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(AddToFavoritesKey, @"")
+	                                                message:NSLocalizedString(EnterTwitterIDKey, @"")
+	                                               delegate:self
+	                                      cancelButtonTitle:NSLocalizedString(CancelKey, @"")
+	                                      otherButtonTitles:NSLocalizedString(OKKey, @""), nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+	[[alert  textFieldAtIndex:0] setPlaceholder:NSLocalizedString(TwitterIDKey, @"")];
+	[alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	UITextField *textField = [alertView textFieldAtIndex:0];
+	NSString *upperCaseUsername = [textField.text uppercaseString];
+	if(upperCaseUsername)
+	{
+		if(!pendingFavorites)
+		{
+			self.pendingFavorites = [[NSMutableArray alloc] init];
+		}
+		[pendingFavorites addObject:upperCaseUsername];
+		[self startUserLoad:upperCaseUsername];
+	}
+}
+
+- (void)updateFavoritesWithUser:(User *)user
+{
+	NSString *upperCaseUsername = [user.screen_name uppercaseString];
+	if([pendingFavorites containsObject:upperCaseUsername])
+	{
+		[userIdArray addObject:user.user_id];
+		[FavoritesHelper saveFavorites:userIdArray];
+		[pendingFavorites removeObject:upperCaseUsername];
+	}
 }
 
 #pragma mark -
@@ -87,18 +118,25 @@
 - (void)viewDidLoad
 {
 	self.imageDownloadsInProgress = [NSMutableDictionary dictionary];
-	self.navigationItem.rightBarButtonItem.enabled = YES;
-}
-
-/* override viewWillAppear to begin the data load */
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
+    
+    /* allocate the memory for the NSMutableArray of people on this ViewController */
+    self.users = [[NSMutableArray alloc] init];
+    
+    /* create a UIBarButtonItem for the right side using the Compose style, this will
+     * present the ComposeStatusViewController modally */
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                                    target:self
+                                                                                    action:@selector(presentUpdateStatusController)];
+    [self.navigationItem setRightBarButtonItem:rightBarButton animated:NO];
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
+    [self startDataLoad];
 }
 
 #pragma mark -
@@ -118,7 +156,7 @@
 	/* for each user, determine if the user is visible
 	 * if not, set the user's statusUpdate and image properties to nil
 	 */
-	for(int i = 0; i < [users count]; i++)
+	for(int i = 0; i < [self.users count]; i++)
 	{
 		BOOL visible = NO;
 		for(NSIndexPath *path in visiblePaths)
@@ -141,47 +179,55 @@
 	}
 }
 
-- (void)viewDidUnload
-{
-	/* Release any retained subviews of the main view.
-	 * e.g. self.myOutlet = nil;
-	 */
-}
-
 #pragma mark -
 #pragma mark Data loading
 
-/* synchronously get the usernames and call beginLoadUser for each username */
-- (void)synchronousLoadTwitterData
+- (void)startDataLoad
 {
+    [self.users removeAllObjects];
 	if( !IsEmpty(self.userIdArray) )
 	{
-		/* start the device's network activity indicator */
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 		for(NSString *user_id in self.userIdArray)
 		{
-			[self synchronousLoadUser:user_id];
+			[self startUserLoad:user_id];
 		}
 	}
 }
 
-/* synchronously fetch data, initialize a user object, and add it to the list of people
- * call the main thread when finished
- */
-- (void)synchronousLoadUser:(NSString *)user_id
+- (void)infoRecievedForUser:(User *)user
 {
-	User *user = [dataAccessHelper initUserByUserId:user_id];
+	[dataAccessHelper saveOrUpdateUser:user];
+	[self.users addObject:user];
+}
+
+- (void)startUserLoad:(NSString *)user_id
+{
+	User *user = [dataAccessHelper userByUserId:user_id];
 	if(![user isValid])
 	{
-		[user release];
 		user = nil;
 
-		/* TODO: get the user's information from Twitter */
+		/* TODO: the user_id might actually be a string... */
+        NSInteger integer = [user_id integerValue];
+        NSNumber *number = [NSNumber numberWithInteger:integer];
+        NINetworkActivityTaskDidStart();
+        [self.engineBlock showUser:[number unsignedLongLongValue] withHandler:^(NSDictionary *result, NSError *error)
+        {
+            NINetworkActivityTaskDidFinish();
+            User *user = [[User alloc] initWithInfo:result];
+
+            /* this user is not yet in the database */
+            if([user isValid])
+            {
+                [self infoRecievedForUser:user];
+                [self updateFavoritesWithUser:user];
+            }
+            [self didFinishLoadingUser];
+        }];
 	}
 	else
 	{
 		[self.users addObject:user];
-		[user release];
 		[self didFinishLoadingUser];
 	}
 }
@@ -206,9 +252,6 @@
 		[self.tableView reloadData];
 		if([self dataLoadComplete])
 		{
-			/* stop the network indicator */
-			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
 			/* flash the scroll indicators to show give the user an idea of how long the
 			 * list is */
 			[self.tableView flashScrollIndicators];
@@ -225,8 +268,8 @@
 	ComposeStatusViewController *statusViewController = [[ComposeStatusViewController alloc] initWithNibName:ComposeStatusViewControllerNibName
 	                                                                                                  bundle:[NSBundle mainBundle]];
 	statusViewController.delegate = self;
+    statusViewController.engineBlock = self.engineBlock;
 	[self.navigationController presentModalViewController:statusViewController animated:YES];
-	[statusViewController release];
 }
 
 /* ComposeStatusViewControllerDelegate protocol */
@@ -237,6 +280,68 @@
 
 #pragma mark -
 #pragma mark Table view methods
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+	[super setEditing:editing animated:animated];
+	[self.tableView setEditing:editing animated:YES];
+	if(editing)
+	{
+		if(!self.addBarButton)
+		{
+			UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+			                                                                           target:self
+			                                                                           action:@selector(presentAddToFavoritesAlert)];
+			self.addBarButton = addButton;
+		}
+        
+		/* hold onto the current right bar button (compose) so it can
+		 * be put back after editing
+		 */
+		self.composeBarButton = self.navigationItem.rightBarButtonItem;
+        
+		/* set the right bar button to the add bar button */
+		self.navigationItem.rightBarButtonItem = self.addBarButton;
+	}
+	else
+	{
+		/* set the right bar button to the compose bar button */
+		self.navigationItem.rightBarButtonItem = self.composeBarButton;
+	}
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return UITableViewCellEditingStyleDelete;
+}
+
+- (BOOL)tableview:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return YES;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+	NSUInteger sourceRow = sourceIndexPath.row;
+	NSUInteger destinationRow = destinationIndexPath.row;
+	User *user = [self.users objectAtIndex:sourceRow];
+	NSString *userId = [self.userIdArray objectAtIndex:sourceRow];
+	[self.users removeObjectAtIndex:sourceRow];
+	[self.userIdArray removeObjectAtIndex:sourceRow];
+	[self.users insertObject:user atIndex:destinationRow];
+	[self.userIdArray insertObject:userId atIndex:destinationRow];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	/* If row is deleted, remove it from the list. */
+	if(editingStyle == UITableViewCellEditingStyleDelete)
+	{
+		[self.users removeObjectAtIndex:indexPath.row];
+		[self.userIdArray removeObjectAtIndex:indexPath.row];
+		[FavoritesHelper saveFavorites:self.userIdArray];
+		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+	}
+}
 
 /* Customize the number of rows per section */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -256,7 +361,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PlaceHolderIdentifier];
 	if(cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PlaceHolderIdentifier] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PlaceHolderIdentifier];
 		cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
@@ -283,7 +388,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if(cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 	}
 
@@ -299,7 +404,7 @@
 		if(!user.image)
 		{
 			/* first check the database */
-			UIImage *anImage = [dataAccessHelper initImageForUserId:user.user_id];
+			UIImage *anImage = [dataAccessHelper imageForUserId:user.user_id];
 			if(!anImage)
 			{
 				if(self.tableView.dragging == NO && self.tableView.decelerating == NO)
@@ -318,7 +423,6 @@
 			else
 			{
 				user.image = anImage;
-				[anImage release];
 				cell.imageView.image = user.image;
 			}
 		}
@@ -339,11 +443,10 @@
 		/* get the correct user out of the people array and initialize the status view
 		 * controller for that user */
 		User *user = [users objectAtIndex:indexPath.row];
-		StatusViewController *statusViewController = [[StatusViewController alloc] initWithUser:user dataAccessHelper:dataAccessHelper];
+		StatusViewController *statusViewController = [[StatusViewController alloc] initWithUser:user dataAccessHelper:dataAccessHelper engine:self.engineBlock];
 
 		/* push the new view controller onto the navigation stack */
 		[self.navigationController pushViewController:statusViewController animated:YES];
-		[statusViewController release];
 	}
 }
 
@@ -364,7 +467,6 @@
 		iconDownloader.delegate = self;
 		[imageDownloadsInProgress setObject:iconDownloader forKey:indexPath];
 		[iconDownloader startDownload];
-		[iconDownloader release];
 	}
 }
 
@@ -418,65 +520,6 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
 	[self loadImagesForOnscreenRows];
-}
-
-#pragma mark -
-#pragma mark SA_OAuthTwitterEngineDelegate
-- (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username
-{
-	[CredentialHelper saveAuthData:data];
-	[CredentialHelper saveUsername:username];
-}
-
-- (NSString *)cachedTwitterOAuthDataForUsername:(NSString *)username
-{
-	return [CredentialHelper retrieveAuthData];
-}
-
-- (void)authSucceededForEngine
-{
-	if( IsEmpty(users) )
-	{
-		[self synchronousLoadTwitterData];
-	}
-}
-
-- (void)deauthorizeEngine
-{
-	/* TODO: clear the access token */
-}
-
-#pragma mark -
-#pragma mark EngineDelegate
-
-/* These delegate methods are called after a connection has been established */
-- (void)requestSucceeded:(NSString *)connectionIdentifier
-{
-	NSLog(@"Request succeeded %@, response pending.", connectionIdentifier);
-}
-
-- (void)requestFailed:(NSString *)connectionIdentifier withError:(NSError *)error
-{
-	NSLog(@"Request failed %@, with error %@.", connectionIdentifier, [error localizedDescription]);
-}
-
-- (void)infoRecievedForUser:(User *)user
-{
-	[dataAccessHelper saveOrUpdateUser:user];
-	[self.users addObject:user];
-}
-
-- (void)userInfoReceived:(NSDictionary *)userInfo forRequest:(NSString *)connectionIdentifier
-{
-	User *user = [[User alloc] initWithInfo:userInfo];
-
-	/* this user is not yet in the database */
-	if([user isValid])
-	{
-		[self infoRecievedForUser:user];
-	}
-	[self didFinishLoadingUser];
-	[user release];
 }
 
 @end

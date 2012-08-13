@@ -13,8 +13,8 @@
 
 @interface DataAccessHelper ()
 
-@property (nonatomic, retain) NSString *databaseName;
-@property (nonatomic, retain) NSString *documentsDatabasePath;
+@property (nonatomic, strong) NSString *databaseName;
+@property (nonatomic, strong) NSString *documentsDatabasePath;
 
 - (FMDatabase *)openApplicationDatabase;
 - (void)updateSchema;
@@ -39,12 +39,6 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 
 /* Release memory that is being held in any instance variables during deconstruction
  */
-- (void)dealloc
-{
-	[databaseName release];
-	[documentsDatabasePath release];
-	[super dealloc];
-}
 
 /* Override the default initalizer to set up the instance variables needed for database operations
  */
@@ -186,7 +180,7 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
  * Attempt to initialize and populate a User object using data in the database for the given
  * userId
  */
-- (User *)initUserByUserId:(NSString *)user_id
+- (User *)userByUserId:(NSString *)user_id
 {
 	/* open the database */
 	FMDatabase *database = [self openApplicationDatabase];
@@ -231,7 +225,7 @@ NSString *const SchemaVersionFormatString = @"Schema_Version_%d";
 /* Attempt to retrieve an image from the database for the given userId. The image data is stored in
  * a blob type
  */
-- (UIImage *)initImageForUserId:(NSString *)user_id
+- (UIImage *)imageForUserId:(NSString *)user_id
 {
 	FMDatabase *database = [self openApplicationDatabase];
 	FMResultSet *resultSet = [database executeQuery:@"SELECT image "

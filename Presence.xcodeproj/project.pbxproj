@@ -11,7 +11,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		560315A810ABA79A005F649A /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* ListViewController.m */; };
+		560315A810ABA79A005F649A /* FavoritesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 560315A710ABA79A005F649A /* FavoritesListViewController.m */; };
 		5616967411C5634300C07DEF /* FavoriteUsers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5616967211C5634300C07DEF /* FavoriteUsers.plist */; };
 		561E9B6211BAE59F005A6BC8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 561E9B6011BAE59F005A6BC8 /* Localizable.strings */; };
 		562BCB0611CA7CD7001E4BA2 /* IconDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BCB0511CA7CD7001E4BA2 /* IconDownloader.m */; };
@@ -26,7 +26,6 @@
 		566ADEE811B8BFBF00931CFD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE511B8BFBF00931CFD /* User.m */; };
 		566ADEE911B8BFBF00931CFD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 566ADEE711B8BFBF00931CFD /* SettingsViewController.m */; };
 		566C53C8127778CD0097A858 /* Schema_Version_3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 566C53C7127778CD0097A858 /* Schema_Version_3.plist */; };
-		5683AF2312C4088F00F4908E /* EditableListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5683AF2212C4088F00F4908E /* EditableListViewController.m */; };
 		56A8D21711CEEC4400BF541D /* FavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D21611CEEC4400BF541D /* FavoritesHelper.m */; };
 		56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D2FB11CEFF4400BF541D /* CredentialHelper.m */; };
 		56AA6D931207D18C001A31E9 /* Schema_Version_2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56AA6D921207D18C001A31E9 /* Schema_Version_2.plist */; };
@@ -52,8 +51,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* Presence_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Presence_Prefix.pch; sourceTree = "<group>"; };
-		560315A610ABA79A005F649A /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
-		560315A710ABA79A005F649A /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		560315A610ABA79A005F649A /* FavoritesListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesListViewController.h; sourceTree = "<group>"; };
+		560315A710ABA79A005F649A /* FavoritesListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesListViewController.m; sourceTree = "<group>"; };
 		5616967211C5634300C07DEF /* FavoriteUsers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = FavoriteUsers.plist; path = Resources/FavoriteUsers.plist; sourceTree = "<group>"; };
 		561E9B6111BAE59F005A6BC8 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		561E9B6311BAE5AC005A6BC8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -76,8 +75,6 @@
 		566ADEE611B8BFBF00931CFD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		566ADEE711B8BFBF00931CFD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		566C53C7127778CD0097A858 /* Schema_Version_3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Schema_Version_3.plist; path = Resources/Database/Schema_Version_3.plist; sourceTree = "<group>"; };
-		5683AF2112C4088F00F4908E /* EditableListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableListViewController.h; sourceTree = "<group>"; };
-		5683AF2212C4088F00F4908E /* EditableListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableListViewController.m; sourceTree = "<group>"; };
 		56A8D21511CEEC4400BF541D /* FavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesHelper.h; sourceTree = "<group>"; };
 		56A8D21611CEEC4400BF541D /* FavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesHelper.m; sourceTree = "<group>"; };
 		56A8D2FA11CEFF4400BF541D /* CredentialHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialHelper.h; sourceTree = "<group>"; };
@@ -191,10 +188,8 @@
 			children = (
 				5638D04111B494CB00C9F272 /* ComposeStatusViewController.h */,
 				5638D04211B494CB00C9F272 /* ComposeStatusViewController.m */,
-				5683AF2112C4088F00F4908E /* EditableListViewController.h */,
-				5683AF2212C4088F00F4908E /* EditableListViewController.m */,
-				560315A610ABA79A005F649A /* ListViewController.h */,
-				560315A710ABA79A005F649A /* ListViewController.m */,
+				560315A610ABA79A005F649A /* FavoritesListViewController.h */,
+				560315A710ABA79A005F649A /* FavoritesListViewController.m */,
 				566ADEE611B8BFBF00931CFD /* SettingsViewController.h */,
 				566ADEE711B8BFBF00931CFD /* SettingsViewController.m */,
 				56B897BB10B34DB400C7C5FF /* StatusViewController.h */,
@@ -385,7 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D3623260D0F684500981E51 /* PresenceAppDelegate.m in Sources */,
-				560315A810ABA79A005F649A /* ListViewController.m in Sources */,
+				560315A810ABA79A005F649A /* FavoritesListViewController.m in Sources */,
 				56B897BD10B34DB400C7C5FF /* StatusViewController.m in Sources */,
 				5638D04411B494CB00C9F272 /* ComposeStatusViewController.m in Sources */,
 				563C65EF11B89639001430C9 /* PresenceContants.m in Sources */,
@@ -397,7 +392,6 @@
 				56A8D2FC11CEFF4400BF541D /* CredentialHelper.m in Sources */,
 				563C7C51120624BE002A9F1E /* DataAccessHelper.m in Sources */,
 				563C7C54120625E3002A9F1E /* Status.m in Sources */,
-				5683AF2312C4088F00F4908E /* EditableListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +415,7 @@
 			baseConfigurationReference = 88CF4C580CE64A90BFE93786 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -442,6 +437,7 @@
 			baseConfigurationReference = 88CF4C580CE64A90BFE93786 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Presence_Prefix.pch;

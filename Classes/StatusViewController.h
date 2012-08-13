@@ -8,18 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@class ADEngineBlock;
 @class DataAccessHelper;
 @class User;
 
 @interface StatusViewController : UITableViewController
-{
-	@private
-	UIActivityIndicatorView *spinner;
-	User *user;
-	DataAccessHelper *dataAccessHelper;
-}
+
+@property (nonatomic, strong) ADEngineBlock *engineBlock;
 
 /* initialize an instance with a UITableViewStyle and User object */
-- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper;
+- (id)initWithUser:(User *)aUser dataAccessHelper:(DataAccessHelper *)accessHelper engine:(ADEngineBlock *)engine;
 
 @end
