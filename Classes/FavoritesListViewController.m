@@ -205,7 +205,7 @@
 
 - (void)startUserLoad:(NSString *)user_id
 {
-    User *user = [dataAccessHelper userByUserId:user_id];
+    __block User *user = [dataAccessHelper userByUserId:user_id];
     if(![user isValid])
     {
         user = nil;
@@ -217,7 +217,7 @@
         [self.engineBlock showUser:[number unsignedLongLongValue] withHandler:^(NSDictionary *result, NSError *error)
          {
              NINetworkActivityTaskDidFinish();
-             User *user = [[User alloc] initWithInfo:result];
+             user = [[User alloc] initWithInfo:result];
 
              /* this user is not yet in the database */
              if([user isValid])
